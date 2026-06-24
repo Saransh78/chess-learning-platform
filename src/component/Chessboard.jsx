@@ -55,7 +55,18 @@ else if (
   setSelectedPiece(piece);
 }
 else {
-  const updatedPieces = boardPieces.map((p) => {
+  let piecesAfterCapture = boardPieces;
+
+  if (
+    piece &&
+    piece.color !== selectedPiece.color
+  ) {
+    piecesAfterCapture = boardPieces.filter(
+      (p) => !(p.row === row && p.col === col)
+    );
+  }
+
+  const updatedPieces = piecesAfterCapture.map((p) => {
     if (
       p.row === selectedPiece.row &&
       p.col === selectedPiece.col
