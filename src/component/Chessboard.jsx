@@ -1,9 +1,18 @@
 import { useState } from "react";
 import { pieces } from "../data/startingPosition";
 import { pieceImages } from "../data/pieceImages";
+import { getLegalMoves } from "../utils/moveGenerator" 
+
 export default function Chessboard() {
   const [boardPieces, setBoardPieces] = useState(pieces);
 const [selectedPiece, setSelectedPiece] = useState(null);
+const [legalMoves, setLegalMoves] = useState([]);
+function isLegalSquare(row, col) {
+    return legalMoves.some(
+      (move) => move.row === row && move.col === col
+    );
+  }
+  
 console.log(selectedPiece);
   return (
     <div className="flex gap-2">
@@ -32,14 +41,18 @@ console.log(selectedPiece);
     const isSelected =
   selectedPiece?.row === row &&
   selectedPiece?.col === col;
+  const isLegalMove = isLegalSquare(row, col);
 
     return (
     <div
+
   key={index}
   onClick={() => {
+    const isLegalDestination = isLegalSquare(row, col);
   if (!selectedPiece) {
     if (piece) {
       setSelectedPiece(piece);
+      setLegalMoves(getLegalMoves(piece, boardPieces));
     }
   } else {
    if (
@@ -47,14 +60,17 @@ console.log(selectedPiece);
   selectedPiece.col === col
 ) {
   setSelectedPiece(null);
+  setLegalMoves([]);
 }
+
 else if (
   piece &&
   piece.color === selectedPiece.color
 ) {
   setSelectedPiece(piece);
 }
-else {
+
+else if (isLegalDestination) {
   let piecesAfterCapture = boardPieces;
 
   if (
@@ -83,6 +99,8 @@ else {
 
   setBoardPieces(updatedPieces);
   setSelectedPiece(null);
+  setLegalMoves([]);
+
 }
   }
 }}
@@ -92,8 +110,11 @@ else {
     : isLight
     ? "bg-amber-100"
     : "bg-amber-900"
-} flex items-center justify-center text-6xl`}
->
+} relative flex items-center justify-center text-6xl`}
+> 
+{isLegalMove && !piece && (
+  <div className="absolute w-5 h-5 rounded-full bg-black/20"></div>
+)}
         {piece && (
   <img
     src={pieceImages[piece.color][piece.type]}
