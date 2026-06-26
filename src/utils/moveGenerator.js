@@ -323,6 +323,19 @@ if (
   
   return moves;
 }
+export function findKing(color, boardPieces) {
+  return boardPieces.find(
+    (piece) =>
+      piece.type === "king" &&
+      piece.color === color
+  );
+}
+export function isKingInCheck(
+  kingColor,
+  boardPieces
+) {
+
+}
 export function getLegalMoves(piece, boardPieces) {
   switch (piece.type) {
     case "pawn":

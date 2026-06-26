@@ -5,8 +5,9 @@ import { getLegalMoves } from "../utils/moveGenerator"
 
 export default function Chessboard() {
   const [boardPieces, setBoardPieces] = useState(pieces);
-const [selectedPiece, setSelectedPiece] = useState(null);
-const [legalMoves, setLegalMoves] = useState([]);
+  const [selectedPiece, setSelectedPiece] = useState(null);
+  const [legalMoves, setLegalMoves] = useState([]);
+  const [currentTurn, setCurrentTurn] = useState("white");
 function isLegalSquare(row, col) {
     return legalMoves.some(
       (move) => move.row === row && move.col === col
@@ -15,6 +16,10 @@ function isLegalSquare(row, col) {
   
 console.log(selectedPiece);
   return (
+    <div>
+    <h2 className="text-xl font-semibold mb-3">
+  Turn: {currentTurn}
+</h2>
     <div className="flex gap-2">
         <div className="flex flex-col h-[600px]">
         {
@@ -27,7 +32,7 @@ console.log(selectedPiece);
 
 
       </div>
-    <div>
+      <div>
     <div className="grid grid-cols-8 grid-rows-8 w-[600px] h-[600px] border">
   {Array.from({ length: 64 }).map((_, index) => {
     const row = Math.floor(index / 8);
@@ -50,11 +55,11 @@ console.log(selectedPiece);
   onClick={() => {
     const isLegalDestination = isLegalSquare(row, col);
   if (!selectedPiece) {
-    if (piece) {
+     if (piece && piece.color === currentTurn) {
       setSelectedPiece(piece);
       setLegalMoves(getLegalMoves(piece, boardPieces));
-    }
-  } else {
+     }
+     }else {
    if (
   selectedPiece.row === row &&
   selectedPiece.col === col
@@ -68,6 +73,7 @@ else if (
   piece.color === selectedPiece.color
 ) {
   setSelectedPiece(piece);
+  setLegalMoves(getLegalMoves(piece, boardPieces));
 }
 
 else if (isLegalDestination) {
@@ -100,6 +106,11 @@ else if (isLegalDestination) {
   setBoardPieces(updatedPieces);
   setSelectedPiece(null);
   setLegalMoves([]);
+  setCurrentTurn(
+  currentTurn === "white"
+    ? "black"
+    : "white"
+);
 
 }
   }
@@ -137,9 +148,13 @@ else if (isLegalDestination) {
     >
       {letter}
     </div>
+
   ))}
+  </div>
+
 </div>
     </div>
     </div>
+    
   );
 }
