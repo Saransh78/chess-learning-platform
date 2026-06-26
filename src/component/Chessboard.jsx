@@ -115,12 +115,15 @@ else if (isLegalDestination) {
 {isLegalMove && !piece && (
   <div className="absolute w-5 h-5 rounded-full bg-black/20"></div>
 )}
+{isLegalMove && piece && (
+  <div className="absolute inset-1 rounded-full border-4 border-black/25"></div>
+)}
         {piece && (
   <img
-    src={pieceImages[piece.color][piece.type]}
-    alt=""
-    className="w-16 h-16"
-  />
+  src={pieceImages[piece.color][piece.type]}
+  alt=""
+  className="relative z-10 w-16 h-16"
+/>
 )}
       </div>
     );

@@ -33,6 +33,41 @@ function getPawnMoves(piece, boardPieces) {
       col: piece.col,
     });
   }
+  const captureLeft = {
+  row: nextRow,
+  col: piece.col - 1,
+};
+
+const captureRight = {
+  row: nextRow,
+  col: piece.col + 1,
+};
+
+const leftPiece = boardPieces.find(
+  (p) =>
+    p.row === captureLeft.row &&
+    p.col === captureLeft.col
+);
+
+const rightPiece = boardPieces.find(
+  (p) =>
+    p.row === captureRight.row &&
+    p.col === captureRight.col
+);
+
+if (
+  leftPiece &&
+  leftPiece.color !== piece.color
+) {
+  moves.push(captureLeft);
+}
+
+if (
+  rightPiece &&
+  rightPiece.color !== piece.color
+) {
+  moves.push(captureRight);
+}
 
   return moves;
 }
