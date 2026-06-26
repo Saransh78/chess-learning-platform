@@ -281,6 +281,48 @@ else {
   
 
 }
+function getKingMoves(piece, boardPieces){
+   const moves = [];
+  const kingOffsets = [
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [0, -1],
+  [0, 1],
+  [1, -1],
+  [1, 0],
+  [1, 1],
+];
+for (const [rowOffset, colOffset] of kingOffsets) {
+  const newRow = piece.row + rowOffset;
+  const newCol = piece.col + colOffset;
+  if (
+  newRow < 0 ||
+  newRow > 7 ||
+  newCol < 0 ||
+  newCol > 7
+) {
+  continue;
+}
+const destinationPiece = getPieceAt(
+  newRow,
+  newCol,
+  boardPieces
+);
+if (
+  !destinationPiece ||
+  destinationPiece.color !== piece.color
+) {
+  moves.push({
+    row: newRow,
+    col: newCol,
+  });
+}
+
+}
+  
+  return moves;
+}
 export function getLegalMoves(piece, boardPieces) {
   switch (piece.type) {
     case "pawn":
@@ -297,6 +339,9 @@ export function getLegalMoves(piece, boardPieces) {
 
     case "queen":
     return getQueenMoves(piece, boardPieces);
+
+    case "king":
+    return getKingMoves(piece, boardPieces);
 
     default:
       return [];
