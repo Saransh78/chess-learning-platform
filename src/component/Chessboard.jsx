@@ -80,9 +80,15 @@ else if (
   setLegalMoves(getLegalMoves(piece, boardPieces));
 }
 
-else if (isLegalDestination)
-
-{
+else if (
+  isLegalDestination &&
+  isMoveLegal(
+    selectedPiece,
+    row,
+    col,
+    boardPieces
+  )
+) {
   let piecesAfterCapture = boardPieces;
 
   if (

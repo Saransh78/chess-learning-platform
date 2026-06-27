@@ -1,4 +1,5 @@
 import { getLegalMoves } from "./moveGenerator";
+import { getAttackedSquares } from "./moveGenerator";
 
 export function findKing(color, boardPieces) {
   return boardPieces.find(
@@ -20,10 +21,10 @@ export function isKingInCheck(
       if (piece.color !== enemyColor) {
     continue;
     }
-    const enemyMoves = getLegalMoves(
-    piece,
-    boardPieces
-    );
+  const enemyMoves = getAttackedSquares(
+  piece,
+  boardPieces
+);
     for (const move of enemyMoves) {
       if (
   move.row === king.row &&

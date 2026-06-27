@@ -79,6 +79,33 @@ if (
 
   return moves;
 }
+function getPawnAttackSquares(piece) {
+  const attacks = [];
+
+  const direction = piece.color === "white" ? -1 : 1;
+
+  const leftCol = piece.col - 1;
+  const rightCol = piece.col + 1;
+  const nextRow = piece.row + direction;
+
+  if (nextRow >= 0 && nextRow <= 7) {
+    if (leftCol >= 0) {
+      attacks.push({
+        row: nextRow,
+        col: leftCol,
+      });
+    }
+
+    if (rightCol <= 7) {
+      attacks.push({
+        row: nextRow,
+        col: rightCol,
+      });
+    }
+  }
+
+  return attacks;
+}
 function getKnightMoves(piece, boardPieces) {
   const moves = [];
   const knightOffsets = [
@@ -322,6 +349,15 @@ if (
 }
   
   return moves;
+}
+export function getAttackedSquares(piece, boardPieces) {
+  switch (piece.type) {
+    case "pawn":
+      return getPawnAttackSquares(piece);
+
+    default:
+      return getLegalMoves(piece, boardPieces);
+  }
 }
 export function getLegalMoves(piece, boardPieces) {
   switch (piece.type) {
