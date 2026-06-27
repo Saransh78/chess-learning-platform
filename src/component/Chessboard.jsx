@@ -158,15 +158,31 @@ if (
 
     return p;
   });
+  const promotedPieces = updatedPieces.map((piece) => {
+  if (
+    piece.type === "pawn" &&
+    (
+      (piece.color === "white" && piece.row === 0) ||
+      (piece.color === "black" && piece.row === 7)
+    )
+  ) {
+    return {
+      ...piece,
+      type: "queen",
+    };
+  }
 
-  setBoardPieces(updatedPieces);
+  return piece;
+});
+
+setBoardPieces(promotedPieces);
 
 const opponent =
   currentTurn === "white"
     ? "black"
     : "white";
 
-if (isCheckmate(opponent, updatedPieces)) {
+if (isCheckmate(opponent,promotedPieces)) {
   const winner =
     currentTurn.charAt(0).toUpperCase() +
     currentTurn.slice(1);
@@ -176,7 +192,7 @@ if (isCheckmate(opponent, updatedPieces)) {
 
   return;
 }
-if (isStalemate(opponent, updatedPieces)) {
+if (isStalemate(opponent, promotedPieces)) {
   setGameOver(true);
   setGameResult("Draw by stalemate.");
   return;
