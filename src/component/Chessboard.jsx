@@ -9,7 +9,10 @@ import {
    isStalemate,
 } from "../utils/gameRules";
 
-export default function Chessboard() {
+export default function Chessboard({
+  moveHistory,
+  setMoveHistory,
+}) {
   const [boardPieces, setBoardPieces] = useState(pieces);
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [legalMoves, setLegalMoves] = useState([]);
@@ -17,12 +20,71 @@ export default function Chessboard() {
   const [gameOver, setGameOver] = useState(false);
   const [gameResult, setGameResult] = useState("");
   const [lastMove, setLastMove] = useState(null);
+  const [promotionPawn, setPromotionPawn] = useState(null);
+  const [promotionSquare, setPromotionSquare] = useState(null);
 function isLegalSquare(row, col) {
     return legalMoves.some(
       (move) => move.row === row && move.col === col
     );
   }
-  
+  function promotePawn(pieceType) {
+  const promotedBoard = boardPieces.map((piece) => {
+    const opponent =
+  currentTurn === "white"
+    ? "black"
+    : "white";
+    if (
+      piece.row === promotionPawn.row &&
+      piece.col === promotionPawn.col
+    ) {
+      return {
+        ...piece,
+        type: pieceType,
+      };
+    }
+
+    return piece;
+  });
+  const opponent =
+  currentTurn === "white"
+    ? "black"
+    : "white";
+
+  if (isCheckmate(opponent, promotedBoard)) {
+  const winner =
+    currentTurn.charAt(0).toUpperCase() +
+    currentTurn.slice(1);
+
+  setBoardPieces(promotedBoard);
+
+  setGameOver(true);
+  setGameResult(`${winner} won by checkmate.`);
+
+  setPromotionPawn(null);
+  setPromotionSquare(null);
+
+  return;
+}
+
+if (isStalemate(opponent, promotedBoard)) {
+  setBoardPieces(promotedBoard);
+
+  setGameOver(true);
+  setGameResult("Draw by stalemate.");
+
+  setPromotionPawn(null);
+  setPromotionSquare(null);
+
+  return;
+}
+
+setBoardPieces(promotedBoard);
+
+setPromotionPawn(null);
+setPromotionSquare(null);
+
+setCurrentTurn(opponent);
+  }
 console.log(selectedPiece);
   return (
     <div>
@@ -55,6 +117,10 @@ console.log(selectedPiece);
     const piece = boardPieces.find(
   (p) => p.row === row && p.col === col
 );
+const kingInCheck =
+  piece &&
+  piece.type === "king" &&
+  isKingInCheck(piece.color, boardPieces);
 
     const isLight = (row + col) % 2 === 0;
     const isSelected =
@@ -68,9 +134,9 @@ console.log(selectedPiece);
   key={index}
   onClick={() => {
     const isLegalDestination = isLegalSquare(row, col);
-    if (gameOver) {
-    return;
-    }
+   if (gameOver || promotionPawn) {
+  return;
+}
   if (!selectedPiece) {
      if (piece && piece.color === currentTurn) {
       setSelectedPiece(piece);
@@ -184,23 +250,27 @@ if (
 
     return p;
   });
-  const promotedPieces = updatedPieces.map((piece) => {
-  if (
+let promotedPieces = updatedPieces;
+
+const pawnToPromote = updatedPieces.find(
+  (piece) =>
     piece.type === "pawn" &&
     (
       (piece.color === "white" && piece.row === 0) ||
       (piece.color === "black" && piece.row === 7)
     )
-  ) {
-    return {
-      ...piece,
-      type: "queen",
-    };
-  }
+);
+if (pawnToPromote) {
+  setPromotionPawn(pawnToPromote);
+  setPromotionSquare({
+    row: pawnToPromote.row,
+    col: pawnToPromote.col,
+  });
 
-  return piece;
-});
+  setBoardPieces(updatedPieces);
 
+  return;
+}
 setBoardPieces(promotedPieces);
 
 const opponent =
@@ -226,22 +296,34 @@ if (isStalemate(opponent, promotedPieces)) {
 
 setSelectedPiece(null);
 setLegalMoves([]);
-setLastMove({
+const move = {
   piece: selectedPiece.type,
   color: selectedPiece.color,
   fromRow: selectedPiece.row,
   fromCol: selectedPiece.col,
   toRow: row,
   toCol: col,
-});
+
+  captured: !!piece || isEnPassant,
+  castling: isCastling,
+  enPassant: isEnPassant,
+};
+setLastMove(move);
+setMoveHistory([
+  ...moveHistory,
+  move,
+]);
+
 
 setCurrentTurn(opponent);
 
 }
   }
 }}
-  className={`${
-  isSelected
+className={`${
+  kingInCheck
+    ? "bg-red-600"
+    : isSelected
     ? "bg-blue-500"
     : isLight
     ? "bg-amber-100"
@@ -279,6 +361,61 @@ setCurrentTurn(opponent);
 
 </div>
     </div>
+    {promotionPawn && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-zinc-800 rounded-xl p-6">
+      <h2 className="text-white text-xl font-semibold mb-4 text-center">
+        Choose Promotion
+      </h2>
+
+      <div className="grid grid-cols-2 gap-4">
+        <button
+  onClick={() => promotePawn("queen")}
+  className="bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg"
+>
+          <img
+            src={pieceImages[promotionPawn.color].queen}
+            alt=""
+            className="w-16 h-16"
+          />
+        </button>
+
+        <button
+  onClick={() => promotePawn("rook")}
+  className="bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg"
+>
+          <img
+            src={pieceImages[promotionPawn.color].rook}
+            alt=""
+            className="w-16 h-16"
+          />
+        </button>
+
+        <button
+  onClick={() => promotePawn("bishop")}
+  className="bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg"
+>
+          <img
+            src={pieceImages[promotionPawn.color].bishop}
+            alt=""
+            className="w-16 h-16"
+          />
+        </button>
+
+        <button
+  onClick={() => promotePawn("knight")}
+  className="bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg"
+>
+          <img
+            src={pieceImages[promotionPawn.color].knight}
+            alt=""
+            className="w-16 h-16"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
     
   );
