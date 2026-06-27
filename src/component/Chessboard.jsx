@@ -6,6 +6,7 @@ import {
   isKingInCheck,
   isMoveLegal,
   isCheckmate,
+   isStalemate,
 } from "../utils/gameRules";
 
 export default function Chessboard() {
@@ -141,6 +142,11 @@ if (isCheckmate(opponent, updatedPieces)) {
   setGameOver(true);
   setGameResult(`${winner} won by checkmate.`);
 
+  return;
+}
+if (isStalemate(opponent, updatedPieces)) {
+  setGameOver(true);
+  setGameResult("Draw by stalemate.");
   return;
 }
 
