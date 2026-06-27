@@ -38,6 +38,36 @@ export function isKingInCheck(
 return false;
 
 }
+export function isCheckmate(
+  kingColor,
+  boardPieces
+) {
+  if (!isKingInCheck(kingColor, boardPieces)) {
+  return false;
+}
+for (const piece of boardPieces) {
+  if (piece.color !== kingColor) {
+  continue;
+  const legalMoves = getLegalMoves(
+  piece,
+  boardPieces
+);
+for (const move of legalMoves) {
+  if (
+  isMoveLegal(
+    piece,
+    move.row,
+    move.col,
+    boardPieces
+  )
+) {
+  return false;
+}
+}
+}
+}
+return true;
+}
 export function isMoveLegal(
   selectedPiece,
   destinationRow,

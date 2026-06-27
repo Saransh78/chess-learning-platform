@@ -5,6 +5,7 @@ import { getLegalMoves } from "../utils/moveGenerator"
 import {
   isKingInCheck,
   isMoveLegal,
+  isCheckmate,
 } from "../utils/gameRules";
 
 export default function Chessboard() {
@@ -12,6 +13,8 @@ export default function Chessboard() {
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [legalMoves, setLegalMoves] = useState([]);
   const [currentTurn, setCurrentTurn] = useState("white");
+  const [gameOver, setGameOver] = useState(false);
+  const [gameResult, setGameResult] = useState("");
 function isLegalSquare(row, col) {
     return legalMoves.some(
       (move) => move.row === row && move.col === col
@@ -24,6 +27,11 @@ console.log(selectedPiece);
     <h2 className="text-xl font-semibold mb-3">
   Turn: {currentTurn}
 </h2>
+{gameOver && (
+  <h3 className="text-2xl font-bold text-green-400 mb-3">
+    {gameResult}
+  </h3>
+)}
     <div className="flex gap-2">
         <div className="flex flex-col h-[600px]">
         {
@@ -58,6 +66,9 @@ console.log(selectedPiece);
   key={index}
   onClick={() => {
     const isLegalDestination = isLegalSquare(row, col);
+    if (gameOver) {
+    return;
+    }
   if (!selectedPiece) {
      if (piece && piece.color === currentTurn) {
       setSelectedPiece(piece);
@@ -116,24 +127,27 @@ else if (
   });
 
   setBoardPieces(updatedPieces);
-  const whiteInCheck = isKingInCheck(
-  "white",
-  updatedPieces
-);
 
-const blackInCheck = isKingInCheck(
-  "black",
-  updatedPieces
-);
-console.log("White:", whiteInCheck);
-console.log("Black:", blackInCheck);
-  setSelectedPiece(null);
-  setLegalMoves([]);
-  setCurrentTurn(
+const opponent =
   currentTurn === "white"
     ? "black"
-    : "white"
-);
+    : "white";
+
+if (isCheckmate(opponent, updatedPieces)) {
+  const winner =
+    currentTurn.charAt(0).toUpperCase() +
+    currentTurn.slice(1);
+
+  setGameOver(true);
+  setGameResult(`${winner} won by checkmate.`);
+
+  return;
+}
+
+setSelectedPiece(null);
+setLegalMoves([]);
+
+setCurrentTurn(opponent);
 
 }
   }
