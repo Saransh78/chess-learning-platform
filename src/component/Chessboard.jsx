@@ -16,6 +16,7 @@ export default function Chessboard() {
   const [currentTurn, setCurrentTurn] = useState("white");
   const [gameOver, setGameOver] = useState(false);
   const [gameResult, setGameResult] = useState("");
+  const [lastMove, setLastMove] = useState(null);
 function isLegalSquare(row, col) {
     return legalMoves.some(
       (move) => move.row === row && move.col === col
@@ -73,7 +74,13 @@ console.log(selectedPiece);
   if (!selectedPiece) {
      if (piece && piece.color === currentTurn) {
       setSelectedPiece(piece);
-      setLegalMoves(getLegalMoves(piece, boardPieces));
+      setLegalMoves(
+  getLegalMoves(
+    piece,
+    boardPieces,
+    lastMove
+  )
+);
      }
      }else {
    if (
@@ -89,7 +96,13 @@ else if (
   piece.color === selectedPiece.color
 ) {
   setSelectedPiece(piece);
-  setLegalMoves(getLegalMoves(piece, boardPieces));
+  setLegalMoves(
+  getLegalMoves(
+    piece,
+    boardPieces,
+    lastMove
+  )
+);
 }
 
 else if (
@@ -111,6 +124,19 @@ else if (
       (p) => !(p.row === row && p.col === col)
     );
   }
+  const isEnPassant =
+  selectedPiece.type === "pawn" &&
+  col !== selectedPiece.col &&
+  !piece;
+  if (isEnPassant) {
+  piecesAfterCapture = piecesAfterCapture.filter(
+    (p) =>
+      !(
+        p.row === selectedPiece.row &&
+        p.col === col
+      )
+  );
+}
   const isCastling =
   selectedPiece.type === "king" &&
   Math.abs(col - selectedPiece.col) === 2;
@@ -200,6 +226,14 @@ if (isStalemate(opponent, promotedPieces)) {
 
 setSelectedPiece(null);
 setLegalMoves([]);
+setLastMove({
+  piece: selectedPiece.type,
+  color: selectedPiece.color,
+  fromRow: selectedPiece.row,
+  fromCol: selectedPiece.col,
+  toRow: row,
+  toCol: col,
+});
 
 setCurrentTurn(opponent);
 

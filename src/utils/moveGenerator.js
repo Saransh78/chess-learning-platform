@@ -4,7 +4,11 @@ function getPieceAt(row, col, boardPieces) {
   );
 }
 
-function getPawnMoves(piece, boardPieces) {
+function getPawnMoves(
+  piece,
+  boardPieces,
+  lastMove
+) {
   const moves = [];
 
   const direction = piece.color === "white" ? -1 : 1;
@@ -76,6 +80,42 @@ if (
 ) {
   moves.push(captureRight);
 }
+if (!lastMove) {
+  return moves;
+}
+if (
+  lastMove.piece !== "pawn" ||
+  Math.abs(lastMove.fromRow - lastMove.toRow) !== 2
+) {
+  return moves;
+}
+const adjacentPawn = getPieceAt(
+  piece.row,
+  lastMove.toCol,
+  boardPieces
+);
+if (
+  !adjacentPawn ||
+  adjacentPawn.type !== "pawn" ||
+  adjacentPawn.color === piece.color
+) {
+  return moves;
+}
+if (
+  Math.abs(piece.col - lastMove.toCol) !== 1
+) {
+  return moves;
+}
+if (
+  (piece.color === "white" && piece.row !== 3) ||
+  (piece.color === "black" && piece.row !== 4)
+) {
+  return moves;
+}
+moves.push({
+  row: piece.row + direction,
+  col: lastMove.toCol,
+});
 
   return moves;
 }
@@ -431,10 +471,18 @@ export function getAttackedSquares(piece, boardPieces) {
       return getLegalMoves(piece, boardPieces);
   }
 }
-export function getLegalMoves(piece, boardPieces) {
+export function getLegalMoves(
+  piece,
+  boardPieces,
+  lastMove = null
+) {
   switch (piece.type) {
     case "pawn":
-      return getPawnMoves(piece, boardPieces); 
+    return getPawnMoves(
+        piece,
+        boardPieces,
+        lastMove
+    );
 
      case "knight":
       return getKnightMoves(piece, boardPieces);
