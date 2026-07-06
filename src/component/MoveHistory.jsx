@@ -34,10 +34,14 @@ function formatMove(move) {
       return destination;
   }
 }
-
 export default function MoveHistory({
   moveHistory,
+  currentPosition,
 }) {
+  const visibleMoves = moveHistory.slice(
+  0,
+  currentPosition
+);
   return (
     <div className="flex-1 bg-zinc-700 rounded-lg p-3 text-white overflow-y-auto">
       <h2 className="text-lg font-semibold mb-3">
@@ -45,10 +49,12 @@ export default function MoveHistory({
       </h2>
 
       {Array.from({
-  length: Math.ceil(moveHistory.length / 2),
+  length: Math.ceil(
+  visibleMoves.length / 2
+),
 }).map((_, index) => {
-  const whiteMove = moveHistory[index * 2];
-  const blackMove = moveHistory[index * 2 + 1];
+  const whiteMove = visibleMoves[index * 2];
+  const blackMove = visibleMoves[index * 2 + 1];
 
   return (
     <div

@@ -8,10 +8,13 @@ import {
   isCheckmate,
    isStalemate,
 } from "../utils/gameRules";
+import PromotionModal from "./PromotionalModal";
 
 export default function Chessboard({
   moveHistory,
   setMoveHistory,
+  currentPosition,
+  setCurrentPosition,
 }) {
   const [boardPieces, setBoardPieces] = useState(pieces);
   const [selectedPiece, setSelectedPiece] = useState(null);
@@ -23,6 +26,16 @@ export default function Chessboard({
   const [promotionPawn, setPromotionPawn] = useState(null);
   const [promotionSquare, setPromotionSquare] = useState(null);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [boardHistory, setBoardHistory] = useState([
+  {
+    board: pieces,
+    turn: "white",
+    lastMove: null,
+    gameOver: false,
+    gameResult: "",
+    moveHistory: [],
+  },
+]);
 function isLegalSquare(row, col) {
     return legalMoves.some(
       (move) => move.row === row && move.col === col
@@ -30,10 +43,6 @@ function isLegalSquare(row, col) {
   }
   function promotePawn(pieceType) {
   const promotedBoard = boardPieces.map((piece) => {
-    const opponent =
-  currentTurn === "white"
-    ? "black"
-    : "white";
     if (
       piece.row === promotionPawn.row &&
       piece.col === promotionPawn.col
@@ -80,12 +89,63 @@ if (isStalemate(opponent, promotedBoard)) {
 }
 
 setBoardPieces(promotedBoard);
+const newHistory = [
+  ...boardHistory.slice(0, currentPosition + 1),
+  {
+    board: promotedBoard,
+    turn: opponent,
+    lastMove,
+    gameOver: false,
+    gameResult: "",
+    moveHistory: [...moveHistory],
+  },
+];
 
+setBoardHistory(newHistory);
+setCurrentPosition(newHistory.length - 1);
 setPromotionPawn(null);
 setPromotionSquare(null);
 
 setCurrentTurn(opponent);
   }
+  function undoMove() {
+  if (currentPosition === 0) return;
+
+  const previousPosition = currentPosition - 1;
+  const snapshot = boardHistory[previousPosition];
+
+  setCurrentPosition(previousPosition);
+
+  setBoardPieces(snapshot.board);
+  setCurrentTurn(snapshot.turn);
+  setLastMove(snapshot.lastMove);
+  setMoveHistory(snapshot.moveHistory);
+  setGameOver(snapshot.gameOver);
+  setGameResult(snapshot.gameResult);
+
+  setSelectedPiece(null);
+  setLegalMoves([]);
+}
+function redoMove() {
+  if (currentPosition >= boardHistory.length - 1) {
+    return;
+  }
+
+  const nextPosition = currentPosition + 1;
+  const snapshot = boardHistory[nextPosition];
+
+  setCurrentPosition(nextPosition);
+
+  setBoardPieces(snapshot.board);
+  setCurrentTurn(snapshot.turn);
+  setLastMove(snapshot.lastMove);
+  setMoveHistory(snapshot.moveHistory);
+  setGameOver(snapshot.gameOver);
+  setGameResult(snapshot.gameResult);
+
+  setSelectedPiece(null);
+  setLegalMoves([]);
+}
 console.log(selectedPiece);
 const rankLabels = isFlipped
   ? [1,2,3,4,5,6,7,8]
@@ -101,12 +161,30 @@ const fileLabels = isFlipped
     Turn: {currentTurn}
   </h2>
 
+<div className="flex gap-2">
+  <button
+    onClick={undoMove}
+    disabled={currentPosition === 0}
+    className="bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-white"
+  >
+    ⬅
+  </button>
+
+  <button
+    onClick={redoMove}
+    disabled={currentPosition === boardHistory.length - 1}
+    className="bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-white"
+  >
+    ➡
+  </button>
+
   <button
     onClick={() => setIsFlipped(!isFlipped)}
     className="bg-zinc-700 hover:bg-zinc-600 px-4 py-2 rounded-lg text-white"
   >
-    Flip Board
+    Flip
   </button>
+</div>
 </div>
 {gameOver && (
   <h3 className="text-2xl font-bold text-green-400 mb-3">
@@ -337,6 +415,23 @@ setMoveHistory([
 
 
 setCurrentTurn(opponent);
+const newHistory = [
+  ...boardHistory.slice(0, currentPosition + 1),
+  {
+  board: promotedPieces,
+  turn: opponent,
+  lastMove: move,
+  moveHistory: [
+    ...moveHistory,
+    move,
+  ],
+  gameOver: false,
+  gameResult: "",
+}
+];
+
+setBoardHistory(newHistory);
+setCurrentPosition(newHistory.length - 1);
 
 }
   }
@@ -381,61 +476,11 @@ className={`${
 
 </div>
     </div>
-    {promotionPawn && (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div className="bg-zinc-800 rounded-xl p-6">
-      <h2 className="text-white text-xl font-semibold mb-4 text-center">
-        Choose Promotion
-      </h2>
+    <PromotionModal
+  promotionPawn={promotionPawn}
+  promotePawn={promotePawn}
+/>
 
-      <div className="grid grid-cols-2 gap-4">
-        <button
-  onClick={() => promotePawn("queen")}
-  className="bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg"
->
-          <img
-            src={pieceImages[promotionPawn.color].queen}
-            alt=""
-            className="w-16 h-16"
-          />
-        </button>
-
-        <button
-  onClick={() => promotePawn("rook")}
-  className="bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg"
->
-          <img
-            src={pieceImages[promotionPawn.color].rook}
-            alt=""
-            className="w-16 h-16"
-          />
-        </button>
-
-        <button
-  onClick={() => promotePawn("bishop")}
-  className="bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg"
->
-          <img
-            src={pieceImages[promotionPawn.color].bishop}
-            alt=""
-            className="w-16 h-16"
-          />
-        </button>
-
-        <button
-  onClick={() => promotePawn("knight")}
-  className="bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg"
->
-          <img
-            src={pieceImages[promotionPawn.color].knight}
-            alt=""
-            className="w-16 h-16"
-          />
-        </button>
-      </div>
-    </div>
-  </div>
-)}
     </div>
     
   );
