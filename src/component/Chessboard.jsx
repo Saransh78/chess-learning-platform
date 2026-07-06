@@ -10,12 +10,12 @@ import {
 } from "../utils/gameRules";
 import PromotionModal from "./PromotionalModal";
 
+
 export default function Chessboard({
   moveHistory,
   setMoveHistory,
-  currentPosition,
-  setCurrentPosition,
 }) {
+
   const [boardPieces, setBoardPieces] = useState(pieces);
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [legalMoves, setLegalMoves] = useState([]);
@@ -31,11 +31,13 @@ export default function Chessboard({
     board: pieces,
     turn: "white",
     lastMove: null,
+    moveHistory: [],
     gameOver: false,
     gameResult: "",
-    moveHistory: [],
   },
 ]);
+
+const [currentPosition, setCurrentPosition] = useState(0);
 function isLegalSquare(row, col) {
     return legalMoves.some(
       (move) => move.row === row && move.col === col
@@ -135,6 +137,23 @@ function redoMove() {
   const snapshot = boardHistory[nextPosition];
 
   setCurrentPosition(nextPosition);
+
+  setBoardPieces(snapshot.board);
+  setCurrentTurn(snapshot.turn);
+  setLastMove(snapshot.lastMove);
+  setMoveHistory(snapshot.moveHistory);
+  setGameOver(snapshot.gameOver);
+  setGameResult(snapshot.gameResult);
+
+  setSelectedPiece(null);
+  setLegalMoves([]);
+}
+function jumpToPosition(position) {
+  const snapshot = boardHistory[position];
+
+  if (!snapshot) return;
+
+  setCurrentPosition(position);
 
   setBoardPieces(snapshot.board);
   setCurrentTurn(snapshot.turn);

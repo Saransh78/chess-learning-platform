@@ -37,11 +37,9 @@ function formatMove(move) {
 export default function MoveHistory({
   moveHistory,
   currentPosition,
+  jumpToPosition,
 }) {
-  const visibleMoves = moveHistory.slice(
-  0,
-  currentPosition
-);
+ const visibleMoves = moveHistory;
   return (
     <div className="flex-1 bg-zinc-700 rounded-lg p-3 text-white overflow-y-auto">
       <h2 className="text-lg font-semibold mb-3">
@@ -65,13 +63,19 @@ export default function MoveHistory({
         {index + 1}.
       </div>
 
-      <div className="font-medium">
-        {whiteMove && formatMove(whiteMove)}
-      </div>
+      <button
+  onClick={() => jumpToPosition(index * 2 + 1)}
+  className="font-medium text-left hover:text-blue-400"
+>
+  {whiteMove && formatMove(whiteMove)}
+</button>
 
-      <div className="font-medium">
-        {blackMove && formatMove(blackMove)}
-      </div>
+      <button
+  onClick={() => jumpToPosition(index * 2 + 2)}
+  className="font-medium text-left hover:text-blue-400"
+>
+  {blackMove && formatMove(blackMove)}
+</button>
     </div>
   );
 })}
