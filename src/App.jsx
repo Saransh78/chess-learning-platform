@@ -18,8 +18,6 @@ export default function App() {
        <Chessboard
   moveHistory={moveHistory}
   setMoveHistory={setMoveHistory}
-  currentPosition={currentPosition}
-  setCurrentPosition={setCurrentPosition}
 />
        <SidePanel
   moveHistory={moveHistory}

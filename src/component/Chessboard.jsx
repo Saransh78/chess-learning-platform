@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { pieces } from "../data/startingPosition";
 import { pieceImages } from "../data/pieceImages";
 import { getLegalMoves } from "../utils/moveGenerator" 
@@ -9,12 +9,22 @@ import {
    isStalemate,
 } from "../utils/gameRules";
 import PromotionModal from "./PromotionalModal";
+import { useGame } from "../context/GameContext";
+
 
 
 export default function Chessboard({
   moveHistory,
   setMoveHistory,
 }) {
+const {
+  boardHistory,
+  setBoardHistory,
+  currentPosition,
+  setCurrentPosition,
+  requestedPosition,
+  setRequestedPosition,
+} = useGame();
 
   const [boardPieces, setBoardPieces] = useState(pieces);
   const [selectedPiece, setSelectedPiece] = useState(null);
@@ -26,18 +36,6 @@ export default function Chessboard({
   const [promotionPawn, setPromotionPawn] = useState(null);
   const [promotionSquare, setPromotionSquare] = useState(null);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [boardHistory, setBoardHistory] = useState([
-  {
-    board: pieces,
-    turn: "white",
-    lastMove: null,
-    moveHistory: [],
-    gameOver: false,
-    gameResult: "",
-  },
-]);
-
-const [currentPosition, setCurrentPosition] = useState(0);
 function isLegalSquare(row, col) {
     return legalMoves.some(
       (move) => move.row === row && move.col === col
@@ -165,6 +163,42 @@ function jumpToPosition(position) {
   setSelectedPiece(null);
   setLegalMoves([]);
 }
+useEffect(() => {
+  if (requestedPosition === null) return;
+
+  jumpToPosition(requestedPosition);
+
+  setRequestedPosition(null);
+}, [requestedPosition]);
+useEffect(() => {
+  function handleKeyDown(event) {
+    if (event.key === "ArrowLeft") {
+      if (currentPosition > 0) {
+        jumpToPosition(currentPosition - 1);
+      }
+    }
+
+    if (event.key === "ArrowRight") {
+      if (currentPosition < boardHistory.length - 1) {
+        jumpToPosition(currentPosition + 1);
+      }
+    }
+
+    if (event.key === "Home") {
+      jumpToPosition(0);
+    }
+
+    if (event.key === "End") {
+      jumpToPosition(boardHistory.length - 1);
+    }
+  }
+
+  window.addEventListener("keydown", handleKeyDown);
+
+  return () => {
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, [currentPosition, boardHistory]);
 console.log(selectedPiece);
 const rankLabels = isFlipped
   ? [1,2,3,4,5,6,7,8]
