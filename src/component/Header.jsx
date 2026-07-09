@@ -1,9 +1,53 @@
 import Button from "./button"
-export default function Header(){
+import { useRef } from "react";
+import { parsePGNFiles } from "../utils/pgnParser";
+export default function Header() {
+
+  const fileInputRef = useRef(null);
+
+  function handleUploadClick() {
+    fileInputRef.current.click();
+  }
+
+ async function handleFileSelect(event) {
+  const files = Array.from(event.target.files);
+
+  const uploadedGames = await Promise.all(
+    files.map(async (file) => {
+      return {
+        name: file.name,
+        size: file.size,
+        content: await file.text(),
+      };
+    })
+  );
+
+  const games = parsePGNFiles(uploadedGames);
+
+console.table(games);
+console.log(games[0]);
+console.log(`Loaded ${games.length} games`);
+}
   return <header className="flex items-center justify-between ">
     <div className="flex flex-col gap-1">
 <h1 className="text-3xl font-bold text-blue-500">AI Chess Learning Platform</h1>
-      <span className="text-zinc-400 text-sm">upload games</span>
+      <div>
+  <button
+    onClick={handleUploadClick}
+    className="mt-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white text-sm transition"
+  >
+    📂 Upload Games
+  </button>
+
+  <input
+    type="file"
+    ref={fileInputRef}
+    accept=".pgn"
+    multiple
+    onChange={handleFileSelect}
+    className="hidden"
+  />
+</div>
     </div>
     <div className="flex flex-col gap-2 items-end">
     <span className=" text-2xl font-bold text-blue-500">Stockfish Analysis</span>
