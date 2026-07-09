@@ -4,7 +4,7 @@ const GameContext = createContext();
 
 export function GameProvider({ children }) {
   const [moveHistory, setMoveHistory] = useState([]);
-
+  const [games, setGames] = useState([]);
   const [boardHistory, setBoardHistory] = useState([
     {
       board: [],
@@ -37,6 +37,9 @@ export function GameProvider({ children }) {
 
         boardSnapshot,
         setBoardSnapshot,
+
+        games,
+        setGames,
       }}
     >
       {children}

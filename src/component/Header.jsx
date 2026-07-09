@@ -1,9 +1,11 @@
 import Button from "./button"
 import { useRef } from "react";
 import { parsePGNFiles } from "../utils/pgnParser";
+import { useGame } from "../context/GameContext";
 export default function Header() {
 
   const fileInputRef = useRef(null);
+  const { setGames } = useGame();
 
   function handleUploadClick() {
     fileInputRef.current.click();
@@ -22,11 +24,12 @@ export default function Header() {
     })
   );
 
-  const games = parsePGNFiles(uploadedGames);
+const parsedGames = parsePGNFiles(uploadedGames);
 
-console.table(games);
-console.log(games[0]);
-console.log(`Loaded ${games.length} games`);
+setGames(parsedGames);
+
+console.table(parsedGames);
+console.log(`Loaded ${parsedGames.length} games`);
 }
   return <header className="flex items-center justify-between ">
     <div className="flex flex-col gap-1">
