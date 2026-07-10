@@ -8,7 +8,8 @@ An AI-powered chess analysis and learning platform built to help players improve
 
 # 📸 Project Preview
 
-> Screenshots coming soon.
+
+![AI Chess Learning Platform](screenshots/board.png)
 
 ```
 Current Features:
