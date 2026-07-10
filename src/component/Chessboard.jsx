@@ -10,6 +10,7 @@ import {
 } from "../utils/gameRules";
 import PromotionModal from "./PromotionalModal";
 import { generateSnapshots } from "../utils/snapshotGenerator";
+import { convertBoardToFEN } from "../utils/boardConverter";
 import { useGame } from "../context/GameContext";
 import useStockfish from "../hooks/useStockfish";
 
@@ -19,7 +20,7 @@ export default function Chessboard({
   moveHistory,
   setMoveHistory,
 }) {
-   useStockfish();
+   const { analyzePosition } = useStockfish();
 const {
   boardHistory,
   setBoardHistory,
@@ -230,6 +231,15 @@ useEffect(() => {
   setSelectedPiece(null);
   setLegalMoves([]);
 }, [selectedGame]);
+useEffect(() => {
+  const fen = convertBoardToFEN(
+    boardPieces,
+    currentTurn
+  );
+
+  analyzePosition(fen);
+
+}, [boardPieces, currentTurn, analyzePosition]);
 console.log(selectedPiece);
 const rankLabels = isFlipped
   ? [1,2,3,4,5,6,7,8]

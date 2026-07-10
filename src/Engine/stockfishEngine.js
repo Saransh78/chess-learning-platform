@@ -1,6 +1,7 @@
 class StockfishEngine {
   constructor() {
     this.worker = null;
+    this.listeners = [];
   }
 
   start() {
@@ -11,8 +12,16 @@ class StockfishEngine {
     );
 
     this.worker.onmessage = (event) => {
-      console.log("[Stockfish]", event.data);
-    };
+
+    const message = event.data;
+
+    console.log("[Stockfish]", message);
+
+    this.listeners.forEach(listener =>
+        listener(message)
+    );
+
+};
 
     this.worker.postMessage("uci");
     this.worker.postMessage("isready");
@@ -30,6 +39,17 @@ class StockfishEngine {
 
     this.worker.postMessage(command);
   }
+  addListener(callback) {
+    this.listeners.push(callback);
 }
+
+removeListener(callback) {
+    this.listeners =
+        this.listeners.filter(
+            listener => listener !== callback
+        );
+}
+}
+
 
 export default new StockfishEngine();
