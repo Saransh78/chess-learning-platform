@@ -11,7 +11,7 @@ import {
 import PromotionModal from "./PromotionalModal";
 import { generateSnapshots } from "../utils/snapshotGenerator";
 import { useGame } from "../context/GameContext";
-
+import useStockfish from "../hooks/useStockfish";
 
 
 
@@ -19,6 +19,7 @@ export default function Chessboard({
   moveHistory,
   setMoveHistory,
 }) {
+   useStockfish();
 const {
   boardHistory,
   setBoardHistory,
