@@ -14,6 +14,7 @@ import { useGame } from "../context/GameContext";
 
 
 
+
 export default function Chessboard({
   moveHistory,
   setMoveHistory,
@@ -27,6 +28,7 @@ const {
   setRequestedPosition,
   selectedGame,
 } = useGame();
+
 
   const [boardPieces, setBoardPieces] = useState(
   pieces.map(piece => ({ ...piece }))
