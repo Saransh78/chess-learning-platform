@@ -9,6 +9,7 @@ import {
    isStalemate,
 } from "../utils/gameRules";
 import PromotionModal from "./PromotionalModal";
+import { generateSnapshots } from "../utils/snapshotGenerator";
 import { useGame } from "../context/GameContext";
 
 
@@ -24,9 +25,12 @@ const {
   setCurrentPosition,
   requestedPosition,
   setRequestedPosition,
+  selectedGame,
 } = useGame();
 
-  const [boardPieces, setBoardPieces] = useState(pieces);
+  const [boardPieces, setBoardPieces] = useState(
+  pieces.map(piece => ({ ...piece }))
+);
   const [selectedPiece, setSelectedPiece] = useState(null);
   const [legalMoves, setLegalMoves] = useState([]);
   const [currentTurn, setCurrentTurn] = useState("white");
@@ -147,6 +151,9 @@ function redoMove() {
   setLegalMoves([]);
 }
 function jumpToPosition(position) {
+  if (position < 0) return;
+
+if (position >= boardHistory.length) return;
   const snapshot = boardHistory[position];
 
   if (!snapshot) return;
@@ -199,6 +206,27 @@ useEffect(() => {
     window.removeEventListener("keydown", handleKeyDown);
   };
 }, [currentPosition, boardHistory]);
+useEffect(() => {
+  if (!selectedGame) return;
+
+  const snapshots = generateSnapshots(selectedGame);
+
+  setBoardHistory(snapshots);
+
+  const firstSnapshot = snapshots[0];
+
+  setBoardPieces(firstSnapshot.board);
+  setCurrentTurn(firstSnapshot.turn);
+  setLastMove(firstSnapshot.lastMove);
+  setMoveHistory(firstSnapshot.moveHistory);
+  setGameOver(firstSnapshot.gameOver);
+  setGameResult(firstSnapshot.gameResult);
+
+  setCurrentPosition(0);
+
+  setSelectedPiece(null);
+  setLegalMoves([]);
+}, [selectedGame]);
 console.log(selectedPiece);
 const rankLabels = isFlipped
   ? [1,2,3,4,5,6,7,8]

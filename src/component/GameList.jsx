@@ -1,7 +1,11 @@
 import { useGame } from "../context/GameContext";
 
 export default function GameList() {
-  const { games } = useGame();
+  const {
+  games,
+  selectedGame,
+  setSelectedGame,
+} = useGame();
 
   if (games.length === 0) {
     return (
@@ -19,9 +23,14 @@ export default function GameList() {
 
       {games.map((game) => (
         <button
-          key={game.id}
-          className="bg-zinc-600 hover:bg-zinc-500 rounded-lg p-3 text-left transition"
-        >
+  key={game.id}
+  onClick={() => setSelectedGame(game)}
+  className={`rounded-lg p-3 text-left transition ${
+    selectedGame?.id === game.id
+      ? "bg-blue-600"
+      : "bg-zinc-600 hover:bg-zinc-500"
+  }`}
+>
           <div className="text-white font-medium">
             {game.white} vs {game.black}
           </div>

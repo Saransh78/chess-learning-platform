@@ -1,3 +1,4 @@
+import { useGame } from "../context/GameContext";
 function squareName(row, col) {
   const files = "abcdefgh";
   const file = files[col];
@@ -6,6 +7,10 @@ function squareName(row, col) {
   return file + rank;
 }
 function formatMove(move) {
+  if (typeof move === "string") {
+    return move;
+  }
+
   const destination = squareName(
     move.toRow,
     move.toCol
@@ -39,7 +44,11 @@ export default function MoveHistory({
   currentPosition,
   jumpToPosition,
 }) {
- const visibleMoves = moveHistory;
+  const { selectedGame } = useGame();
+ const visibleMoves =
+  selectedGame
+    ? selectedGame.moves
+    : moveHistory;
   return (
     <div className="flex-1 bg-zinc-700 rounded-lg p-3 text-white overflow-y-auto">
       <h2 className="text-lg font-semibold mb-3">
@@ -65,14 +74,22 @@ export default function MoveHistory({
 
       <button
   onClick={() => jumpToPosition(index * 2 + 1)}
-  className="font-medium text-left hover:text-blue-400"
+  className={`font-medium text-left hover:text-blue-400 ${
+  currentPosition === index * 2 + 1
+    ? "text-blue-400 font-bold"
+    : ""
+}`}
 >
   {whiteMove && formatMove(whiteMove)}
 </button>
 
       <button
   onClick={() => jumpToPosition(index * 2 + 2)}
-  className="font-medium text-left hover:text-blue-400"
+  className={`font-medium text-left hover:text-blue-400 ${
+  currentPosition === index * 2 + 2
+    ? "text-blue-400 font-bold"
+    : ""
+}`}
 >
   {blackMove && formatMove(blackMove)}
 </button>

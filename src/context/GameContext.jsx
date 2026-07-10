@@ -1,20 +1,22 @@
 import { createContext, useContext, useState } from "react";
+import { pieces } from "../data/startingPosition";
 
 const GameContext = createContext();
 
 export function GameProvider({ children }) {
   const [moveHistory, setMoveHistory] = useState([]);
   const [games, setGames] = useState([]);
+  const [selectedGame, setSelectedGame] = useState(null);
   const [boardHistory, setBoardHistory] = useState([
-    {
-      board: [],
-      turn: "white",
-      lastMove: null,
-      moveHistory: [],
-      gameOver: false,
-      gameResult: "",
-    },
-  ]);
+  {
+    board: pieces.map(piece => ({ ...piece })),
+    turn: "white",
+    lastMove: null,
+    moveHistory: [],
+    gameOver: false,
+    gameResult: "",
+  },
+]);
 
   const [currentPosition, setCurrentPosition] = useState(0);
   const [requestedPosition, setRequestedPosition] = useState(null);
@@ -40,6 +42,9 @@ export function GameProvider({ children }) {
 
         games,
         setGames,
+
+        selectedGame,
+        setSelectedGame,
       }}
     >
       {children}
