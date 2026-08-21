@@ -8,6 +8,7 @@ import GameList from "./GameList";
 export default function SidePanel({
   moveHistory,
   currentPosition,
+  engineEnabled,
 }) {
 
   const {
@@ -15,7 +16,7 @@ export default function SidePanel({
   } = useGame();
  return (
   <div className="w-[360px] h-[640px] bg-zinc-800 rounded-xl p-4 flex flex-col gap-4 shadow-lg">
-    <EvaluationBar />
+    <EvaluationBar engineEnabled={engineEnabled} />
 
     <Tabs
       gamesContent={<GameList />}
@@ -40,4 +41,4 @@ export default function SidePanel({
     />
   </div>
 );
-}
+}

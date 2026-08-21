@@ -2,7 +2,7 @@ import Button from "./button"
 import { useRef } from "react";
 import { parsePGNFiles } from "../utils/pgnParser";
 import { useGame } from "../context/GameContext";
-export default function Header() {
+export default function Header({ engineEnabled, setEngineEnabled }) {
 
   const fileInputRef = useRef(null);
   const { setGames } = useGame();
@@ -52,5 +52,13 @@ console.log(`Loaded ${parsedGames.length} games`);
   />
 </div>
     </div>
+    <button
+      onClick={() => setEngineEnabled((on) => !on)}
+      className={`px-4 py-2 rounded-lg text-white text-sm font-medium transition ${
+        engineEnabled ? "bg-green-600 hover:bg-green-700" : "bg-gray-400 hover:bg-gray-500"
+      }`}
+    >
+      Stockfish: {engineEnabled ? "ON" : "OFF"}
+    </button>
   </header>
 }

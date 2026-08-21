@@ -1,5 +1,5 @@
 import { useGame } from "../context/GameContext";
-export default function EvaluationBar() {
+export default function EvaluationBar({ engineEnabled }) {
   const { evaluation } = useGame();
 
   let description = "Equal Position";
@@ -35,10 +35,10 @@ export default function EvaluationBar() {
         </p>
 
         <p className="text-zinc-400 text-sm">
-          Stockfish Connected
+          {engineEnabled ? "Stockfish Connected" : "Engine Off"}
         </p>
 
       </div>
     </div>
   );
-}
+}

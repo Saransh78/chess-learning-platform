@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import stockfishEngine from "../Engine/stockfishEngine";
 import { useRef } from "react";
-export default function useStockfish() {
+export default function useStockfish(enabled = true) {
     const currentFen = useRef("");
     const pendingFen = useRef(null);
     const searching = useRef(false);
@@ -71,6 +71,18 @@ setEvaluation(evaluation);
     };
   }, []);
 
+  useEffect(() => {
+    if (enabled) {
+      stockfishEngine.start();
+    } else {
+      stockfishEngine.stop();
+    }
+
+    searching.current = false;
+    cancelling.current = false;
+    pendingFen.current = null;
+  }, [enabled]);
+
 const analyzePosition = useCallback((fen) => {
   console.log("Sending FEN:", fen);
 
@@ -87,4 +99,4 @@ const analyzePosition = useCallback((fen) => {
     analyzePosition,
     evaluation,
 };
-}
+}

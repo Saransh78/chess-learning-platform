@@ -19,11 +19,12 @@ import useStockfish from "../hooks/useStockfish";
 export default function Chessboard({
   moveHistory,
   setMoveHistory,
+  engineEnabled,
 }) {
    const {
     analyzePosition,
     evaluation,
-} = useStockfish();
+} = useStockfish(engineEnabled);
 console.log(evaluation);
 const {
   boardHistory,
@@ -239,6 +240,7 @@ useEffect(() => {
 }, [selectedGame]);
 useEffect(() => {
   if (promotionPawn) return;
+  if (!engineEnabled) return;
 
   const snapshot = boardHistory[currentPosition];
 
@@ -256,6 +258,7 @@ useEffect(() => {
   boardHistory,
   currentPosition,
   lastMove,
+  engineEnabled,
 ]);
 useEffect(() => {
     setEvaluation(evaluation);
