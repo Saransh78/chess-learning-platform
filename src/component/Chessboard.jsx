@@ -238,11 +238,25 @@ useEffect(() => {
   setLegalMoves([]);
 }, [selectedGame]);
 useEffect(() => {
-  const fen = convertBoardToFEN(boardPieces, currentTurn);
+  if (promotionPawn) return;
+
+  const snapshot = boardHistory[currentPosition];
+
+  const fen =
+    snapshot?.fen ??
+    convertBoardToFEN(boardPieces, currentTurn, lastMove);
 
   analyzePosition(fen);
 
-}, [boardPieces, currentTurn, analyzePosition]);
+}, [
+  boardPieces,
+  currentTurn,
+  analyzePosition,
+  promotionPawn,
+  boardHistory,
+  currentPosition,
+  lastMove,
+]);
 useEffect(() => {
     setEvaluation(evaluation);
 }, [evaluation, setEvaluation]);
