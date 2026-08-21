@@ -35,7 +35,10 @@ export default function EvaluationBar({ engineEnabled }) {
       </div>
 
       <div className="mt-2.5 flex items-end justify-between gap-3">
-        <span className="text-[2rem] font-semibold leading-none tracking-tight text-bronze tabular-nums transition-opacity duration-300">
+        <span
+          key={displayEval}
+          className="animate-eval text-[2rem] font-semibold leading-none tracking-tight text-bronze tabular-nums"
+        >
           {displayEval}
         </span>
         <span className="pb-0.5 text-right text-xs leading-snug text-parchment">

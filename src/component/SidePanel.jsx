@@ -3,6 +3,7 @@ import MoveHistory from "./MoveHistory";
 import EnginePanel from "./EnginePanel";
 import Tabs from "./Tabs";
 import GameList from "./GameList";
+import CoachReport from "./CoachReport";
 import { useGame } from "../context/GameContext";
 export default function SidePanel({ engineEnabled }) {
   const { moveHistory, setRequestedPosition } = useGame();
@@ -24,11 +25,7 @@ export default function SidePanel({ engineEnabled }) {
 
           engineContent={<EnginePanel engineEnabled={engineEnabled} />}
 
-          coachContent={
-            <div className="mt-10 text-center text-sm text-faded">
-              Coach Report coming soon
-            </div>
-          }
+          coachContent={<CoachReport />}
         />
       </div>
     </aside>
