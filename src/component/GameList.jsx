@@ -34,7 +34,7 @@ export default function GameList() {
           </button>
         </div>
       ) : (
-        <ul className="space-y-2.5 pr-0.5 scrollbar-thin">
+        <ul className="scrollbar-thin space-y-2 pr-0.5">
           {games.map((game) => {
             const isSelected = selectedGame?.id === game.id;
             return (
@@ -42,7 +42,7 @@ export default function GameList() {
                 <button
                   onClick={() => setSelectedGame(game)}
                   aria-current={isSelected ? "true" : undefined}
-                  className={`group relative w-full overflow-hidden rounded-xl p-3.5 pl-4 text-left transition-all duration-200 ${
+                  className={`group relative w-full overflow-hidden rounded-xl p-4 pl-[18px] text-left transition-all duration-200 ${
                     isSelected
                       ? "bg-slate-ash/70 shadow-lg shadow-black/25 ring-1 ring-bronze/40"
                       : "bg-charcoal/60 ring-1 ring-stone/30 hover:-translate-y-0.5 hover:bg-slate-ash/50 hover:shadow-lg hover:shadow-black/30 hover:ring-stone/50"
@@ -50,7 +50,7 @@ export default function GameList() {
                 >
                   <span
                     aria-hidden="true"
-                    className={`absolute inset-y-2 left-0 w-[3px] rounded-full bg-bronze transition-all duration-200 ${
+                    className={`absolute inset-y-2.5 left-0 w-[3px] rounded-full bg-bronze transition-all duration-200 ${
                       isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-30"
                     }`}
                   />
@@ -62,7 +62,7 @@ export default function GameList() {
                         <span className="mx-1.5 text-[10px] uppercase tracking-wider text-faded">vs</span>
                         {game.black}
                       </p>
-                      <p className="mt-0.5 truncate text-xs text-faded">
+                      <p className="mt-1 truncate text-xs text-faded">
                         {game.event || "Unknown event"}
                       </p>
                     </div>
@@ -73,7 +73,7 @@ export default function GameList() {
                   </div>
 
                   {Array.isArray(game.moves) && game.moves.length > 0 && (
-                    <p className="mt-2 text-[11px] text-faded">
+                    <p className="mt-2.5 text-[11px] tabular-nums text-faded">
                       {Math.ceil(game.moves.length / 2)} moves
                     </p>
                   )}

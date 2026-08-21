@@ -12,8 +12,9 @@ export default function Tabs({
     { id: "games", label: "Games" },
     { id: "moves", label: "Moves" },
     { id: "engine", label: "Engine" },
-    { id: "coach", label: "Coach Report" },
+    { id: "coach", label: "AI Coach" },
   ];
+  const activeIndex = tabs.findIndex((t) => t.id === activeTab);
 
   function renderContent() {
     switch (activeTab) {
@@ -35,8 +36,16 @@ export default function Tabs({
       <div
         role="tablist"
         aria-label="Panel sections"
-        className="flex shrink-0 gap-0.5 rounded-xl bg-obsidian/70 p-1 ring-1 ring-stone/30"
+        className="relative flex shrink-0 rounded-xl bg-obsidian/70 p-1 ring-1 ring-stone/30"
       >
+        <span
+          aria-hidden="true"
+          className="absolute inset-y-1 left-1 rounded-lg bg-slate-ash shadow-[0_2px_10px_-2px_rgba(0,0,0,0.45)] ring-1 ring-stone/40 transition-transform duration-300 ease-out"
+          style={{
+            width: `calc((100% - 0.5rem) / ${tabs.length})`,
+            transform: `translateX(${activeIndex * 100}%)`,
+          }}
+        />
         {tabs.map((tab) => {
           const active = activeTab === tab.id;
           return (
@@ -45,13 +54,17 @@ export default function Tabs({
               role="tab"
               aria-selected={active}
               onClick={() => setActiveTab(tab.id)}
-              className={`min-w-0 flex-1 rounded-lg px-2 py-2 text-xs font-medium transition-all duration-200 ${
-                active
-                  ? "bg-slate-ash text-ivory shadow-sm shadow-black/30 ring-1 ring-stone/40"
-                  : "text-faded hover:bg-charcoal/60 hover:text-parchment"
+              className={`relative z-10 min-w-0 flex-1 rounded-lg px-2 pb-2 pt-[7px] text-xs font-medium transition-colors duration-200 ${
+                active ? "text-ivory" : "text-faded hover:text-parchment"
               }`}
             >
-              <span className="truncate">{tab.label}</span>
+              <span className="block truncate">{tab.label}</span>
+              <span
+                aria-hidden="true"
+                className={`absolute bottom-[3px] left-1/2 h-[2px] w-4 -translate-x-1/2 rounded-full bg-sage transition-opacity duration-200 ${
+                  active ? "opacity-100" : "opacity-0"
+                }`}
+              />
             </button>
           );
         })}

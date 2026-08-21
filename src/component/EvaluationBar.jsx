@@ -1,7 +1,7 @@
 import { useGame } from "../context/GameContext";
 
 export default function EvaluationBar({ engineEnabled }) {
-  const { evaluation, depth, bestMove } = useGame();
+  const { evaluation, depth, bestMove, pv } = useGame();
 
   let description = "Equal position";
 
@@ -53,7 +53,7 @@ export default function EvaluationBar({ engineEnabled }) {
             {depth ?? "—"}
           </dd>
         </div>
-        <div className="flex items-center gap-1.5 min-w-0">
+        <div className="flex min-w-0 items-center gap-1.5">
           <dt className="shrink-0 text-faded">Best</dt>
           <dd>
             <span className="inline-flex max-w-full items-center rounded-md bg-bronze/15 px-2 py-0.5 font-mono text-[11px] font-semibold text-gold ring-1 ring-bronze/25">
@@ -62,6 +62,15 @@ export default function EvaluationBar({ engineEnabled }) {
           </dd>
         </div>
       </dl>
+
+      {pv && (
+        <p
+          title={pv}
+          className="scrollbar-thin mt-3 overflow-x-hidden whitespace-nowrap border-t border-stone/20 pt-3 font-mono text-[11px] leading-relaxed text-parchment/90"
+        >
+          {pv}
+        </p>
+      )}
     </section>
   );
 }

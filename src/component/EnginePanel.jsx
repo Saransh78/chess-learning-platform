@@ -39,7 +39,7 @@ export default function EnginePanel({ engineEnabled }) {
         <h3 className="text-xs font-medium uppercase tracking-[0.14em] text-faded">
           Principal Variation
         </h3>
-        <p className="mt-3 font-mono text-xs leading-relaxed text-parchment break-words">
+        <p className="scrollbar-thin mt-3 max-h-32 overflow-y-auto font-mono text-xs leading-relaxed text-parchment break-words">
           {pv || "Waiting for engine…"}
         </p>
       </div>

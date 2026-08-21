@@ -35,7 +35,7 @@ function formatMove(move) {
 }
 
 const MOVE_BASE =
-  "rounded-md px-2 py-1 text-left text-[13px] font-medium leading-none transition-colors duration-100";
+  "rounded-md px-2 py-1.5 text-left text-[13px] font-medium leading-none transition-all duration-100";
 
 export default function MoveHistory({
   moveHistory,
@@ -87,9 +87,9 @@ export default function MoveHistory({
             return (
               <li
                 key={index}
-                className="grid grid-cols-[2rem_1fr_1fr] items-center gap-x-1 rounded-lg px-1 py-0.5 hover:bg-white/[0.03]"
+                className="grid grid-cols-[1.75rem_1fr_1fr] items-center gap-x-1.5 rounded-lg px-1 py-0.5 hover:bg-white/[0.03]"
               >
-                <span className="pr-1.5 text-right text-xs tabular-nums text-faded/70">
+                <span className="pr-1 text-right text-[11px] tabular-nums text-faded/70">
                   {index + 1}.
                 </span>
 
@@ -99,7 +99,7 @@ export default function MoveHistory({
                   className={`${MOVE_BASE} ${
                     whiteActive
                       ? "bg-bronze/15 text-gold ring-1 ring-bronze/30"
-                      : "text-ivory/85 hover:text-ivory"
+                      : "text-ivory/85 hover:bg-white/[0.04] hover:text-ivory"
                   }`}
                 >
                   {whiteMove ? formatMove(whiteMove) : ""}
@@ -111,7 +111,7 @@ export default function MoveHistory({
                   className={`${MOVE_BASE} ${
                     blackActive
                       ? "bg-bronze/15 text-gold ring-1 ring-bronze/30"
-                      : "text-parchment hover:text-ivory"
+                      : "text-parchment hover:bg-white/[0.04] hover:text-ivory"
                   }`}
                 >
                   {blackMove ? formatMove(blackMove) : ""}
