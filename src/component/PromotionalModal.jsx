@@ -7,23 +7,24 @@ export default function PromotionModal({
   if (!promotionPawn) return null;
 
   return (
-    <div className="fixed inset-0 bg-obsidian/80 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="relative bg-charcoal border border-stone/50 rounded-2xl p-6 shadow-2xl shadow-black/60">
-        <h2 className="text-ivory text-xl font-semibold mb-4 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-obsidian/80 backdrop-blur-sm">
+      <div className="relative rounded-2xl border border-stone/50 bg-charcoal p-6 shadow-[0_32px_80px_-24px_rgba(0,0,0,0.8)] animate-rise">
+        <h2 className="mb-4 text-center text-lg font-semibold tracking-tight text-ivory">
           Choose Promotion
         </h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           {["queen", "rook", "bishop", "knight"].map((piece) => (
             <button
               key={piece}
               onClick={() => promotePawn(piece)}
-              className="bg-slate-ash hover:bg-stone border border-stone/40 hover:border-bronze/50 p-4 rounded-lg transition"
+              aria-label={`Promote to ${piece}`}
+              className="rounded-xl border border-stone/40 bg-slate-ash p-4 transition-all duration-150 hover:-translate-y-0.5 hover:border-bronze/50 hover:bg-stone"
             >
               <img
                 src={pieceImages[promotionPawn.color][piece]}
                 alt={piece}
-                className="w-16 h-16"
+                className="h-16 w-16"
               />
             </button>
           ))}

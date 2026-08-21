@@ -5,7 +5,6 @@ const ACCENTS = {
   clay: { dot: "bg-clay", label: "text-clay" },
   bronze: { dot: "bg-bronze", label: "text-gold" },
   sage: { dot: "bg-sage", label: "text-sage" },
-  ivory: { dot: "bg-parchment", label: "text-parchment" },
 };
 
 const PREVIEW_INSIGHTS = [
@@ -15,19 +14,21 @@ const PREVIEW_INSIGHTS = [
     quote: "Losing space in Caro-Kann structures.",
   },
   {
-    tag: "Tactical Patterns",
+    tag: "Tactical Pattern",
     accent: "bronze",
-    quote: "12 missed forks across 38 games.",
+    quote: "Missed forks across multiple games.",
   },
   {
-    tag: "Opening Trends",
+    tag: "Opening Trend",
     accent: "sage",
-    quote: "Your win rate climbs sharply in closed openings.",
+    quote:
+      "Strong early development but weak central control after the opening.",
   },
   {
-    tag: "Recommended Study",
-    accent: "ivory",
-    quote: "Minor-piece coordination and isolated pawn structures.",
+    tag: "Study Recommendation",
+    accent: "sage",
+    quote:
+      "Focus on isolated pawn structures and minor-piece coordination this week.",
   },
 ];
 
@@ -39,36 +40,45 @@ export default function CoachReport() {
 
   return (
     <div className="space-y-5 px-0.5 pb-2">
-      <section className="relative overflow-hidden rounded-xl bg-gradient-to-b from-slate-ash/70 to-charcoal px-5 py-6 text-center ring-1 ring-stone/40">
+      <section className="relative overflow-hidden rounded-xl bg-gradient-to-b from-sage/[0.08] to-charcoal px-5 py-6 text-center ring-1 ring-sage/25">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-16 left-1/2 h-32 w-56 -translate-x-1/2 rounded-full bg-bronze/15 blur-3xl"
+          className="pointer-events-none absolute -top-16 left-1/2 h-32 w-56 -translate-x-1/2 rounded-full bg-sage/15 blur-3xl"
         />
 
-        <div className="relative mx-auto grid h-11 w-11 place-items-center rounded-xl bg-bronze/15 ring-1 ring-bronze/30">
-          <svg viewBox="0 0 24 24" className="h-5 w-5 text-bronze" fill="currentColor">
-            <path d="M12 2.5l1.9 6.1a1 1 0 0 0 .66.66l6.1 1.9-6.1 1.9a1 1 0 0 0-.66.66L12 19.77l-1.9-6.05a1 1 0 0 0-.66-.66l-6.1-1.9 6.1-1.9a1 1 0 0 0 .66-.66L12 2.5z" />
+        <div className="relative mx-auto grid h-11 w-11 place-items-center rounded-xl bg-sage/15 ring-1 ring-sage/30">
+          <svg
+            viewBox="0 0 24 24"
+            className="h-5 w-5 text-sage"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M3.5 17.5l5.2-5.2 3.4 3.4 6.9-6.9" />
+            <path d="M14.5 8.5H19V13" />
           </svg>
         </div>
 
         <h3 className="relative mt-4 text-base font-semibold tracking-tight text-ivory">
-          Coach Report
+          AI Coach
         </h3>
-        <p className="relative mx-auto mt-1.5 max-w-[26ch] text-xs leading-relaxed text-parchment">
-          Generated after analyzing your games.
+        <p className="relative mx-auto mt-1.5 max-w-[28ch] text-xs leading-relaxed text-parchment">
+          Your personalized improvement report.
         </p>
 
         <button
           onClick={() => setRequested(true)}
           className="relative mt-5 w-full rounded-xl bg-bronze px-4 py-2.5 text-sm font-semibold text-obsidian shadow-lg shadow-bronze/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:shadow-xl hover:shadow-bronze/25 active:translate-y-0"
         >
-          Generate Report
+          Generate AI Report
         </button>
 
         {requested ? (
-          <p className="relative mt-3 animate-fade-in text-[11px] leading-relaxed text-gold/90">
-            The ML Coach is training on your patterns &mdash; full reports
-            arrive with the KnightMind engine release.
+          <p className="relative mt-3 animate-fade-in text-[11px] leading-relaxed text-sage">
+            The AI Coach is studying your patterns &mdash; full reports arrive
+            with the KnightMind engine release.
           </p>
         ) : (
           gameCount > 0 && (
@@ -91,7 +101,7 @@ export default function CoachReport() {
             return (
               <li
                 key={insight.tag}
-                className="group rounded-xl bg-slate-ash/40 p-4 transition-colors duration-200 hover:bg-slate-ash/60"
+                className="group rounded-xl bg-slate-ash/40 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-ash/60"
               >
                 <blockquote className="text-[13px] leading-relaxed text-ivory/90">
                   &ldquo;{insight.quote}&rdquo;
