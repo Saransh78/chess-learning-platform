@@ -4,7 +4,7 @@ import { useGame } from "../context/GameContext";
 const ACCENTS = {
   clay: { dot: "bg-clay", label: "text-clay" },
   bronze: { dot: "bg-bronze", label: "text-gold" },
-  sage: { dot: "bg-sage", label: "text-sage" },
+  sage: { dot: "bg-sage", label: "text-sage-light" },
 };
 
 const PREVIEW_INSIGHTS = [

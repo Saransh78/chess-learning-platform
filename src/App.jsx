@@ -23,14 +23,16 @@ export default function App() {
       ) : (
         <main className="mx-auto w-full max-w-[1360px] flex-1 animate-fade-in px-4 pb-16 pt-6 sm:px-6">
           <div className="flex flex-col items-center gap-10 xl:flex-row xl:items-start xl:justify-center">
-            <div className="w-full min-w-0 max-w-[880px] xl:flex-1">
+            <div className="w-full min-w-0 max-w-[880px] animate-settle xl:flex-1">
               <Chessboard
                 moveHistory={moveHistory}
                 setMoveHistory={setMoveHistory}
                 engineEnabled={engineEnabled}
               />
             </div>
-            <SidePanel engineEnabled={engineEnabled} />
+            <div className="w-full animate-rise [animation-delay:120ms]">
+              <SidePanel engineEnabled={engineEnabled} />
+            </div>
           </div>
         </main>
       )}

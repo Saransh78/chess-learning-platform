@@ -147,7 +147,7 @@ export default function Welcome() {
             </FeatureIcon>
             <div className="mt-5 flex items-center justify-between gap-3">
               <h3 className="text-base font-semibold text-ivory">AI Coach</h3>
-              <span className="shrink-0 rounded-full border border-sage/30 bg-sage/10 px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-sage">
+              <span className="shrink-0 rounded-full border border-sage/30 bg-sage/10 px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-sage-light">
                 Across your games
               </span>
             </div>
