@@ -6,12 +6,12 @@ export default function Header({ engineEnabled, setEngineEnabled }) {
       <nav className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-3">
           <Logo size="sm" />
-          <div className="flex items-baseline gap-3">
-            <span className="text-lg font-semibold tracking-tight text-ivory">
+          <div className="leading-tight">
+            <span className="block text-[15px] font-semibold tracking-tight text-ivory">
               Knight<span className="text-bronze">Mind</span>
             </span>
-            <span className="hidden text-xs tracking-wide text-faded md:block">
-              Personalized Chess Intelligence
+            <span className="hidden text-[10px] font-medium uppercase tracking-[0.18em] text-faded sm:block">
+              AI Based Learning Platform
             </span>
           </div>
         </div>
