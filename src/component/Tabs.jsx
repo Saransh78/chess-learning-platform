@@ -3,63 +3,63 @@ import { useState } from "react";
 export default function Tabs({
   gamesContent,
   movesContent,
-  analysisContent,
-  aiContent,
+  engineContent,
+  coachContent,
 }) {
   const [activeTab, setActiveTab] = useState("moves");
 
   const tabs = [
     { id: "games", label: "Games" },
     { id: "moves", label: "Moves" },
-    { id: "analysis", label: "Analysis" },
-    { id: "ai", label: "AI" },
+    { id: "engine", label: "Engine" },
+    { id: "coach", label: "Coach Report" },
   ];
 
   function renderContent() {
     switch (activeTab) {
       case "games":
         return gamesContent;
-
       case "moves":
         return movesContent;
-
-      case "analysis":
-        return analysisContent;
-
-      case "ai":
-        return aiContent;
-
+      case "engine":
+        return engineContent;
+      case "coach":
+        return coachContent;
       default:
         return null;
     }
   }
 
   return (
-    <div className="bg-slate-ash/60 border border-stone/30 rounded-xl p-4 h-full flex flex-col">
-
-      <div className="flex gap-2 mb-4">
-
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-3 py-2 rounded-md text-sm transition
-            ${
-              activeTab === tab.id
-                ? "bg-bronze text-obsidian font-medium shadow-sm shadow-bronze/30"
-                : "bg-charcoal/70 text-ivory/70 hover:bg-stone/60 hover:text-ivory"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div
+        role="tablist"
+        aria-label="Panel sections"
+        className="flex shrink-0 gap-0.5 rounded-xl bg-obsidian/70 p-1 ring-1 ring-stone/30"
+      >
+        {tabs.map((tab) => {
+          const active = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              role="tab"
+              aria-selected={active}
+              onClick={() => setActiveTab(tab.id)}
+              className={`min-w-0 flex-1 rounded-lg px-2 py-2 text-xs font-medium transition-all duration-200 ${
+                active
+                  ? "bg-slate-ash text-ivory shadow-sm shadow-black/30 ring-1 ring-stone/40"
+                  : "text-faded hover:bg-charcoal/60 hover:text-parchment"
+              }`}
+            >
+              <span className="truncate">{tab.label}</span>
+            </button>
+          );
+        })}
       </div>
 
-      <div className="flex-1 overflow-auto">
+      <div className="scrollbar-thin mt-3 min-h-0 flex-1 overflow-y-auto pr-0.5 animate-fade-in" key={activeTab}>
         {renderContent()}
       </div>
-
     </div>
   );
-}
+}

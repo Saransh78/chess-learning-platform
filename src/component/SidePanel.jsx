@@ -1,16 +1,15 @@
 import EvaluationBar from "./EvaluationBar";
 import MoveHistory from "./MoveHistory";
-import AnalysisPanel from "./AnalysisPanel";
-import { useGame } from "../context/GameContext";
+import EnginePanel from "./EnginePanel";
 import Tabs from "./Tabs";
 import GameList from "./GameList";
-
+import { useGame } from "../context/GameContext";
 export default function SidePanel({ engineEnabled }) {
   const { moveHistory, setRequestedPosition } = useGame();
 
   return (
     <aside className="w-full max-w-[480px] shrink-0 self-start md:max-w-none md:w-[400px] xl:sticky xl:top-20">
-      <div className="relative h-[640px] bg-charcoal/90 border border-stone/40 rounded-2xl p-4 flex flex-col gap-4 shadow-2xl shadow-black/40 backdrop-blur before:pointer-events-none before:absolute before:-inset-10 before:bg-walnut/15 before:blur-3xl before:rounded-full before:content-['']">
+      <div className="flex h-[640px] flex-col gap-4 rounded-2xl border border-stone/40 bg-charcoal p-4 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.6)]">
         <EvaluationBar engineEnabled={engineEnabled} />
 
         <Tabs
@@ -23,13 +22,11 @@ export default function SidePanel({ engineEnabled }) {
             />
           }
 
-          analysisContent={
-            <AnalysisPanel />
-          }
+          engineContent={<EnginePanel engineEnabled={engineEnabled} />}
 
-          aiContent={
-            <div className="text-sage text-center mt-10">
-              AI Coach coming soon...
+          coachContent={
+            <div className="mt-10 text-center text-sm text-faded">
+              Coach Report coming soon
             </div>
           }
         />

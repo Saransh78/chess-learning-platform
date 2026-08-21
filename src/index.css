@@ -74,3 +74,22 @@ body {
 ::selection {
     background-color: rgba(200, 155, 90, 0.28);
 }
+
+.scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-stone) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--color-stone);
+    border-radius: 9999px;
+}
+
