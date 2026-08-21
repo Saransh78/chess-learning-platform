@@ -35,7 +35,7 @@ export default function Tabs({
   }
 
   return (
-    <div className="bg-zinc-700 rounded-xl p-4 h-full flex flex-col">
+    <div className="bg-slate-ash/60 border border-stone/30 rounded-xl p-4 h-full flex flex-col">
 
       <div className="flex gap-2 mb-4">
 
@@ -46,8 +46,8 @@ export default function Tabs({
             className={`px-3 py-2 rounded-md text-sm transition
             ${
               activeTab === tab.id
-                ? "bg-blue-600 text-white"
-                : "bg-zinc-600 text-zinc-300 hover:bg-zinc-500"
+                ? "bg-bronze text-obsidian font-medium shadow-sm shadow-bronze/30"
+                : "bg-charcoal/70 text-ivory/70 hover:bg-stone/60 hover:text-ivory"
             }`}
           >
             {tab.label}
@@ -62,4 +62,4 @@ export default function Tabs({
 
     </div>
   );
-}
+}

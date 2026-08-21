@@ -22,6 +22,9 @@ export function GameProvider({ children }) {
   const [requestedPosition, setRequestedPosition] = useState(null);
   const [boardSnapshot, setBoardSnapshot] = useState(null);
   const [evaluation, setEvaluation] = useState(0);
+  const [depth, setDepth] = useState(null);
+  const [bestMove, setBestMove] = useState(null);
+  const [pv, setPv] = useState("");
 
   return (
     <GameContext.Provider
@@ -49,6 +52,15 @@ export function GameProvider({ children }) {
 
         evaluation,
         setEvaluation,
+
+        depth,
+        setDepth,
+
+        bestMove,
+        setBestMove,
+
+        pv,
+        setPv,
       }}
     >
       {children}
@@ -58,4 +70,4 @@ export function GameProvider({ children }) {
 
 export function useGame() {
   return useContext(GameContext);
-}
+}

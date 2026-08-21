@@ -7,9 +7,9 @@ export default function PromotionModal({
   if (!promotionPawn) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-zinc-800 rounded-xl p-6">
-        <h2 className="text-white text-xl font-semibold mb-4 text-center">
+    <div className="fixed inset-0 bg-obsidian/80 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="relative bg-charcoal border border-stone/50 rounded-2xl p-6 shadow-2xl shadow-black/60">
+        <h2 className="text-ivory text-xl font-semibold mb-4 text-center">
           Choose Promotion
         </h2>
 
@@ -18,7 +18,7 @@ export default function PromotionModal({
             <button
               key={piece}
               onClick={() => promotePawn(piece)}
-              className="bg-zinc-700 hover:bg-zinc-600 p-4 rounded-lg transition"
+              className="bg-slate-ash hover:bg-stone border border-stone/40 hover:border-bronze/50 p-4 rounded-lg transition"
             >
               <img
                 src={pieceImages[promotionPawn.color][piece]}
@@ -31,4 +31,4 @@ export default function PromotionModal({
       </div>
     </div>
   );
-}
+}

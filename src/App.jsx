@@ -13,13 +13,13 @@ export default function App() {
   setCurrentPosition,
 } = useGame();
   return (
-    <div className="max-w-7xl mx-auto p-4 flex flex-col gap-4">
+    <div className="max-w-7xl mx-auto px-4 pb-12 flex flex-col">
       <Header
         engineEnabled={engineEnabled}
         setEngineEnabled={setEngineEnabled}
       />
 
-      <div className="flex gap-8 items-start mt-2">
+      <div className="flex gap-10 items-start mt-8">
        <Chessboard
   moveHistory={moveHistory}
   setMoveHistory={setMoveHistory}

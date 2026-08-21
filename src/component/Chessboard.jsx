@@ -9,6 +9,7 @@ import {
    isStalemate,
 } from "../utils/gameRules";
 import PromotionModal from "./PromotionalModal";
+import VerticalEvalBar from "./VerticalEvalBar";
 import { generateSnapshots } from "../utils/snapshotGenerator";
 import { convertBoardToFEN } from "../utils/boardConverter";
 import { useGame } from "../context/GameContext";
@@ -24,6 +25,9 @@ export default function Chessboard({
    const {
     analyzePosition,
     evaluation,
+    depth,
+    bestMove,
+    pv,
 } = useStockfish(engineEnabled);
 console.log(evaluation);
 const {
@@ -35,6 +39,9 @@ const {
   setRequestedPosition,
   selectedGame,
   setEvaluation,
+  setDepth,
+  setBestMove,
+  setPv,
 } = useGame();
 
 
@@ -262,7 +269,10 @@ useEffect(() => {
 ]);
 useEffect(() => {
     setEvaluation(evaluation);
-}, [evaluation, setEvaluation]);
+    setDepth(depth);
+    setBestMove(bestMove);
+    setPv(pv);
+}, [evaluation, depth, bestMove, pv, setEvaluation, setDepth, setBestMove, setPv]);
 console.log(selectedPiece);
 const rankLabels = isFlipped
   ? [1,2,3,4,5,6,7,8]
@@ -273,16 +283,22 @@ const fileLabels = isFlipped
   : "abcdefgh".split("");
   return (
     <div>
-<div className="flex justify-between items-center mb-3">
-  <h2 className="text-xl font-semibold">
-    Turn: {currentTurn}
+<div className="flex justify-between items-center mb-4 rounded-xl bg-charcoal/80 border border-stone/40 px-4 py-2.5 backdrop-blur">
+  <h2 className="inline-flex items-center gap-2.5 text-base font-medium text-ivory/90">
+    Turn
+    <span
+      className={`inline-block w-2.5 h-2.5 rounded-full ${
+        currentTurn === "white" ? "bg-ivory" : "bg-obsidian ring-1 ring-ivory/70"
+      }`}
+    />
+    <span className="capitalize">{currentTurn}</span>
   </h2>
 
 <div className="flex gap-2">
   <button
     onClick={undoMove}
     disabled={currentPosition === 0}
-    className="bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-white"
+    className="bg-slate-ash hover:bg-stone border border-stone/40 hover:border-bronze/60 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-ivory transition"
   >
     ⬅
   </button>
@@ -290,26 +306,27 @@ const fileLabels = isFlipped
   <button
     onClick={redoMove}
     disabled={currentPosition === boardHistory.length - 1}
-    className="bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-white"
+    className="bg-slate-ash hover:bg-stone border border-stone/40 hover:border-bronze/60 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-ivory transition"
   >
     ➡
   </button>
 
   <button
     onClick={() => setIsFlipped(!isFlipped)}
-    className="bg-zinc-700 hover:bg-zinc-600 px-4 py-2 rounded-lg text-white"
+    className="bg-slate-ash hover:bg-stone border border-stone/40 hover:border-bronze/60 px-4 py-2 rounded-lg text-ivory transition"
   >
     Flip
   </button>
 </div>
 </div>
 {gameOver && (
-  <h3 className="text-2xl font-bold text-green-400 mb-3">
+  <h3 className="text-2xl font-bold text-gold mb-3">
     {gameResult}
   </h3>
 )}
     <div className="flex gap-2">
-        <div className="flex flex-col h-[600px]">
+        <VerticalEvalBar />
+        <div className="flex flex-col h-[690px]">
         
                 {rankLabels.map((number) => (
   <div key={number} className="flex-1 text-center">
@@ -319,8 +336,9 @@ const fileLabels = isFlipped
 
 
       </div>
-      <div>
-    <div className="grid grid-cols-8 grid-rows-8 w-[600px] h-[600px] border">
+      <div className="relative">
+    <div className="pointer-events-none absolute -inset-8 rounded-[2.5rem] bg-bronze/10 blur-3xl" />
+    <div className="relative grid grid-cols-8 grid-rows-8 w-[690px] h-[690px] border border-stone/60">
   {Array.from({ length: 64 }).map((_, index) => {
     let row = Math.floor(index / 8);
 let col = index % 8;
@@ -573,14 +591,14 @@ className={`${
   <img
   src={pieceImages[piece.color][piece.type]}
   alt=""
-  className="relative z-10 w-16 h-16"
+   className="relative z-10 w-[74px] h-[74px]"
 />
 )}
       </div>
     );
   })}
 </div>
-<div className="flex w-[600px]">
+<div className="flex w-[690px]">
   {fileLabels.map((letter) => (
     <div
       key={letter}

@@ -15,7 +15,7 @@ export default function SidePanel({
     setRequestedPosition,
   } = useGame();
  return (
-  <div className="w-[360px] h-[640px] bg-zinc-800 rounded-xl p-4 flex flex-col gap-4 shadow-lg">
+  <div className="relative w-[360px] h-[640px] bg-charcoal/90 border border-stone/40 rounded-2xl p-4 flex flex-col gap-4 shadow-2xl shadow-black/40 backdrop-blur before:pointer-events-none before:absolute before:-inset-10 before:bg-walnut/15 before:blur-3xl before:rounded-full before:content-['']">
     <EvaluationBar engineEnabled={engineEnabled} />
 
     <Tabs
@@ -34,7 +34,7 @@ export default function SidePanel({
       }
 
       aiContent={
-        <div className="text-zinc-400 text-center mt-10">
+        <div className="text-sage text-center mt-10">
           AI Coach coming soon...
         </div>
       }

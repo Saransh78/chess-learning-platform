@@ -1,6 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+    --color-obsidian: #171614;
+    --color-charcoal: #22201D;
+    --color-slate-ash: #2F2B27;
+    --color-stone: #4A443C;
+    --color-bronze: #C89B5A;
+    --color-gold: #D8A867;
+    --color-sage: #7FA38A;
+    --color-walnut: #6A4E3A;
+    --color-ivory: #F4EFE7;
+}
+
 body{
-    background-color: var(--color-zinc-900);
-    color: var(--color-zinc-100);
+    background-color: var(--color-obsidian);
+    color: var(--color-ivory);
 }
