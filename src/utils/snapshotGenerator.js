@@ -7,24 +7,25 @@ export function generateSnapshots(game) {
   const snapshots = [];
 
   // Initial position
-  snapshots.push({
-    board: convertChessBoard(chess.board()),
-    turn: "white",
-    lastMove: null,
-    moveHistory: [],
-    gameOver: false,
-    gameResult: "",
-  });
+snapshots.push({
+  board: convertChessBoard(chess.board()),
+  fen: chess.fen(),
+  turn: "white",
+  lastMove: null,
+  moveHistory: [],
+  gameOver: false,
+  gameResult: "",
+});
 
   const moveHistory = [];
 
   game.moves.forEach((move, index) => {
     chess.move(move);
-
     moveHistory.push(move);
 
     snapshots.push({
-      board: convertChessBoard(chess.board()),
+  board: convertChessBoard(chess.board()),
+  fen: chess.fen(),
 
       turn: chess.turn() === "w" ? "white" : "black",
 

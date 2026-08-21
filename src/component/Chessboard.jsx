@@ -20,7 +20,11 @@ export default function Chessboard({
   moveHistory,
   setMoveHistory,
 }) {
-   const { analyzePosition } = useStockfish();
+   const {
+    analyzePosition,
+    evaluation,
+} = useStockfish();
+console.log(evaluation);
 const {
   boardHistory,
   setBoardHistory,
@@ -29,6 +33,7 @@ const {
   requestedPosition,
   setRequestedPosition,
   selectedGame,
+  setEvaluation,
 } = useGame();
 
 
@@ -220,6 +225,7 @@ useEffect(() => {
   const firstSnapshot = snapshots[0];
 
   setBoardPieces(firstSnapshot.board);
+  console.log(firstSnapshot.fen);
   setCurrentTurn(firstSnapshot.turn);
   setLastMove(firstSnapshot.lastMove);
   setMoveHistory(firstSnapshot.moveHistory);
@@ -232,14 +238,28 @@ useEffect(() => {
   setLegalMoves([]);
 }, [selectedGame]);
 useEffect(() => {
-  const fen = convertBoardToFEN(
-    boardPieces,
-    currentTurn
-  );
+  if (promotionPawn) return;
+
+  const snapshot = boardHistory[currentPosition];
+
+  const fen =
+    snapshot?.fen ??
+    convertBoardToFEN(boardPieces, currentTurn, lastMove);
 
   analyzePosition(fen);
 
-}, [boardPieces, currentTurn, analyzePosition]);
+}, [
+  boardPieces,
+  currentTurn,
+  analyzePosition,
+  promotionPawn,
+  boardHistory,
+  currentPosition,
+  lastMove,
+]);
+useEffect(() => {
+    setEvaluation(evaluation);
+}, [evaluation, setEvaluation]);
 console.log(selectedPiece);
 const rankLabels = isFlipped
   ? [1,2,3,4,5,6,7,8]

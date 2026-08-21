@@ -21,6 +21,7 @@ export function GameProvider({ children }) {
   const [currentPosition, setCurrentPosition] = useState(0);
   const [requestedPosition, setRequestedPosition] = useState(null);
   const [boardSnapshot, setBoardSnapshot] = useState(null);
+  const [evaluation, setEvaluation] = useState(0);
 
   return (
     <GameContext.Provider
@@ -45,6 +46,9 @@ export function GameProvider({ children }) {
 
         selectedGame,
         setSelectedGame,
+
+        evaluation,
+        setEvaluation,
       }}
     >
       {children}

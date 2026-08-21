@@ -42,7 +42,11 @@ const reversePieceMap = {
   king: "k",
 };
 
-export function convertBoardToFEN(boardPieces, turn = "white") {
+export function convertBoardToFEN(
+  boardPieces,
+  turn = "white",
+  lastMove = null
+) {
   const board = Array.from({ length: 8 }, () =>
     Array(8).fill(null)
   );
@@ -81,8 +85,40 @@ export function convertBoardToFEN(boardPieces, turn = "white") {
     return fenRow;
   });
 
+  const findUnmoved = (type, color, row, col) =>
+    boardPieces.find(
+      (piece) =>
+        piece.type === type &&
+        piece.color === color &&
+        piece.row === row &&
+        piece.col === col &&
+        !piece.hasMoved
+    );
+
+  const whiteKing = findUnmoved("king", "white", 7, 4);
+  const blackKing = findUnmoved("king", "black", 0, 4);
+
+  const castling =
+    (whiteKing && findUnmoved("rook", "white", 7, 7) ? "K" : "") +
+    (whiteKing && findUnmoved("rook", "white", 7, 0) ? "Q" : "") +
+    (blackKing && findUnmoved("rook", "black", 0, 7) ? "k" : "") +
+    (blackKing && findUnmoved("rook", "black", 0, 0) ? "q" : "");
+
+  let enPassant = "-";
+
+  if (
+    lastMove &&
+    lastMove.piece === "pawn" &&
+    typeof lastMove.fromRow === "number" &&
+    Math.abs(lastMove.toRow - lastMove.fromRow) === 2
+  ) {
+    const epRow = (lastMove.fromRow + lastMove.toRow) / 2;
+
+    enPassant = `${"abcdefgh"[lastMove.toCol]}${8 - epRow}`;
+  }
+
   return (
     fenRows.join("/") +
-    ` ${turn === "white" ? "w" : "b"} KQkq - 0 1`
+    ` ${turn === "white" ? "w" : "b"} ${castling || "-"} ${enPassant} 0 1`
   );
 }
