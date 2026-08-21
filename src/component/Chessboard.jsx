@@ -287,16 +287,16 @@ const fileLabels = isFlipped
 
   return (
     <div className="w-full min-w-0 max-w-[780px] animate-fade-in">
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <div className="inline-flex items-center gap-2.5 rounded-full border border-stone/50 bg-charcoal/80 py-1.5 pl-3 pr-4 shadow-sm backdrop-blur">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div className="inline-flex items-center gap-2.5 rounded-full border border-stone/40 bg-charcoal/80 py-1.5 pl-3 pr-4 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5)]">
           <span
-            className={`inline-block h-3.5 w-3.5 rounded-full ${
+            className={`inline-block h-3 w-3 rounded-full ${
               currentTurn === "white"
-                ? "bg-ivory shadow-[inset_0_-2px_2px_rgba(0,0,0,0.3)]"
-                : "bg-obsidian ring-1 ring-ivory/60"
+                ? "bg-ivory shadow-[inset_0_-2px_2px_rgba(0,0,0,0.35)]"
+                : "bg-obsidian ring-1 ring-ivory/50"
             }`}
           />
-          <span className="text-sm font-medium capitalize text-ivory/90">
+          <span className="text-sm font-medium capitalize tracking-wide text-ivory/90">
             {currentTurn} to move
           </span>
         </div>
@@ -308,14 +308,14 @@ const fileLabels = isFlipped
         )}
       </div>
 
-      <div className="flex items-stretch gap-2.5">
+      <div className="flex items-stretch gap-3">
         <VerticalEvalBar />
         <div className="relative mb-8 min-w-0 flex-1">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-12 rounded-[3rem] bg-bronze/[0.08] blur-3xl"
+            className="pointer-events-none absolute -inset-10 rounded-[3rem] bg-bronze/[0.07] blur-3xl"
           />
-          <div className="relative rounded-2xl bg-gradient-to-b from-slate-ash/90 to-charcoal p-2 shadow-[0_30px_70px_-24px_rgba(0,0,0,0.7)] ring-1 ring-stone/60 sm:p-2.5">
+          <div className="relative rounded-[1.4rem] bg-gradient-to-b from-slate-ash/90 to-charcoal p-2.5 shadow-[0_28px_70px_-24px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(244,239,231,0.05)] ring-1 ring-stone/50 sm:p-3">
             <div className="relative overflow-hidden rounded-xl">
               <div className="grid aspect-square w-full grid-cols-8 grid-rows-8">
   {Array.from({ length: 64 }).map((_, index) => {
@@ -624,12 +624,13 @@ className={`relative flex items-center justify-center ${
             </div>
           </div>
 
-          <div className="absolute -bottom-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1 rounded-full border border-stone/60 bg-slate-ash/95 p-1.5 shadow-xl shadow-black/50 backdrop-blur">
+          <div className="absolute -bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1 rounded-full border border-stone/50 bg-slate-ash/95 p-1.5 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(244,239,231,0.06)] backdrop-blur">
             <button
               onClick={undoMove}
               disabled={!canGoBack}
-              aria-label="Back"
-              className="grid h-8 w-8 place-items-center rounded-full text-parchment transition-colors duration-150 hover:bg-stone/60 hover:text-ivory disabled:pointer-events-none disabled:opacity-35"
+              aria-label="Previous move"
+              title="Previous move (←)"
+              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95 disabled:pointer-events-none disabled:opacity-35"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                 <path d="M15 18l-6-6 6-6" />
@@ -638,18 +639,20 @@ className={`relative flex items-center justify-center ${
             <button
               onClick={redoMove}
               disabled={!canGoForward}
-              aria-label="Forward"
-              className="grid h-8 w-8 place-items-center rounded-full text-parchment transition-colors duration-150 hover:bg-stone/60 hover:text-ivory disabled:pointer-events-none disabled:opacity-35"
+              aria-label="Next move"
+              title="Next move (→)"
+              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95 disabled:pointer-events-none disabled:opacity-35"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                 <path d="M9 18l6-6-6-6" />
               </svg>
             </button>
-            <span className="mx-0.5 h-5 w-px bg-stone/70" />
+            <span className="mx-0.5 h-5 w-px bg-stone/60" />
             <button
               onClick={() => setIsFlipped(!isFlipped)}
               aria-label="Flip board"
-              className="grid h-8 w-8 place-items-center rounded-full text-parchment transition-colors duration-150 hover:bg-stone/60 hover:text-ivory"
+              title="Flip board"
+              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                 <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
