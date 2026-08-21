@@ -41,10 +41,9 @@ function formatMove(move) {
 }
 export default function MoveHistory({
   moveHistory,
-  currentPosition,
   jumpToPosition,
 }) {
-  const { selectedGame } = useGame();
+  const { selectedGame, currentPosition } = useGame();
  const visibleMoves =
   selectedGame
     ? selectedGame.moves

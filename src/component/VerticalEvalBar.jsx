@@ -11,7 +11,7 @@ export default function VerticalEvalBar() {
   const whitePercent = Math.round(50 + chances * 50);
 
   return (
-    <div className="relative w-7 h-[690px] shrink-0 rounded-lg overflow-hidden border border-stone bg-obsidian">
+    <div className="relative w-7 h-auto self-stretch min-h-[320px] shrink-0 rounded-lg overflow-hidden border border-stone bg-obsidian">
       <div
         className="absolute inset-x-0 bottom-0 bg-white transition-all duration-300"
         style={{ height: `${whitePercent}%` }}

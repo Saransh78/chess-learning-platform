@@ -29,7 +29,6 @@ export default function Chessboard({
     bestMove,
     pv,
 } = useStockfish(engineEnabled);
-console.log(evaluation);
 const {
   boardHistory,
   setBoardHistory,
@@ -233,7 +232,6 @@ useEffect(() => {
   const firstSnapshot = snapshots[0];
 
   setBoardPieces(firstSnapshot.board);
-  console.log(firstSnapshot.fen);
   setCurrentTurn(firstSnapshot.turn);
   setLastMove(firstSnapshot.lastMove);
   setMoveHistory(firstSnapshot.moveHistory);
@@ -273,7 +271,6 @@ useEffect(() => {
     setBestMove(bestMove);
     setPv(pv);
 }, [evaluation, depth, bestMove, pv, setEvaluation, setDepth, setBestMove, setPv]);
-console.log(selectedPiece);
 const rankLabels = isFlipped
   ? [1,2,3,4,5,6,7,8]
   : [8,7,6,5,4,3,2,1];
@@ -281,64 +278,46 @@ const rankLabels = isFlipped
 const fileLabels = isFlipped
   ? "hgfedcba".split("")
   : "abcdefgh".split("");
+
+  const canGoBack = currentPosition > 0;
+  const canGoForward = currentPosition < boardHistory.length - 1;
+
+  const coordColor = (row, col) =>
+    (row + col) % 2 === 0 ? "text-amber-950/50" : "text-amber-100/60";
+
   return (
-    <div>
-<div className="flex justify-between items-center mb-4 rounded-xl bg-charcoal/80 border border-stone/40 px-4 py-2.5 backdrop-blur">
-  <h2 className="inline-flex items-center gap-2.5 text-base font-medium text-ivory/90">
-    Turn
-    <span
-      className={`inline-block w-2.5 h-2.5 rounded-full ${
-        currentTurn === "white" ? "bg-ivory" : "bg-obsidian ring-1 ring-ivory/70"
-      }`}
-    />
-    <span className="capitalize">{currentTurn}</span>
-  </h2>
+    <div className="w-full min-w-0 max-w-[780px] animate-fade-in">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+        <div className="inline-flex items-center gap-2.5 rounded-full border border-stone/50 bg-charcoal/80 py-1.5 pl-3 pr-4 shadow-sm backdrop-blur">
+          <span
+            className={`inline-block h-3.5 w-3.5 rounded-full ${
+              currentTurn === "white"
+                ? "bg-ivory shadow-[inset_0_-2px_2px_rgba(0,0,0,0.3)]"
+                : "bg-obsidian ring-1 ring-ivory/60"
+            }`}
+          />
+          <span className="text-sm font-medium capitalize text-ivory/90">
+            {currentTurn} to move
+          </span>
+        </div>
 
-<div className="flex gap-2">
-  <button
-    onClick={undoMove}
-    disabled={currentPosition === 0}
-    className="bg-slate-ash hover:bg-stone border border-stone/40 hover:border-bronze/60 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-ivory transition"
-  >
-    ⬅
-  </button>
-
-  <button
-    onClick={redoMove}
-    disabled={currentPosition === boardHistory.length - 1}
-    className="bg-slate-ash hover:bg-stone border border-stone/40 hover:border-bronze/60 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-ivory transition"
-  >
-    ➡
-  </button>
-
-  <button
-    onClick={() => setIsFlipped(!isFlipped)}
-    className="bg-slate-ash hover:bg-stone border border-stone/40 hover:border-bronze/60 px-4 py-2 rounded-lg text-ivory transition"
-  >
-    Flip
-  </button>
-</div>
-</div>
-{gameOver && (
-  <h3 className="text-2xl font-bold text-gold mb-3">
-    {gameResult}
-  </h3>
-)}
-    <div className="flex gap-2">
-        <VerticalEvalBar />
-        <div className="flex flex-col h-[690px]">
-        
-                {rankLabels.map((number) => (
-  <div key={number} className="flex-1 text-center">
-    {number}
-  </div>
-))}
-
-
+        {gameOver && (
+          <span className="inline-flex animate-rise items-center rounded-lg border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-sm font-medium text-gold">
+            {gameResult}
+          </span>
+        )}
       </div>
-      <div className="relative">
-    <div className="pointer-events-none absolute -inset-8 rounded-[2.5rem] bg-bronze/10 blur-3xl" />
-    <div className="relative grid grid-cols-8 grid-rows-8 w-[690px] h-[690px] border border-stone/60">
+
+      <div className="flex items-stretch gap-2.5">
+        <VerticalEvalBar />
+        <div className="relative mb-8 min-w-0 flex-1">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-12 rounded-[3rem] bg-bronze/[0.08] blur-3xl"
+          />
+          <div className="relative rounded-2xl bg-gradient-to-b from-slate-ash/90 to-charcoal p-2 shadow-[0_30px_70px_-24px_rgba(0,0,0,0.7)] ring-1 ring-stone/60 sm:p-2.5">
+            <div className="relative overflow-hidden rounded-xl">
+              <div className="grid aspect-square w-full grid-cols-8 grid-rows-8">
   {Array.from({ length: 64 }).map((_, index) => {
     let row = Math.floor(index / 8);
 let col = index % 8;
@@ -571,47 +550,116 @@ setCurrentPosition(newHistory.length - 1);
 }
   }
 }}
-className={`${
+className={`relative flex items-center justify-center ${
   kingInCheck
-    ? "bg-red-600"
+    ? "bg-crimson"
     : isSelected
-    ? "bg-blue-500"
+    ? "bg-bronze/45"
     : isLight
     ? "bg-amber-100"
     : "bg-amber-900"
-} relative flex items-center justify-center text-6xl`}
+}`}
 > 
 {isLegalMove && !piece && (
-  <div className="absolute w-5 h-5 rounded-full bg-black/20"></div>
+  <div className="absolute h-[26%] w-[26%] rounded-full bg-obsidian/25"></div>
 )}
 {isLegalMove && piece && (
-  <div className="absolute inset-1 rounded-full border-4 border-black/25"></div>
+  <div className="absolute inset-[5%] rounded-full border-[3px] border-obsidian/30"></div>
 )}
         {piece && (
   <img
   src={pieceImages[piece.color][piece.type]}
   alt=""
-   className="relative z-10 w-[74px] h-[74px]"
+   className="relative z-10 h-[84%] w-[84%] drop-shadow-[0_3px_4px_rgba(0,0,0,0.28)]"
 />
 )}
       </div>
     );
   })}
 </div>
-<div className="flex w-[690px]">
-  {fileLabels.map((letter) => (
-    <div
-      key={letter}
-      className="flex-1 text-center text-white"
-    >
-      {letter}
-    </div>
-  ))}
-</div>
 
-</div>
-    </div>
-    <PromotionModal
+              <div
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-y-0 left-0 flex w-[5.5%] min-w-4 flex-col ${
+                  isFlipped ? "flex-col-reverse" : ""
+                }`}
+              >
+                {rankLabels.map((number, v) => {
+                  const actualRow = isFlipped ? 7 - v : v;
+                  return (
+                    <span
+                      key={number}
+                      className={`flex flex-1 items-start justify-start pl-1 pt-1 text-[10px] font-semibold ${coordColor(
+                        actualRow,
+                        0
+                      )}`}
+                    >
+                      {number}
+                    </span>
+                  );
+                })}
+              </div>
+
+              <div
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-x-0 bottom-0 flex h-[5.5%] min-h-4 ${
+                  isFlipped ? "flex-row-reverse" : ""
+                }`}
+              >
+                {fileLabels.map((letter, v) => {
+                  const actualCol = isFlipped ? 7 - v : v;
+                  return (
+                    <span
+                      key={letter}
+                      className={`flex flex-1 items-end justify-end pb-0.5 pr-1 text-[10px] font-semibold ${coordColor(
+                        7,
+                        actualCol
+                      )}`}
+                    >
+                      {letter}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute -bottom-5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1 rounded-full border border-stone/60 bg-slate-ash/95 p-1.5 shadow-xl shadow-black/50 backdrop-blur">
+            <button
+              onClick={undoMove}
+              disabled={!canGoBack}
+              aria-label="Back"
+              className="grid h-8 w-8 place-items-center rounded-full text-parchment transition-colors duration-150 hover:bg-stone/60 hover:text-ivory disabled:pointer-events-none disabled:opacity-35"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <button
+              onClick={redoMove}
+              disabled={!canGoForward}
+              aria-label="Forward"
+              className="grid h-8 w-8 place-items-center rounded-full text-parchment transition-colors duration-150 hover:bg-stone/60 hover:text-ivory disabled:pointer-events-none disabled:opacity-35"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+            <span className="mx-0.5 h-5 w-px bg-stone/70" />
+            <button
+              onClick={() => setIsFlipped(!isFlipped)}
+              aria-label="Flip board"
+              className="grid h-8 w-8 place-items-center rounded-full text-parchment transition-colors duration-150 hover:bg-stone/60 hover:text-ivory"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
+                <path d="M21 3v5h-5" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <PromotionModal
   promotionPawn={promotionPawn}
   promotePawn={promotePawn}
 />

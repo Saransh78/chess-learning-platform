@@ -21,17 +21,16 @@ export default function App() {
       {!hasGames ? (
         <Welcome />
       ) : (
-        <main className="mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6">
-          <div className="mt-8 flex items-start gap-10">
-            <Chessboard
-              moveHistory={moveHistory}
-              setMoveHistory={setMoveHistory}
-              engineEnabled={engineEnabled}
-            />
-            <SidePanel
-              moveHistory={moveHistory}
-              engineEnabled={engineEnabled}
-            />
+        <main className="mx-auto w-full max-w-[1260px] flex-1 animate-fade-in px-4 pb-16 pt-6 sm:px-6">
+          <div className="flex flex-col items-center gap-8 xl:flex-row xl:items-start xl:justify-center">
+            <div className="w-full min-w-0 max-w-[780px] xl:flex-1">
+              <Chessboard
+                moveHistory={moveHistory}
+                setMoveHistory={setMoveHistory}
+                engineEnabled={engineEnabled}
+              />
+            </div>
+            <SidePanel engineEnabled={engineEnabled} />
           </div>
         </main>
       )}
