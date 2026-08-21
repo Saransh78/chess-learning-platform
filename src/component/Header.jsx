@@ -52,12 +52,5 @@ console.log(`Loaded ${parsedGames.length} games`);
   />
 </div>
     </div>
-    <div className="flex flex-col gap-2 items-end">
-    <span className=" text-2xl font-bold text-blue-500">Stockfish Analysis</span>
-      <div className="flex items-center gap-3">
-        <Button text="Start" />
-        <Button text="Report" />
-      </div>
-    </div>
   </header>
 }

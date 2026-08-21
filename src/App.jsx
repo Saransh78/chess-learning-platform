@@ -20,8 +20,8 @@ export default function App() {
   setMoveHistory={setMoveHistory}
 />
        <SidePanel
-  moveHistory={moveHistory}
-  currentPosition={currentPosition}
+    moveHistory={moveHistory}
+    currentPosition={currentPosition}
 />
       </div>
     </div>
