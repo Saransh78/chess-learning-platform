@@ -1,90 +1,52 @@
-import Button from "./button"
-import { useRef } from "react";
-import { parsePGNFiles } from "../utils/pgnParser";
-import { useGame } from "../context/GameContext";
+import Logo from "./Logo";
+
 export default function Header({ engineEnabled, setEngineEnabled }) {
-
-  const fileInputRef = useRef(null);
-  const { setGames } = useGame();
-
-  function handleUploadClick() {
-    fileInputRef.current.click();
-  }
-
- async function handleFileSelect(event) {
-  const files = Array.from(event.target.files);
-
-  const uploadedGames = await Promise.all(
-    files.map(async (file) => {
-      return {
-        name: file.name,
-        size: file.size,
-        content: await file.text(),
-      };
-    })
-  );
-
-const parsedGames = parsePGNFiles(uploadedGames);
-
-setGames(parsedGames);
-
-console.table(parsedGames);
-console.log(`Loaded ${parsedGames.length} games`);
-}
   return (
-    <header className="relative">
-      <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-72 w-[42rem] rounded-full bg-walnut/25 blur-[110px]" />
-
-      <nav className="relative flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <span className="text-2xl leading-none text-bronze">♞</span>
-          <span className="text-xl font-bold tracking-tight text-ivory">
-            Knight<span className="text-bronze">Mind</span>
-          </span>
+    <header className="sticky top-0 z-40 border-b border-stone/30 bg-obsidian/85 backdrop-blur-md">
+      <nav className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between px-4 sm:px-6">
+        <div className="flex items-center gap-3">
+          <Logo size="sm" />
+          <div className="flex items-baseline gap-3">
+            <span className="text-lg font-semibold tracking-tight text-ivory">
+              Knight<span className="text-bronze">Mind</span>
+            </span>
+            <span className="hidden text-xs tracking-wide text-faded md:block">
+              Personalized Chess Intelligence
+            </span>
+          </div>
         </div>
 
         <button
+          type="button"
+          role="switch"
+          aria-checked={engineEnabled}
           onClick={() => setEngineEnabled((on) => !on)}
-          className={`px-4 py-2 rounded-lg text-sm font-medium border transition ${
+          className={`flex items-center gap-2.5 rounded-full border px-3 py-1.5 transition-colors duration-200 ${
             engineEnabled
-              ? "bg-bronze hover:bg-gold text-obsidian border-transparent shadow-md shadow-bronze/25"
-              : "bg-charcoal hover:bg-slate-ash text-ivory/80 border-stone/50"
+              ? "border-bronze/40 bg-bronze/10 hover:border-bronze/60"
+              : "border-stone/50 bg-charcoal/70 hover:border-stone"
           }`}
         >
-          Stockfish: {engineEnabled ? "ON" : "OFF"}
+          <span
+            className={`relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors duration-200 ${
+              engineEnabled ? "bg-bronze" : "bg-stone/70"
+            }`}
+          >
+            <span
+              className={`absolute h-3 w-3 rounded-full bg-ivory shadow-sm transition-transform duration-200 ${
+                engineEnabled ? "translate-x-[14px]" : "translate-x-[2px]"
+              }`}
+            />
+          </span>
+          <span
+            className={`text-xs font-medium tracking-wide ${
+              engineEnabled ? "text-gold" : "text-faded"
+            }`}
+          >
+            Stockfish {engineEnabled ? "On" : "Off"}
+          </span>
         </button>
       </nav>
-
-      <section className="relative mt-12 mb-2 text-center">
-        <p className="text-xs font-medium uppercase tracking-[0.35em] text-bronze/80">
-          AI Chess Laboratory
-        </p>
-
-        <h1 className="mt-4 text-5xl sm:text-6xl font-bold tracking-tight bg-gradient-to-r from-gold via-bronze to-gold bg-clip-text text-transparent">
-          KnightMind
-        </h1>
-
-        <p className="mt-4 max-w-xl mx-auto leading-relaxed text-ivory/60">
-          Upload your games and read every position like a grandmaster —
-          powered by a world-class chess engine.
-        </p>
-
-        <button
-          onClick={handleUploadClick}
-          className="mt-7 bg-bronze hover:bg-gold px-6 py-3 rounded-xl text-obsidian text-sm font-semibold transition shadow-lg shadow-bronze/30 hover:-translate-y-0.5"
-        >
-          📂 Upload Games
-        </button>
-
-        <input
-          type="file"
-          ref={fileInputRef}
-          accept=".pgn"
-          multiple
-          onChange={handleFileSelect}
-          className="hidden"
-        />
-      </section>
     </header>
   );
 }
