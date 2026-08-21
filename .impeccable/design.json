@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-21T16:45:00Z",
+  "title": "Design System: KnightMind",
+  "extensions": {
+    "colorMeta": {
+      "bronze": { "role": "primary", "displayName": "Bronze", "canonical": "#C89B5A", "tonalRamp": ["#3A2C18", "#59431F", "#7A5B28", "#9A7434", "#B78643", "#C89B5A", "#D8A867", "#EBD0A4"] },
+      "sage": { "role": "secondary", "displayName": "Sage", "canonical": "#7FA38A", "tonalRamp": ["#22332A", "#2E463A", "#3B594A", "#496D5B", "#5F846F", "#7FA38A", "#A8C1A5", "#D2E0CE"] },
+      "clay": { "role": "tertiary", "displayName": "Clay", "canonical": "#C97A5D" },
+      "obsidian": { "role": "neutral", "displayName": "Obsidian", "canonical": "#171614", "tonalRamp": ["#0D0C0B", "#121110", "#171614", "#22201D", "#2F2B27", "#4A443C", "#6E675E", "#8E8578"] },
+      "charcoal": { "role": "neutral", "displayName": "Charcoal Tray", "canonical": "#22201D" },
+      "slate-ash": { "role": "neutral", "displayName": "Slate Ash Well", "canonical": "#2F2B27" },
+      "stone": { "role": "neutral", "displayName": "Stone Border", "canonical": "#4A443C" },
+      "divider": { "role": "neutral", "displayName": "Divider", "canonical": "#6E675E" },
+      "ivory": { "role": "neutral", "displayName": "Ivory Type", "canonical": "#F4EFE7" },
+      "parchment": { "role": "neutral", "displayName": "Parchment Type", "canonical": "#B7AFA2" },
+      "faded": { "role": "neutral", "displayName": "Faded Caption", "canonical": "#8E8578" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Welcome hero statement only." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles." },
+      "title": { "displayName": "Title", "purpose": "Card and panel titles, wordmark." },
+      "body": { "displayName": "Body", "purpose": "Descriptions and prose; ≤65ch measure." },
+      "label": { "displayName": "Label", "purpose": "Uppercase group labels inside panels." },
+      "data": { "displayName": "Data Mono", "purpose": "Engine output, notation, evaluations." }
+    },
+    "shadows": [
+      { "name": "tray-rest", "value": "0 24px 60px -24px rgba(0,0,0,0.6)", "purpose": "Side panel and large resting cards." },
+      { "name": "board-plinth", "value": "0 28px 70px -24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(244,239,231,0.05)", "purpose": "Board frame with lacquer top highlight." },
+      { "name": "floating-control", "value": "0 16px 40px -12px rgba(0,0,0,0.7)", "purpose": "Toolbar floating over the board edge." },
+      { "name": "primary-lift", "value": "0 12px 24px -8px rgba(200,155,90,0.25)", "purpose": "Bronze primary buttons; deepens on hover." }
+    ],
+    "motion": [
+      { "name": "ease-signature", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "All entrances (rise/settle) and the tab thumb slide." },
+      { "name": "duration-state", "value": "150–300ms", "purpose": "Hover/color/transform state transitions." },
+      { "name": "entrance-stagger", "value": "≤120ms delays, one authored moment per view", "purpose": "Welcome rise cascade; workspace board settle + panel rise." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Bronze fill, obsidian text; lifts on hover into bronze-hover with a tinted shadow.",
+      "html": "<button class=\"ds-btn-primary\">Import PGNs</button>",
+      "css": ".ds-btn-primary { background: var(--color-bronze, #C89B5A); color: var(--color-obsidian, #171614); font-weight: 600; font-size: 14px; padding: 14px 32px; border: none; border-radius: 12px; box-shadow: 0 12px 24px -8px rgba(200,155,90,0.25); transition: all .2s cubic-bezier(.22,1,.36,1); cursor: pointer; } .ds-btn-primary:hover { background: var(--color-bronze-hover, #D8A867); transform: translateY(-2px); box-shadow: 0 16px 28px -10px rgba(200,155,90,0.3); } .ds-btn-primary:active { transform: translateY(0); } .ds-btn-primary:focus-visible { outline: 2px solid rgba(200,155,90,.75); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Text-only quiet action used for inline links like '+ Import PGNs'.",
+      "html": "<button class=\"ds-btn-ghost\">+ Import PGNs</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: var(--color-bronze, #C89B5A); font-size: 12px; font-weight: 500; padding: 4px 8px; border: none; border-radius: 6px; transition: background .15s, color .15s; cursor: pointer; } .ds-btn-ghost:hover { background: rgba(200,155,90,.1); color: var(--color-bronze-hover, #D8A867); }"
+    },
+    {
+      "name": "Segmented Tab",
+      "kind": "nav",
+      "refersTo": "tab-active",
+      "description": "Equal-width segmented control with sliding thumb and sage active underline.",
+      "html": "<div class=\"ds-tabs\"><button class=\"ds-tab\" aria-selected=\"true\">Moves<span class=\"ds-tab-bar\"></span></button><button class=\"ds-tab\">AI Coach</button></div>",
+      "css": ".ds-tabs { position: relative; display: flex; background: rgba(23,22,20,.7); border-radius: 12px; padding: 4px; box-shadow: inset 0 0 0 1px rgba(74,68,60,.3); } .ds-tab { position: relative; z-index: 1; flex: 1; background: none; border: none; color: var(--color-faded, #8E8578); font-size: 12px; font-weight: 500; padding: 7px 8px 8px; border-radius: 8px; cursor: pointer; transition: color .2s; } .ds-tab[aria-selected=\"true\"] { color: var(--color-ivory, #F4EFE7); } .ds-tab:hover { color: var(--color-parchment, #B7AFA2); } .ds-tab[aria-selected=\"true\"]:before { content: ''; position: absolute; inset: 4px 0; background: var(--color-slate-ash, #2F2B27); border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(74,68,60,.4), 0 2px 10px -2px rgba(0,0,0,.45); z-index: -1; } .ds-tab-bar { position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%); width: 16px; height: 2px; border-radius: 9999px; background: var(--color-sage, #7FA38A); opacity: 0; transition: opacity .2s; } .ds-tab[aria-selected=\"true\"] .ds-tab-bar { opacity: 1; }"
+    },
+    {
+      "name": "Game Card",
+      "kind": "card",
+      "description": "Selectable game row with hover lift and bronze activity rail.",
+      "html": "<button class=\"ds-game-card\"><span class=\"ds-game-rail\"></span><span class=\"ds-game-names\">Player A <em>vs</em> Player B</span><span class=\"ds-game-result\">0-1</span></button>",
+      "css": ".ds-game-card { position: relative; display: block; width: 100%; text-align: left; background: rgba(34,32,29,.6); box-shadow: inset 0 0 0 1px rgba(74,68,60,.3); border: none; border-radius: 12px; padding: 16px 16px 16px 18px; overflow: hidden; cursor: pointer; transition: all .2s cubic-bezier(.22,1,.36,1); } .ds-game-card:hover { transform: translateY(-2px); background: rgba(47,43,39,.5); box-shadow: 0 12px 24px -12px rgba(0,0,0,.35), inset 0 0 0 1px rgba(74,68,60,.5); } .ds-game-rail { position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 9999px; background: var(--color-bronze, #C89B5A); opacity: 0; transition: opacity .2s; } .ds-game-card:hover .ds-game-rail { opacity: .3; } .ds-game-card[data-selected] { background: rgba(47,43,39,.7); box-shadow: 0 12px 24px -12px rgba(0,0,0,.3), inset 0 0 0 1px rgba(200,155,90,.4); } .ds-game-card[data-selected] .ds-game-rail { opacity: 1; } .ds-game-names { display: block; color: var(--color-ivory, #F4EFE7); font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-game-names em { font-style: normal; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; color: var(--color-faded, #8E8578); margin: 0 6px; } .ds-game-result { float: right; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: var(--color-bronze-hover, #D8A867); background: rgba(23,22,20,.6); box-shadow: inset 0 0 0 1px rgba(74,68,60,.4); border-radius: 6px; padding: 2px 8px; }"
+    },
+    {
+      "name": "Evaluation Card",
+      "kind": "custom",
+      "description": "Compact engine readout: label + live pulse, bronze figure, meta, PV hairline.",
+      "html": "<section class=\"ds-eval\"><header><h3>Evaluation</h3><span class=\"ds-eval-live\"><i></i>Stockfish</span></header><div class=\"ds-eval-main\"><strong>+0.73</strong><span>White has the initiative</span></div><dl><div><dt>Depth</dt><dd>18</dd></div><div><dt>Best</dt><dd class=\"ds-eval-best\">Nf3</dd></div></dl></section>",
+      "css": ".ds-eval { background: rgba(47,43,39,.45); border-radius: 12px; padding: 14px 16px; font-family: Inter, sans-serif; } .ds-eval header { display: flex; justify-content: space-between; align-items: center; } .ds-eval h3 { margin: 0; font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--color-faded, #8E8578); } .ds-eval-live { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: var(--color-sage, #7FA38A); } .ds-eval-live i { width: 6px; height: 6px; border-radius: 9999px; background: var(--color-sage, #7FA38A); animation: ds-pulse 2s infinite; } @keyframes ds-pulse { 50% { opacity: .4; } } .ds-eval-main { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-top: 10px; } .ds-eval-main strong { font-size: 32px; line-height: 1; font-weight: 600; letter-spacing: -.02em; color: var(--color-bronze, #C89B5A); font-variant-numeric: tabular-nums; } .ds-eval-main span { font-size: 12px; color: var(--color-parchment, #B7AFA2); text-align: right; } .ds-eval dl { display: flex; gap: 24px; margin: 16px 0 0; font-size: 12px; } .ds-eval dt { color: var(--color-faded, #8E8578); } .ds-eval dd { margin: 0; color: rgba(244,239,231,.9); font-weight: 500; } .ds-eval-best { font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; color: var(--color-bronze-hover, #D8A867); background: rgba(200,155,90,.15); box-shadow: inset 0 0 0 1px rgba(200,155,90,.25); border-radius: 6px; padding: 2px 8px; }"
+    },
+    {
+      "name": "Turn Indicator Pill",
+      "kind": "chip",
+      "description": "Side-to-move pill above the board.",
+      "html": "<div class=\"ds-turn\"><i class=\"ds-turn-dot\"></i>White to move</div>",
+      "css": ".ds-turn { display: inline-flex; align-items: center; gap: 10px; background: rgba(34,32,29,.8); box-shadow: inset 0 0 0 1px rgba(74,68,60,.4), 0 8px 24px -12px rgba(0,0,0,.5); border-radius: 9999px; padding: 6px 16px 6px 12px; font-size: 14px; font-weight: 500; color: rgba(244,239,231,.9); text-transform: capitalize; } .ds-turn-dot { width: 12px; height: 12px; border-radius: 9999px; background: var(--color-ivory, #F4EFE7); box-shadow: inset 0 -2px 2px rgba(0,0,0,.35); }"
+    },
+    {
+      "name": "Coach Insight Card",
+      "kind": "card",
+      "description": "AI Coach placeholder insight with sage-light tag.",
+      "html": "<figure class=\"ds-insight\"><blockquote>&ldquo;Missed forks across multiple games.&rdquo;</blockquote><figcaption><i></i>Tactical Pattern</figcaption></figure>",
+      "css": ".ds-insight { margin: 0; background: rgba(47,43,39,.4); border-radius: 12px; padding: 16px; transition: all .2s; } .ds-insight:hover { transform: translateY(-2px); background: rgba(47,43,39,.6); } .ds-insight blockquote { margin: 0; font-size: 13px; line-height: 1.625; color: rgba(244,239,231,.9); } .ds-insight figcaption { margin-top: 10px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: var(--color-sage-light, #A8C1A5); } .ds-insight figcaption i { width: 4px; height: 4px; border-radius: 9999px; background: var(--color-sage, #7FA38A); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Obsidian Study Room",
+    "overview": "KnightMind is a lacquered, warm near-black chess study where a single brass instrument — bronze — marks everything the engine touches, and a quiet green voice — sage — speaks only for the AI Coach. Surfaces read as stacked lacquer trays rather than floating glass; depth comes from soft black drop shadows with real offset. Whitespace is generous and the board is always the visual hero at roughly 60% of the workspace's attention.",
+    "keyCharacteristics": [
+      "Warm neutral lacquer ~70%; ivory carries typography",
+      "Bronze is the engine's instrument accent (~15%)",
+      "Sage is the coach's voice (~5%), always sage-light as small text",
+      "One authored motion moment per view; restrained state transitions"
+    ],
+    "rules": [
+      { "name": "The Two Voices Rule", "body": "Bronze speaks for the engine, sage speaks for the coach; neither borrows the other's role, and together they stay near 20% of any screen. White carries the words.", "section": "colors" },
+      { "name": "The Soft Sage Rule", "body": "Wherever sage appears as text below 12px, use Sage Light (#A8C1A5) for contrast; raw sage is for shapes and icons.", "section": "colors" },
+      { "name": "The Data Is Mono Rule", "body": "Monospace is reserved for measurable chess data — notation, evaluations, PV lines — never as a decorative costume.", "section": "typography" },
+      { "name": "The Lacquer Rule", "body": "Surfaces are flat at rest within their tonal layer; elevation is reserved for elements that float or respond.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep the chessboard squares exactly as they are — the board is heritage, not themable surface.",
+      "Do theme browser chrome from the palette: selection, caret, scrollbars, focus-visible.",
+      "Do respect prefers-reduced-motion.",
+      "Do label coach placeholder content honestly until the ML pipeline ships."
+    ],
+    "donts": [
+      "Don't apply neon, RGB-gaming gradients, heavy glassmorphism, or clutter.",
+      "Don't let sage exceed its ~5% presence or speak for anything that isn't the AI Coach.",
+      "Don't use unicode glyphs or emoji where drawn SVG icons belong.",
+      "Don't market copy like a generic AI startup."
+    ]
+  }
+}
