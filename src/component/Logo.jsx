@@ -38,7 +38,7 @@ export default function Logo({ size = "md" }) {
   return (
     <div
       role="img"
-      aria-label="KnightMind emblem"
+      aria-label="BoardSense emblem"
       className={`grid shrink-0 select-none place-items-center bg-gradient-to-b from-slate-ash to-charcoal ring-1 ring-stone shadow-[inset_0_1px_0_rgba(244,239,231,0.07),0_8px_24px_-10px_rgba(0,0,0,0.7)] ${SIZES[size]}`}
     >
       <KnightGlyph className={`${GLYPH[size]} translate-y-[-1px] drop-shadow-[0_2px_6px_rgba(200,155,90,0.35)]`} />

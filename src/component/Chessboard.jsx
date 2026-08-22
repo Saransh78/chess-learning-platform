@@ -286,8 +286,9 @@ const fileLabels = isFlipped
     (row + col) % 2 === 0 ? "text-amber-950/50" : "text-amber-100/60";
 
   return (
-    <div className="w-full min-w-0 max-w-[780px] animate-fade-in">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+    <div className="w-full min-w-0 animate-fade-in">
+      <div className="mx-auto flex w-full max-w-[clamp(420px,calc(100dvh_-_200px),780px)] flex-col">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <div className="inline-flex items-center gap-2.5 rounded-full border border-stone/40 bg-charcoal/80 py-1.5 pl-3 pr-4 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5)]">
           <span
             className={`inline-block h-3 w-3 rounded-full ${
@@ -301,19 +302,58 @@ const fileLabels = isFlipped
           </span>
         </div>
 
-        {gameOver && (
-          <span className="inline-flex animate-rise items-center rounded-lg border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-sm font-medium text-gold">
-            {gameResult}
-          </span>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          {gameOver && (
+            <span className="inline-flex animate-rise items-center rounded-lg border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-sm font-medium text-gold">
+              {gameResult}
+            </span>
+          )}
+
+          <div className="flex items-center gap-1 rounded-full border border-stone/50 bg-slate-ash/95 p-1.5 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(244,239,231,0.06)] backdrop-blur">
+            <button
+              onClick={undoMove}
+              disabled={!canGoBack}
+              aria-label="Previous move"
+              title="Previous move (←)"
+              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95 disabled:pointer-events-none disabled:opacity-35"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <button
+              onClick={redoMove}
+              disabled={!canGoForward}
+              aria-label="Next move"
+              title="Next move (→)"
+              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95 disabled:pointer-events-none disabled:opacity-35"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+            <span className="mx-0.5 h-5 w-px bg-stone/60" />
+            <button
+              onClick={() => setIsFlipped(!isFlipped)}
+              aria-label="Flip board"
+              title="Flip board"
+              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
+                <path d="M21 3v5h-5" />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div className="flex items-stretch gap-3">
+        <div className="flex w-full items-stretch gap-3">
         <VerticalEvalBar />
-        <div className="relative mb-8 min-w-0 flex-1">
+        <div className="relative min-w-0 flex-1">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-10 rounded-[3rem] bg-bronze/[0.07] blur-3xl"
+            className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-bronze/[0.07] blur-3xl"
           />
           <div className="relative rounded-[1.4rem] bg-gradient-to-b from-slate-ash/90 to-charcoal p-2.5 shadow-[0_28px_70px_-24px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(244,239,231,0.05)] ring-1 ring-stone/50 sm:p-3">
             <div className="relative overflow-hidden rounded-xl">
@@ -623,43 +663,7 @@ className={`relative flex items-center justify-center ${
               </div>
             </div>
           </div>
-
-          <div className="absolute -bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1 rounded-full border border-stone/50 bg-slate-ash/95 p-1.5 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(244,239,231,0.06)] backdrop-blur">
-            <button
-              onClick={undoMove}
-              disabled={!canGoBack}
-              aria-label="Previous move"
-              title="Previous move (←)"
-              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95 disabled:pointer-events-none disabled:opacity-35"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </button>
-            <button
-              onClick={redoMove}
-              disabled={!canGoForward}
-              aria-label="Next move"
-              title="Next move (→)"
-              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95 disabled:pointer-events-none disabled:opacity-35"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            </button>
-            <span className="mx-0.5 h-5 w-px bg-stone/60" />
-            <button
-              onClick={() => setIsFlipped(!isFlipped)}
-              aria-label="Flip board"
-              title="Flip board"
-              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-                <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
-                <path d="M21 3v5h-5" />
-              </svg>
-            </button>
-          </div>
+        </div>
         </div>
       </div>
       <PromotionModal

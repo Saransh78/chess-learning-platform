@@ -54,12 +54,12 @@ export default function Welcome() {
         </div>
 
         <p className="mt-7 animate-rise text-sm font-semibold tracking-tight text-ivory [animation-delay:40ms]">
-          Knight<span className="text-bronze">Mind</span>
+          Board<span className="text-bronze">Sense</span>
           <span className="mx-2.5 text-faded" aria-hidden="true">
             ·
           </span>
           <span className="font-medium tracking-wide text-parchment">
-            AI Based Learning Platform
+            AI Based Chess Learning Platform
           </span>
         </p>
 
@@ -69,18 +69,19 @@ export default function Welcome() {
           <span className="text-bronze">Learn like a coach.</span>
         </h1>
 
-        <p className="mx-auto mt-8 max-w-xl animate-rise text-lg leading-relaxed text-ivory/85 [animation-delay:150ms]">
+        <p className="mx-auto mt-8 max-w-xl animate-rise text-lg leading-relaxed text-sage [animation-delay:150ms]">
           Upload your Chess.com or Lichess PGNs and turn every game into
-          actionable improvement.
+          actionable improvement. Stockfish analyzes every position move by
+          move, while BoardSense&rsquo;s AI Coach studies patterns across your
+          games to uncover recurring weaknesses, tactical blind spots, opening
+          trends, and the skills you should focus on next.
         </p>
 
-        <p className="mx-auto mt-5 max-w-xl animate-rise text-base leading-relaxed text-parchment [animation-delay:200ms]">
-          <span className="font-medium text-ivory">Stockfish</span> analyzes
-          every position move by move, while{" "}
-          <span className="font-medium text-sage">KnightMind&rsquo;s AI Coach</span>{" "}
-          studies patterns across your games to uncover recurring weaknesses,
-          tactical blind spots, opening trends, and the skills you should focus
-          on next.
+        <p className="mx-auto mt-8 max-w-xl animate-rise text-xl font-semibold tracking-tight [animation-delay:200ms]">
+          <span className="text-ivory">
+            Stockfish analyzes every position.
+          </span>{" "}
+          <span className="text-sage-light">BoardSense analyzes you.</span>
         </p>
 
         <div className="mt-10 animate-rise [animation-delay:250ms]">
@@ -151,6 +152,9 @@ export default function Welcome() {
                 Across your games
               </span>
             </div>
+            <p className="mt-1 text-sm leading-relaxed text-parchment">
+              Your personalized improvement report.
+            </p>
             <ul className="mt-4 space-y-2.5">
               <Bullet tone="sage">Analyzes multiple games together</Bullet>
               <Bullet tone="sage">Finds recurring mistakes</Bullet>
@@ -191,10 +195,10 @@ export default function Welcome() {
       <section className="mx-auto max-w-5xl px-6 pb-28">
         <div className="border-t border-stone/30 pt-16">
           <h2 className="text-center text-2xl font-semibold tracking-tight text-ivory sm:text-3xl">
-            How KnightMind Works
+            How BoardSense Works
           </h2>
           <p className="mx-auto mt-3 max-w-lg text-center text-sm leading-relaxed text-faded">
-            Instead of only showing engine evaluations, KnightMind builds a
+            Instead of only showing engine evaluations, BoardSense builds a
             long-term picture of your chess.
           </p>
 

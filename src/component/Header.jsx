@@ -8,10 +8,10 @@ export default function Header({ engineEnabled, setEngineEnabled }) {
           <Logo size="sm" />
           <div className="leading-tight">
             <span className="block text-[15px] font-semibold tracking-tight text-ivory">
-              Knight<span className="text-bronze">Mind</span>
+              Board<span className="text-bronze">Sense</span>
             </span>
             <span className="hidden text-[10px] font-medium uppercase tracking-[0.18em] text-faded sm:block">
-              AI Based Learning Platform
+              AI Based Chess Learning Platform
             </span>
           </div>
         </div>

@@ -78,7 +78,7 @@ export default function CoachReport() {
         {requested ? (
           <p className="relative mt-3 animate-fade-in text-[11px] leading-relaxed text-sage">
             The AI Coach is studying your patterns &mdash; full reports arrive
-            with the KnightMind engine release.
+            with the BoardSense engine release.
           </p>
         ) : (
           gameCount > 0 && (
