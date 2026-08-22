@@ -9,6 +9,7 @@ import {
    isStalemate,
 } from "../utils/gameRules";
 import PromotionModal from "./PromotionalModal";
+import VerticalEvalBar from "./VerticalEvalBar";
 import { generateSnapshots } from "../utils/snapshotGenerator";
 import { convertBoardToFEN } from "../utils/boardConverter";
 import { useGame } from "../context/GameContext";
@@ -19,12 +20,15 @@ import useStockfish from "../hooks/useStockfish";
 export default function Chessboard({
   moveHistory,
   setMoveHistory,
+  engineEnabled,
 }) {
    const {
     analyzePosition,
     evaluation,
-} = useStockfish();
-console.log(evaluation);
+    depth,
+    bestMove,
+    pv,
+} = useStockfish(engineEnabled);
 const {
   boardHistory,
   setBoardHistory,
@@ -34,6 +38,9 @@ const {
   setRequestedPosition,
   selectedGame,
   setEvaluation,
+  setDepth,
+  setBestMove,
+  setPv,
 } = useGame();
 
 
@@ -225,7 +232,6 @@ useEffect(() => {
   const firstSnapshot = snapshots[0];
 
   setBoardPieces(firstSnapshot.board);
-  console.log(firstSnapshot.fen);
   setCurrentTurn(firstSnapshot.turn);
   setLastMove(firstSnapshot.lastMove);
   setMoveHistory(firstSnapshot.moveHistory);
@@ -239,6 +245,7 @@ useEffect(() => {
 }, [selectedGame]);
 useEffect(() => {
   if (promotionPawn) return;
+  if (!engineEnabled) return;
 
   const snapshot = boardHistory[currentPosition];
 
@@ -256,11 +263,14 @@ useEffect(() => {
   boardHistory,
   currentPosition,
   lastMove,
+  engineEnabled,
 ]);
 useEffect(() => {
     setEvaluation(evaluation);
-}, [evaluation, setEvaluation]);
-console.log(selectedPiece);
+    setDepth(depth);
+    setBestMove(bestMove);
+    setPv(pv);
+}, [evaluation, depth, bestMove, pv, setEvaluation, setDepth, setBestMove, setPv]);
 const rankLabels = isFlipped
   ? [1,2,3,4,5,6,7,8]
   : [8,7,6,5,4,3,2,1];
@@ -268,56 +278,86 @@ const rankLabels = isFlipped
 const fileLabels = isFlipped
   ? "hgfedcba".split("")
   : "abcdefgh".split("");
+
+  const canGoBack = currentPosition > 0;
+  const canGoForward = currentPosition < boardHistory.length - 1;
+
+  const coordColor = (row, col) =>
+    (row + col) % 2 === 0 ? "text-amber-950/50" : "text-amber-100/60";
+
   return (
-    <div>
-<div className="flex justify-between items-center mb-3">
-  <h2 className="text-xl font-semibold">
-    Turn: {currentTurn}
-  </h2>
+    <div className="w-full min-w-0 animate-fade-in">
+      <div className="mx-auto flex w-full max-w-[clamp(420px,calc(100dvh_-_200px),780px)] flex-col">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="inline-flex items-center gap-2.5 rounded-full border border-stone/40 bg-charcoal/80 py-1.5 pl-3 pr-4 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5)]">
+          <span
+            className={`inline-block h-3 w-3 rounded-full ${
+              currentTurn === "white"
+                ? "bg-ivory shadow-[inset_0_-2px_2px_rgba(0,0,0,0.35)]"
+                : "bg-obsidian ring-1 ring-ivory/50"
+            }`}
+          />
+          <span className="text-sm font-medium capitalize tracking-wide text-ivory/90">
+            {currentTurn} to move
+          </span>
+        </div>
 
-<div className="flex gap-2">
-  <button
-    onClick={undoMove}
-    disabled={currentPosition === 0}
-    className="bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-white"
-  >
-    ⬅
-  </button>
+        <div className="flex flex-wrap items-center gap-2">
+          {gameOver && (
+            <span className="inline-flex animate-rise items-center rounded-lg border border-gold/30 bg-gold/10 px-3.5 py-1.5 text-sm font-medium text-gold">
+              {gameResult}
+            </span>
+          )}
 
-  <button
-    onClick={redoMove}
-    disabled={currentPosition === boardHistory.length - 1}
-    className="bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 rounded-lg text-white"
-  >
-    ➡
-  </button>
-
-  <button
-    onClick={() => setIsFlipped(!isFlipped)}
-    className="bg-zinc-700 hover:bg-zinc-600 px-4 py-2 rounded-lg text-white"
-  >
-    Flip
-  </button>
-</div>
-</div>
-{gameOver && (
-  <h3 className="text-2xl font-bold text-green-400 mb-3">
-    {gameResult}
-  </h3>
-)}
-    <div className="flex gap-2">
-        <div className="flex flex-col h-[600px]">
-        
-                {rankLabels.map((number) => (
-  <div key={number} className="flex-1 text-center">
-    {number}
-  </div>
-))}
-
-
+          <div className="flex items-center gap-1 rounded-full border border-stone/50 bg-slate-ash/95 p-1.5 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(244,239,231,0.06)] backdrop-blur">
+            <button
+              onClick={undoMove}
+              disabled={!canGoBack}
+              aria-label="Previous move"
+              title="Previous move (←)"
+              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95 disabled:pointer-events-none disabled:opacity-35"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <button
+              onClick={redoMove}
+              disabled={!canGoForward}
+              aria-label="Next move"
+              title="Next move (→)"
+              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95 disabled:pointer-events-none disabled:opacity-35"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+            <span className="mx-0.5 h-5 w-px bg-stone/60" />
+            <button
+              onClick={() => setIsFlipped(!isFlipped)}
+              aria-label="Flip board"
+              title="Flip board"
+              className="grid h-9 w-9 place-items-center rounded-full text-parchment transition-all duration-150 hover:bg-stone/50 hover:text-ivory active:scale-95"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
+                <path d="M21 3v5h-5" />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
-      <div>
-    <div className="grid grid-cols-8 grid-rows-8 w-[600px] h-[600px] border">
+
+        <div className="flex w-full items-stretch gap-3">
+        <VerticalEvalBar />
+        <div className="relative min-w-0 flex-1">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-6 rounded-[3rem] bg-bronze/[0.07] blur-3xl"
+          />
+          <div className="relative rounded-[1.4rem] bg-gradient-to-b from-slate-ash/90 to-charcoal p-2.5 shadow-[0_28px_70px_-24px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(244,239,231,0.05)] ring-1 ring-stone/50 sm:p-3">
+            <div className="relative overflow-hidden rounded-xl">
+              <div className="grid aspect-square w-full grid-cols-8 grid-rows-8">
   {Array.from({ length: 64 }).map((_, index) => {
     let row = Math.floor(index / 8);
 let col = index % 8;
@@ -550,47 +590,83 @@ setCurrentPosition(newHistory.length - 1);
 }
   }
 }}
-className={`${
+className={`relative flex items-center justify-center ${
   kingInCheck
-    ? "bg-red-600"
+    ? "bg-crimson"
     : isSelected
-    ? "bg-blue-500"
+    ? "bg-bronze/45"
     : isLight
     ? "bg-amber-100"
     : "bg-amber-900"
-} relative flex items-center justify-center text-6xl`}
+}`}
 > 
 {isLegalMove && !piece && (
-  <div className="absolute w-5 h-5 rounded-full bg-black/20"></div>
+  <div className="absolute h-[26%] w-[26%] rounded-full bg-obsidian/25"></div>
 )}
 {isLegalMove && piece && (
-  <div className="absolute inset-1 rounded-full border-4 border-black/25"></div>
+  <div className="absolute inset-[5%] rounded-full border-[3px] border-obsidian/30"></div>
 )}
         {piece && (
   <img
   src={pieceImages[piece.color][piece.type]}
   alt=""
-  className="relative z-10 w-16 h-16"
+   className="relative z-10 h-[84%] w-[84%] drop-shadow-[0_3px_4px_rgba(0,0,0,0.28)]"
 />
 )}
       </div>
     );
   })}
 </div>
-<div className="flex w-[600px]">
-  {fileLabels.map((letter) => (
-    <div
-      key={letter}
-      className="flex-1 text-center text-white"
-    >
-      {letter}
-    </div>
-  ))}
-</div>
 
-</div>
-    </div>
-    <PromotionModal
+              <div
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-y-0 left-0 flex w-[5.5%] min-w-4 flex-col ${
+                  isFlipped ? "flex-col-reverse" : ""
+                }`}
+              >
+                {rankLabels.map((number, v) => {
+                  const actualRow = isFlipped ? 7 - v : v;
+                  return (
+                    <span
+                      key={number}
+                      className={`flex flex-1 items-start justify-start pl-1 pt-1 text-[10px] font-semibold ${coordColor(
+                        actualRow,
+                        0
+                      )}`}
+                    >
+                      {number}
+                    </span>
+                  );
+                })}
+              </div>
+
+              <div
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-x-0 bottom-0 flex h-[5.5%] min-h-4 ${
+                  isFlipped ? "flex-row-reverse" : ""
+                }`}
+              >
+                {fileLabels.map((letter, v) => {
+                  const actualCol = isFlipped ? 7 - v : v;
+                  return (
+                    <span
+                      key={letter}
+                      className={`flex flex-1 items-end justify-end pb-0.5 pr-1 text-[10px] font-semibold ${coordColor(
+                        7,
+                        actualCol
+                      )}`}
+                    >
+                      {letter}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <PromotionModal
   promotionPawn={promotionPawn}
   promotePawn={promotePawn}
 />

@@ -1,56 +1,52 @@
-import Button from "./button"
-import { useRef } from "react";
-import { parsePGNFiles } from "../utils/pgnParser";
-import { useGame } from "../context/GameContext";
-export default function Header() {
+import Logo from "./Logo";
 
-  const fileInputRef = useRef(null);
-  const { setGames } = useGame();
+export default function Header({ engineEnabled, setEngineEnabled }) {
+  return (
+    <header className="sticky top-0 z-40 border-b border-stone/30 bg-obsidian/85 backdrop-blur-md">
+      <nav className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between px-4 sm:px-6">
+        <div className="flex items-center gap-3">
+          <Logo size="sm" />
+          <div className="leading-tight">
+            <span className="block text-[15px] font-semibold tracking-tight text-ivory">
+              Board<span className="text-bronze">Sense</span>
+            </span>
+            <span className="hidden text-[10px] font-medium uppercase tracking-[0.18em] text-faded sm:block">
+              AI Based Chess Learning Platform
+            </span>
+          </div>
+        </div>
 
-  function handleUploadClick() {
-    fileInputRef.current.click();
-  }
-
- async function handleFileSelect(event) {
-  const files = Array.from(event.target.files);
-
-  const uploadedGames = await Promise.all(
-    files.map(async (file) => {
-      return {
-        name: file.name,
-        size: file.size,
-        content: await file.text(),
-      };
-    })
+        <button
+          type="button"
+          role="switch"
+          aria-checked={engineEnabled}
+          onClick={() => setEngineEnabled((on) => !on)}
+          className={`flex items-center gap-2.5 rounded-full border px-3 py-1.5 transition-colors duration-200 ${
+            engineEnabled
+              ? "border-bronze/40 bg-bronze/10 hover:border-bronze/60"
+              : "border-stone/50 bg-charcoal/70 hover:border-stone"
+          }`}
+        >
+          <span
+            className={`relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors duration-200 ${
+              engineEnabled ? "bg-bronze" : "bg-stone/70"
+            }`}
+          >
+            <span
+              className={`absolute h-3 w-3 rounded-full bg-ivory shadow-sm transition-transform duration-200 ${
+                engineEnabled ? "translate-x-[14px]" : "translate-x-[2px]"
+              }`}
+            />
+          </span>
+          <span
+            className={`text-xs font-medium tracking-wide ${
+              engineEnabled ? "text-gold" : "text-faded"
+            }`}
+          >
+            Stockfish {engineEnabled ? "On" : "Off"}
+          </span>
+        </button>
+      </nav>
+    </header>
   );
-
-const parsedGames = parsePGNFiles(uploadedGames);
-
-setGames(parsedGames);
-
-console.table(parsedGames);
-console.log(`Loaded ${parsedGames.length} games`);
-}
-  return <header className="flex items-center justify-between ">
-    <div className="flex flex-col gap-1">
-<h1 className="text-3xl font-bold text-blue-500">AI Chess Learning Platform</h1>
-      <div>
-  <button
-    onClick={handleUploadClick}
-    className="mt-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white text-sm transition"
-  >
-    📂 Upload Games
-  </button>
-
-  <input
-    type="file"
-    ref={fileInputRef}
-    accept=".pgn"
-    multiple
-    onChange={handleFileSelect}
-    className="hidden"
-  />
-</div>
-    </div>
-  </header>
 }

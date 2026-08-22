@@ -1,6 +1,139 @@
 @import "tailwindcss";
 
-body{
-    background-color: var(--color-zinc-900);
-    color: var(--color-zinc-100);
+@theme {
+    /* Foundation */
+    --color-obsidian: #171614;
+    --color-charcoal: #22201D;
+    --color-slate-ash: #2F2B27;
+    --color-stone: #4A443C;
+    --color-divider: #6E675E;
+
+    /* Typography */
+    --color-ivory: #F4EFE7;
+    --color-parchment: #B7AFA2;
+    --color-faded: #8E8578;
+
+    /* Brand */
+    --color-bronze: #C89B5A;
+    --color-gold: #D8A867;
+    --color-antique: #B78643;
+
+    /* Supporting */
+    --color-sage: #7FA38A;
+    --color-sage-light: #A8C1A5;
+    --color-clay: #C97A5D;
+    --color-crimson: #A64F4F;
+    --color-walnut: #6A4E3A;
+
+    --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+        "Segoe UI", Roboto, sans-serif;
+
+    --animate-rise: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    --animate-fade-in: fade-in 0.5s ease-out both;
+    --animate-eval: eval-fade 0.35s ease-out both;
+    --animate-settle: settle 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+    @keyframes rise {
+        from {
+            opacity: 0;
+            transform: translateY(14px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes settle {
+        from {
+            opacity: 0;
+            transform: translateY(10px) scale(0.988);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes eval-fade {
+        from {
+            opacity: 0.3;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 }
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--color-obsidian);
+    background-image:
+        radial-gradient(
+            ellipse 60% 42% at 50% -8%,
+            rgba(200, 155, 90, 0.05),
+            transparent
+        ),
+        radial-gradient(
+            ellipse 45% 35% at 85% 110%,
+            rgba(106, 78, 58, 0.06),
+            transparent
+        );
+    background-attachment: fixed;
+    color: var(--color-ivory);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background-color: rgba(200, 155, 90, 0.28);
+}
+
+.scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-stone) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--color-stone);
+    border-radius: 9999px;
+}
+
+::caret,
+input,
+textarea {
+    caret-color: var(--color-ivory);
+}
+
+:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--color-bronze) 75%, transparent);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+

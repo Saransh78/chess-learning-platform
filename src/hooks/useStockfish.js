@@ -1,17 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
 import stockfishEngine from "../Engine/stockfishEngine";
 import { useRef } from "react";
-export default function useStockfish() {
+export default function useStockfish(enabled = true) {
     const currentFen = useRef("");
     const pendingFen = useRef(null);
     const searching = useRef(false);
     const cancelling = useRef(false);
     const [evaluation, setEvaluation] = useState(0);
+    const [depth, setDepth] = useState(null);
+    const [bestMove, setBestMove] = useState(null);
+    const [pv, setPv] = useState("");
 
 const startSearch = (fen) => {
   currentFen.current = fen;
   pendingFen.current = null;
   searching.current = true;
+
+  setDepth(null);
+  setBestMove(null);
+  setPv("");
 
   stockfishEngine.send(`position fen ${fen}`);
   stockfishEngine.send("go depth 18");
@@ -27,6 +34,12 @@ const startSearch = (fen) => {
 const handleMessage = (message) => {
 
   if (message.startsWith("bestmove")) {
+    const move = message.split(/\s+/)[1];
+
+    if (move && move !== "(none)") {
+      setBestMove(move);
+    }
+
     searching.current = false;
     cancelling.current = false;
 
@@ -39,6 +52,14 @@ const handleMessage = (message) => {
 
   if (cancelling.current || !searching.current) {
     return;
+  }
+
+  const depthMatch = message.match(/\bdepth (\d+)/);
+  const pvMatch = message.match(/ pv (.+)$/);
+
+  if (depthMatch && pvMatch) {
+    setDepth(Number(depthMatch[1]));
+    setPv(pvMatch[1].trim());
   }
 
   const match = message.match(/score (cp|mate) (-?\d+)/);
@@ -71,6 +92,18 @@ setEvaluation(evaluation);
     };
   }, []);
 
+  useEffect(() => {
+    if (enabled) {
+      stockfishEngine.start();
+    } else {
+      stockfishEngine.stop();
+    }
+
+    searching.current = false;
+    cancelling.current = false;
+    pendingFen.current = null;
+  }, [enabled]);
+
 const analyzePosition = useCallback((fen) => {
   console.log("Sending FEN:", fen);
 
@@ -86,5 +119,8 @@ const analyzePosition = useCallback((fen) => {
   return {
     analyzePosition,
     evaluation,
+    depth,
+    bestMove,
+    pv,
 };
-}
+}
