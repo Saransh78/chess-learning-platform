@@ -1,8 +1,7 @@
-import io
-
-import chess.pgn
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from typing import Annotated
+
+from app.services.upload_service import extract_games
 
 router = APIRouter(prefix="/api", tags=["uploads"])
 
@@ -21,13 +20,11 @@ async def upload_pgn(file: Annotated[UploadFile, File()]):
     except UnicodeDecodeError:
         raise HTTPException(status_code=400, detail="File is not valid UTF-8 text")
 
-    stream = io.StringIO(content)
-    games_detected = 0
-    while chess.pgn.read_game(stream) is not None:
-        games_detected += 1
+    games = extract_games(content)
 
     return {
         "filename": filename,
-        "games_detected": games_detected,
+        "games_detected": len(games),
         "file_size_bytes": len(raw),
+        "games": games,
     }
