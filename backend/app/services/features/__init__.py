@@ -1,4 +1,4 @@
-"""Pure, deterministic chess feature helpers (M3.7 Commit 1 + Commit 2)."""
+"""Pure, deterministic chess feature helpers (M3.7 Commits 1-3)."""
 
 from app.services.features.extractor import extract_features
 from app.services.features.material import (
@@ -15,6 +15,12 @@ from app.services.features.pawn_structure import (
 )
 from app.services.features.phase import castled, game_phase
 from app.services.features.piece_counts import piece_counts
+from app.services.features.stockfish_features import (
+    analyze_move,
+    evaluate_after_move,
+    evaluate_best_move,
+    stockfish_evaluation,
+)
 
 __all__ = [
     "PIECE_VALUES",
@@ -29,4 +35,8 @@ __all__ = [
     "castled",
     "game_phase",
     "piece_counts",
+    "stockfish_evaluation",
+    "evaluate_after_move",
+    "evaluate_best_move",
+    "analyze_move",
 ]
