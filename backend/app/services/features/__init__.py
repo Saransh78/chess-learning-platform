@@ -1,5 +1,6 @@
-"""Pure, deterministic chess feature helpers (M3.7 Commit 1)."""
+"""Pure, deterministic chess feature helpers (M3.7 Commit 1 + Commit 2)."""
 
+from app.services.features.extractor import extract_features
 from app.services.features.material import (
     PIECE_VALUES,
     bishop_pair,
@@ -17,6 +18,7 @@ from app.services.features.piece_counts import piece_counts
 
 __all__ = [
     "PIECE_VALUES",
+    "extract_features",
     "material_difference",
     "bishop_pair",
     "queens_present",
