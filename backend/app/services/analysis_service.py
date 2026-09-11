@@ -28,6 +28,12 @@ def stockfish_session() -> Iterator[chess.engine.SimpleEngine]:
 def analyze_position(fen: str, depth: int = 12):
     board = chess.Board(fen)
 
+    if board.is_game_over():
+        # No legal moves: the engine returns no PV. Mirror the notebook's
+        # game-over convention (stockfish_evaluation -> Nones) instead of
+        # raising KeyError on info["pv"].
+        return {"fen": fen, "best_move": None, "evaluation": None}
+
     with stockfish_session() as engine:
         info = engine.analyse(board, chess.engine.Limit(depth=depth))
 
