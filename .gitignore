@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 .opencode/
-.impeccable/
+.impeccable/feature_extraction.ipynb
