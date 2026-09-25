@@ -25,3 +25,4 @@ dist-ssr
 
 .opencode/
 /feature_extraction.ipynb
+.ipynb_checkpoints/
