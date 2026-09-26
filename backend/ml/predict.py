@@ -349,6 +349,14 @@ def predict_position(
         raise TypeError("feature_dict must be a mapping of feature names to values.")
 
     artifacts = _load_artifacts(_resolve_models_dir(models_dir))
+    position_frame = _feature_mapping_to_frame(feature_dict, artifacts)
+    return predict_dataframe(position_frame, models_dir)[0]
+
+
+def _feature_mapping_to_frame(
+    feature_dict: Mapping[str, Any], artifacts: LoadedArtifacts
+) -> pd.DataFrame:
+    """Validate known mapping keys and arrange them by the saved feature schema."""
     feature_names = artifacts.schema["feature_names"]
     missing = [feature for feature in feature_names if feature not in feature_dict]
     known_non_features = set(artifacts.schema["excluded_columns"])
@@ -363,7 +371,7 @@ def predict_position(
         raise ValueError(f"Prediction input contains unknown features: {unknown}")
 
     ordered_features = {feature: feature_dict[feature] for feature in feature_names}
-    return predict_dataframe(pd.DataFrame([ordered_features]), models_dir)[0]
+    return pd.DataFrame([ordered_features])
 
 
 def _load_cli_input(

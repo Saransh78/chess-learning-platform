@@ -1,0 +1,256 @@
+{
+  "model_version": "RandomForestClassifier-9b86140addb2",
+  "feature_schema_version": 1,
+  "sample_count": 2918,
+  "class_labels": [
+    "0-1",
+    "1-0",
+    "1/2-1/2"
+  ],
+  "aggregation": "mean absolute SHAP averaged across samples and classes",
+  "features": [
+    {
+      "rank": 1,
+      "feature": "PlayedEvaluation",
+      "mean_absolute_shap_impact": 0.04966088185203144,
+      "percentage_contribution": 11.101121083955059,
+      "cumulative_percentage": 11.101121083955059
+    },
+    {
+      "rank": 2,
+      "feature": "CurrentEvaluation",
+      "mean_absolute_shap_impact": 0.039887571930315675,
+      "percentage_contribution": 8.9164096413501,
+      "cumulative_percentage": 20.017530725305157
+    },
+    {
+      "rank": 3,
+      "feature": "BestEvaluation",
+      "mean_absolute_shap_impact": 0.038516542307976666,
+      "percentage_contribution": 8.60993167962917,
+      "cumulative_percentage": 28.627462404934327
+    },
+    {
+      "rank": 4,
+      "feature": "BlackKnightCount",
+      "mean_absolute_shap_impact": 0.03849595949012571,
+      "percentage_contribution": 8.605330626552961,
+      "cumulative_percentage": 37.23279303148729
+    },
+    {
+      "rank": 5,
+      "feature": "WhitePawnCount",
+      "mean_absolute_shap_impact": 0.03268114596073513,
+      "percentage_contribution": 7.305495692837536,
+      "cumulative_percentage": 44.53828872432483
+    },
+    {
+      "rank": 6,
+      "feature": "PiecesOnBoard",
+      "mean_absolute_shap_impact": 0.018426841214065227,
+      "percentage_contribution": 4.119109203933393,
+      "cumulative_percentage": 48.65739792825822
+    },
+    {
+      "rank": 7,
+      "feature": "WhiteIsolatedPawns",
+      "mean_absolute_shap_impact": 0.01626304300323284,
+      "percentage_contribution": 3.6354169084307295,
+      "cumulative_percentage": 52.29281483668895
+    },
+    {
+      "rank": 8,
+      "feature": "MoveNumber",
+      "mean_absolute_shap_impact": 0.016115046098445697,
+      "percentage_contribution": 3.6023338962323583,
+      "cumulative_percentage": 55.89514873292131
+    },
+    {
+      "rank": 9,
+      "feature": "BlackPawnIslands",
+      "mean_absolute_shap_impact": 0.014127610767364374,
+      "percentage_contribution": 3.1580655015912438,
+      "cumulative_percentage": 59.05321423451255
+    },
+    {
+      "rank": 10,
+      "feature": "BlackBishopCount",
+      "mean_absolute_shap_impact": 0.013340061184848637,
+      "percentage_contribution": 2.9820178167922706,
+      "cumulative_percentage": 62.035232051304824
+    },
+    {
+      "rank": 11,
+      "feature": "WhiteKnightCount",
+      "mean_absolute_shap_impact": 0.013159821408562164,
+      "percentage_contribution": 2.9417272801348098,
+      "cumulative_percentage": 64.97695933143963
+    },
+    {
+      "rank": 12,
+      "feature": "MaterialDifference",
+      "mean_absolute_shap_impact": 0.012711556329596677,
+      "percentage_contribution": 2.841522758311543,
+      "cumulative_percentage": 67.81848208975117
+    },
+    {
+      "rank": 13,
+      "feature": "BlackRookCount",
+      "mean_absolute_shap_impact": 0.01159860767631948,
+      "percentage_contribution": 2.5927358399264144,
+      "cumulative_percentage": 70.41121792967759
+    },
+    {
+      "rank": 14,
+      "feature": "WhiteBishopCount",
+      "mean_absolute_shap_impact": 0.01054268876660915,
+      "percentage_contribution": 2.3566972672232858,
+      "cumulative_percentage": 72.76791519690087
+    },
+    {
+      "rank": 15,
+      "feature": "WhiteQueenCount",
+      "mean_absolute_shap_impact": 0.009213271288080532,
+      "percentage_contribution": 2.0595212234259743,
+      "cumulative_percentage": 74.82743642032685
+    },
+    {
+      "rank": 16,
+      "feature": "QueensPresent",
+      "mean_absolute_shap_impact": 0.008708117429016435,
+      "percentage_contribution": 1.946599866688764,
+      "cumulative_percentage": 76.7740362870156
+    },
+    {
+      "rank": 17,
+      "feature": "WhitePawnIslands",
+      "mean_absolute_shap_impact": 0.007979268674432136,
+      "percentage_contribution": 1.7836740793328723,
+      "cumulative_percentage": 78.55771036634847
+    },
+    {
+      "rank": 18,
+      "feature": "WhitePassedPawns",
+      "mean_absolute_shap_impact": 0.007840924511689195,
+      "percentage_contribution": 1.7527488270096505,
+      "cumulative_percentage": 80.31045919335813
+    },
+    {
+      "rank": 19,
+      "feature": "WhiteRookCount",
+      "mean_absolute_shap_impact": 0.007827337098960321,
+      "percentage_contribution": 1.749711516589543,
+      "cumulative_percentage": 82.06017070994767
+    },
+    {
+      "rank": 20,
+      "feature": "BlackCastled",
+      "mean_absolute_shap_impact": 0.007605915775512828,
+      "percentage_contribution": 1.70021531695531,
+      "cumulative_percentage": 83.76038602690298
+    },
+    {
+      "rank": 21,
+      "feature": "BlackIsolatedPawns",
+      "mean_absolute_shap_impact": 0.007550947015751349,
+      "percentage_contribution": 1.6879276805866044,
+      "cumulative_percentage": 85.44831370748959
+    },
+    {
+      "rank": 22,
+      "feature": "GamePhase",
+      "mean_absolute_shap_impact": 0.00720887662840715,
+      "percentage_contribution": 1.6114617652116434,
+      "cumulative_percentage": 87.05977547270123
+    },
+    {
+      "rank": 23,
+      "feature": "BlackBishopPair",
+      "mean_absolute_shap_impact": 0.007137155740730558,
+      "percentage_contribution": 1.5954293826067822,
+      "cumulative_percentage": 88.65520485530801
+    },
+    {
+      "rank": 24,
+      "feature": "BlackQueenCount",
+      "mean_absolute_shap_impact": 0.006636334120332982,
+      "percentage_contribution": 1.4834764481812202,
+      "cumulative_percentage": 90.13868130348924
+    },
+    {
+      "rank": 25,
+      "feature": "WhiteCastled",
+      "mean_absolute_shap_impact": 0.006574697804831045,
+      "percentage_contribution": 1.4696983561289165,
+      "cumulative_percentage": 91.60837965961815
+    },
+    {
+      "rank": 26,
+      "feature": "Mobility",
+      "mean_absolute_shap_impact": 0.0064432955720414,
+      "percentage_contribution": 1.4403248927005738,
+      "cumulative_percentage": 93.04870455231872
+    },
+    {
+      "rank": 27,
+      "feature": "CentipawnLoss",
+      "mean_absolute_shap_impact": 0.006412144643551579,
+      "percentage_contribution": 1.4333614595889044,
+      "cumulative_percentage": 94.48206601190763
+    },
+    {
+      "rank": 28,
+      "feature": "BlackPawnCount",
+      "mean_absolute_shap_impact": 0.006010806901452983,
+      "percentage_contribution": 1.3436470061913075,
+      "cumulative_percentage": 95.82571301809894
+    },
+    {
+      "rank": 29,
+      "feature": "WhiteBishopPair",
+      "mean_absolute_shap_impact": 0.005637895396966205,
+      "percentage_contribution": 1.2602869124812877,
+      "cumulative_percentage": 97.08599993058023
+    },
+    {
+      "rank": 30,
+      "feature": "BlackPassedPawns",
+      "mean_absolute_shap_impact": 0.005043827430336163,
+      "percentage_contribution": 1.1274898258466028,
+      "cumulative_percentage": 98.21348975642684
+    },
+    {
+      "rank": 31,
+      "feature": "BlackDoubledPawns",
+      "mean_absolute_shap_impact": 0.003607551324365993,
+      "percentage_contribution": 0.8064267603562724,
+      "cumulative_percentage": 99.01991651678311
+    },
+    {
+      "rank": 32,
+      "feature": "WhiteDoubledPawns",
+      "mean_absolute_shap_impact": 0.0022132526858270967,
+      "percentage_contribution": 0.49474727669883883,
+      "cumulative_percentage": 99.51466379348196
+    },
+    {
+      "rank": 33,
+      "feature": "PlayedBestMove",
+      "mean_absolute_shap_impact": 0.00217115224923024,
+      "percentage_contribution": 0.4853362065180551,
+      "cumulative_percentage": 100.0
+    },
+    {
+      "rank": 34,
+      "feature": "Depth",
+      "mean_absolute_shap_impact": 0.0,
+      "percentage_contribution": 0.0,
+      "cumulative_percentage": 100.0
+    }
+  ],
+  "plot_files": [
+    "shap_summary_plot.png",
+    "shap_bar_plot.png",
+    "top20_feature_importance.png"
+  ]
+}
