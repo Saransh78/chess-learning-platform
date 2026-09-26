@@ -1,0 +1,766 @@
+{
+  "castling_analysis": {
+    "Black": {
+      "castled": {
+        "average_evaluation_loss": 0.4303529411764706,
+        "average_mobility": 33.34,
+        "blunder_count": 13,
+        "blunder_frequency": 0.013569937369519834,
+        "sample_size": 958
+      },
+      "uncastled": {
+        "average_evaluation_loss": 0.37875141884222474,
+        "average_mobility": 26.75,
+        "blunder_count": 26,
+        "blunder_frequency": 0.013612565445026177,
+        "sample_size": 1910
+      }
+    },
+    "White": {
+      "castled": {
+        "average_evaluation_loss": 0.4551951672862454,
+        "average_mobility": 33.3,
+        "blunder_count": 16,
+        "blunder_frequency": 0.014492753623188406,
+        "sample_size": 1104
+      },
+      "uncastled": {
+        "average_evaluation_loss": 0.3577729796421962,
+        "average_mobility": 26.23,
+        "blunder_count": 23,
+        "blunder_frequency": 0.013038548752834467,
+        "sample_size": 1764
+      }
+    }
+  },
+  "dataset": {
+    "games": 38,
+    "positions": 2918,
+    "scored_positions": 2868
+  },
+  "game_phase_analysis": {
+    "phases": {
+      "Endgame": {
+        "average_centipawn_loss": 35.92,
+        "average_confidence": 0.9003884711779448,
+        "average_cpl_unrounded": 35.916015625,
+        "average_evaluation_loss": 0.43501355013550136,
+        "average_mobility": 16.1,
+        "blunder_count": 10,
+        "blunder_rate": 0.01953125,
+        "mistake_count": 46,
+        "mistake_rate": 0.08984375,
+        "positions": 532,
+        "sample_size": 512
+      },
+      "Middlegame": {
+        "average_centipawn_loss": 46.54,
+        "average_confidence": 0.9053201058201058,
+        "average_cpl_unrounded": 46.53939886271324,
+        "average_evaluation_loss": 0.4715837479270315,
+        "average_mobility": 30.74,
+        "blunder_count": 23,
+        "blunder_rate": 0.01868399675060926,
+        "mistake_count": 161,
+        "mistake_rate": 0.13078797725426483,
+        "positions": 1260,
+        "sample_size": 1231
+      },
+      "Opening": {
+        "average_centipawn_loss": 30.41,
+        "average_confidence": 0.8249378330373002,
+        "average_cpl_unrounded": 30.413333333333334,
+        "average_evaluation_loss": 0.3034670231729055,
+        "average_mobility": 32.98,
+        "blunder_count": 6,
+        "blunder_rate": 0.005333333333333333,
+        "mistake_count": 84,
+        "mistake_rate": 0.07466666666666667,
+        "positions": 1126,
+        "sample_size": 1125
+      }
+    },
+    "weakest_phase": "Endgame",
+    "weakest_phase_reason": "highest blunder rate, then highest average CPL"
+  },
+  "material_imbalance_analysis": {
+    "bishop_pair": {
+      "groups": {
+        "absent": {
+          "average_centipawn_loss": 42.38,
+          "average_confidence": 0.9057584890496283,
+          "average_cpl_unrounded": 42.37685643564357,
+          "average_evaluation_loss": 0.4498486932599725,
+          "average_mobility": 25.85,
+          "blunder_count": 30,
+          "blunder_rate": 0.018564356435643563,
+          "mistake_count": 187,
+          "mistake_rate": 0.11571782178217822,
+          "positions": 1659,
+          "sample_size": 1616
+        },
+        "present": {
+          "average_centipawn_loss": 33.08,
+          "average_confidence": 0.8307678051363516,
+          "average_cpl_unrounded": 33.07747603833866,
+          "average_evaluation_loss": 0.3344006436041834,
+          "average_mobility": 32.99,
+          "blunder_count": 9,
+          "blunder_rate": 0.00718849840255591,
+          "mistake_count": 104,
+          "mistake_rate": 0.08306709265175719,
+          "positions": 1259,
+          "sample_size": 1252
+        }
+      },
+      "higher_cpl_group": null
+    },
+    "major_piece_imbalance": {
+      "groups": {
+        "absent": {
+          "average_centipawn_loss": 39.47,
+          "average_confidence": 0.8779109184075681,
+          "average_cpl_unrounded": 39.47141143542583,
+          "average_evaluation_loss": 0.39419354838709675,
+          "average_mobility": 29.69,
+          "blunder_count": 35,
+          "blunder_rate": 0.013994402239104359,
+          "mistake_count": 261,
+          "mistake_rate": 0.10435825669732107,
+          "positions": 2537,
+          "sample_size": 2501
+        },
+        "present": {
+          "average_centipawn_loss": 30.45,
+          "average_confidence": 0.8433858267716535,
+          "average_cpl_unrounded": 30.452316076294277,
+          "average_evaluation_loss": 0.4208064516129032,
+          "average_mobility": 23.86,
+          "blunder_count": 4,
+          "blunder_rate": 0.010899182561307902,
+          "mistake_count": 30,
+          "mistake_rate": 0.08174386920980926,
+          "positions": 381,
+          "sample_size": 367
+        }
+      },
+      "higher_cpl_group": null
+    },
+    "queenless": {
+      "groups": {
+        "absent": {
+          "average_centipawn_loss": 35.98,
+          "average_confidence": 0.8413744380218369,
+          "average_cpl_unrounded": 35.98383145516903,
+          "average_evaluation_loss": 0.3847741596638656,
+          "average_mobility": 32.87,
+          "blunder_count": 23,
+          "blunder_rate": 0.011268985791278784,
+          "mistake_count": 199,
+          "mistake_rate": 0.09750122488975992,
+          "positions": 2076,
+          "sample_size": 2041
+        },
+        "present": {
+          "average_centipawn_loss": 44.08,
+          "average_confidence": 0.9523713380839272,
+          "average_cpl_unrounded": 44.07617896009673,
+          "average_evaluation_loss": 0.42513240857503154,
+          "average_mobility": 19.22,
+          "blunder_count": 16,
+          "blunder_rate": 0.019347037484885126,
+          "mistake_count": 92,
+          "mistake_rate": 0.11124546553808948,
+          "positions": 842,
+          "sample_size": 827
+        }
+      },
+      "higher_cpl_group": null
+    },
+    "rook_endings": {
+      "groups": {
+        "absent": {
+          "average_centipawn_loss": 37.36,
+          "average_confidence": 0.8674793536804308,
+          "average_cpl_unrounded": 37.35586408476434,
+          "average_evaluation_loss": 0.39325798908807486,
+          "average_mobility": 29.51,
+          "blunder_count": 32,
+          "blunder_rate": 0.011691633175009134,
+          "mistake_count": 271,
+          "mistake_rate": 0.09901351845085861,
+          "positions": 2785,
+          "sample_size": 2737
+        },
+        "present": {
+          "average_centipawn_loss": 58.4,
+          "average_confidence": 0.9974436090225564,
+          "average_cpl_unrounded": 58.404580152671755,
+          "average_evaluation_loss": 0.4629007633587786,
+          "average_mobility": 16.86,
+          "blunder_count": 7,
+          "blunder_rate": 0.05343511450381679,
+          "mistake_count": 20,
+          "mistake_rate": 0.15267175572519084,
+          "positions": 133,
+          "sample_size": 131
+        }
+      },
+      "higher_cpl_group": "present"
+    }
+  },
+  "metric_definitions": {
+    "average_evaluation_loss": "mean positive, side-relative pre-move to played-move evaluation drop in pawn units; mate evaluations excluded",
+    "blunder_count": "CPL at or above blunder_cpl",
+    "confidence": "scored_positions / (scored_positions + minimum_sample_size)",
+    "mistake_count": "CPL at or above mistake_cpl; includes blunders",
+    "rates": "event counts divided by scored positions, represented as 0-1 fractions",
+    "scored_position": "CentipawnLoss < 500",
+    "severity_score": "0-100 weighted mistake frequency and average CPL, multiplied by sample-support confidence"
+  },
+  "mobility_analysis": {
+    "comparison_status": "supported",
+    "quartiles": {
+      "Q1": {
+        "average_centipawn_loss": 35.71,
+        "average_confidence": 0.9068258426966291,
+        "average_cpl_unrounded": 35.711399711399714,
+        "average_evaluation_loss": 0.37812080536912757,
+        "average_mobility": 11.26,
+        "blunder_count": 12,
+        "blunder_rate": 0.017316017316017316,
+        "mistake_count": 62,
+        "mistake_rate": 0.08946608946608947,
+        "positions": 712,
+        "sample_size": 693
+      },
+      "Q2": {
+        "average_centipawn_loss": 34.09,
+        "average_confidence": 0.8676451310861423,
+        "average_cpl_unrounded": 34.09375,
+        "average_evaluation_loss": 0.3485610465116279,
+        "average_mobility": 26.57,
+        "blunder_count": 7,
+        "blunder_rate": 0.009943181818181818,
+        "mistake_count": 58,
+        "mistake_rate": 0.08238636363636363,
+        "positions": 712,
+        "sample_size": 704
+      },
+      "Q3": {
+        "average_centipawn_loss": 40.19,
+        "average_confidence": 0.8588464912280702,
+        "average_cpl_unrounded": 40.18666666666667,
+        "average_evaluation_loss": 0.4083265306122449,
+        "average_mobility": 33.92,
+        "blunder_count": 12,
+        "blunder_rate": 0.016,
+        "mistake_count": 80,
+        "mistake_rate": 0.10666666666666667,
+        "positions": 760,
+        "sample_size": 750
+      },
+      "Q4": {
+        "average_centipawn_loss": 43.0,
+        "average_confidence": 0.8616394187102635,
+        "average_cpl_unrounded": 43.00138696255201,
+        "average_evaluation_loss": 0.4490412979351032,
+        "average_mobility": 43.2,
+        "blunder_count": 8,
+        "blunder_rate": 0.011095700416088766,
+        "mistake_count": 91,
+        "mistake_rate": 0.1262135922330097,
+        "positions": 734,
+        "sample_size": 721
+      }
+    },
+    "reduced_mobility_precedes_mistakes": false
+  },
+  "move_range_analysis": {
+    "highest_risk_range": "41+",
+    "ranges": {
+      "1-10": {
+        "average_cpl": 24.38,
+        "average_evaluation_loss": 0.24261213720316624,
+        "blunder_count": 3,
+        "blunder_rate": 0.00395778364116095,
+        "mistake_count": 36,
+        "mistake_rate": 0.047493403693931395,
+        "positions": 758,
+        "sample_size": 758
+      },
+      "11-20": {
+        "average_cpl": 45.52,
+        "average_evaluation_loss": 0.4566808510638298,
+        "blunder_count": 10,
+        "blunder_rate": 0.014144271570014143,
+        "mistake_count": 95,
+        "mistake_rate": 0.13437057991513437,
+        "positions": 711,
+        "sample_size": 707
+      },
+      "21-30": {
+        "average_cpl": 45.29,
+        "average_evaluation_loss": 0.46735652173913045,
+        "blunder_count": 10,
+        "blunder_rate": 0.01697792869269949,
+        "mistake_count": 72,
+        "mistake_rate": 0.12224108658743633,
+        "positions": 605,
+        "sample_size": 589
+      },
+      "31-40": {
+        "average_cpl": 41.7,
+        "average_evaluation_loss": 0.44370919881305637,
+        "blunder_count": 6,
+        "blunder_rate": 0.016042780748663103,
+        "mistake_count": 45,
+        "mistake_rate": 0.12032085561497326,
+        "positions": 386,
+        "sample_size": 374
+      },
+      "41+": {
+        "average_cpl": 38.55,
+        "average_evaluation_loss": 0.45223602484472053,
+        "blunder_count": 10,
+        "blunder_rate": 0.022727272727272728,
+        "mistake_count": 43,
+        "mistake_rate": 0.09772727272727273,
+        "positions": 458,
+        "sample_size": 440
+      }
+    },
+    "risk_basis": "highest blunder rate, then highest average CPL"
+  },
+  "overall": {
+    "average_confidence": 0.8734030157642221,
+    "average_cpl": 38.32,
+    "average_mobility": 28.93,
+    "blunder_count": 39,
+    "blunder_rate": 0.013598326359832637,
+    "games": 38,
+    "mistake_count": 291,
+    "mistake_rate": 0.10146443514644352,
+    "positions": 2918,
+    "scored_positions": 2868
+  },
+  "patterns": [
+    {
+      "confidence": 0.8675,
+      "metrics": {
+        "average_centipawn_loss": 58.4,
+        "average_confidence": 0.9974436090225564,
+        "average_cpl_unrounded": 58.404580152671755,
+        "average_evaluation_loss": 0.4629007633587786,
+        "average_mobility": 16.86,
+        "blunder_count": 7,
+        "blunder_rate": 0.05343511450381679,
+        "mistake_count": 20,
+        "mistake_rate": 0.15267175572519084,
+        "positions": 133,
+        "sample_size": 131
+      },
+      "pattern": "rook_endings:present_positions_have_higher_cpl",
+      "sample_size": 131,
+      "sample_status": "adequate",
+      "severity_score": 14.8845
+    },
+    {
+      "confidence": 0.9768,
+      "metrics": {
+        "average_centipawn_loss": 48.43,
+        "average_confidence": 0.8918414918414919,
+        "average_cpl_unrounded": 48.43111638954869,
+        "average_evaluation_loss": 0.4900120192307692,
+        "average_mobility": 31.29,
+        "blunder_count": 16,
+        "blunder_rate": 0.019002375296912115,
+        "mistake_count": 120,
+        "mistake_rate": 0.14251781472684086,
+        "positions": 858,
+        "sample_size": 842
+      },
+      "pattern": "pawn_islands:fragmented_has_higher_cpl",
+      "sample_size": 842,
+      "sample_status": "adequate",
+      "severity_score": 14.7526
+    },
+    {
+      "confidence": 0.9867,
+      "metrics": {
+        "average_centipawn_loss": 46.04,
+        "average_confidence": 0.9087406920718353,
+        "average_cpl_unrounded": 46.043184885290145,
+        "average_evaluation_loss": 0.47183393501805054,
+        "average_mobility": 26.91,
+        "blunder_count": 29,
+        "blunder_rate": 0.019568151147098516,
+        "mistake_count": 193,
+        "mistake_rate": 0.13022941970310392,
+        "positions": 1522,
+        "sample_size": 1482
+      },
+      "pattern": "isolated_pawns:present_has_higher_cpl",
+      "sample_size": 1482,
+      "sample_status": "adequate",
+      "severity_score": 13.8813
+    },
+    {
+      "confidence": 0.9624,
+      "metrics": {
+        "average_centipawn_loss": 35.92,
+        "average_confidence": 0.9003884711779448,
+        "average_cpl_unrounded": 35.916015625,
+        "average_evaluation_loss": 0.43501355013550136,
+        "average_mobility": 16.1,
+        "blunder_count": 10,
+        "blunder_rate": 0.01953125,
+        "mistake_count": 46,
+        "mistake_rate": 0.08984375,
+        "positions": 532,
+        "sample_size": 512
+      },
+      "pattern": "weakest_game_phase:Endgame",
+      "sample_size": 512,
+      "sample_status": "adequate",
+      "severity_score": 5.7024
+    },
+    {
+      "confidence": 0.9565,
+      "metrics": {
+        "average_cpl": 38.55,
+        "average_evaluation_loss": 0.45223602484472053,
+        "blunder_count": 10,
+        "blunder_rate": 0.022727272727272728,
+        "mistake_count": 43,
+        "mistake_rate": 0.09772727272727273,
+        "positions": 458,
+        "sample_size": 440
+      },
+      "pattern": "highest_risk_move_range:41+",
+      "sample_size": 440,
+      "sample_status": "adequate",
+      "severity_score": 0.5978
+    }
+  ],
+  "pawn_structure_analysis": {
+    "doubled_pawns": {
+      "groups": {
+        "absent": {
+          "average_centipawn_loss": 35.84,
+          "average_confidence": 0.8626486321259361,
+          "average_cpl_unrounded": 35.83791336748952,
+          "average_evaluation_loss": 0.3742691532258065,
+          "average_mobility": 28.69,
+          "blunder_count": 26,
+          "blunder_rate": 0.012109920819748486,
+          "mistake_count": 196,
+          "mistake_rate": 0.09129017233348859,
+          "positions": 2181,
+          "sample_size": 2147
+        },
+        "present": {
+          "average_centipawn_loss": 45.7,
+          "average_confidence": 0.9052284034373587,
+          "average_cpl_unrounded": 45.7004160887656,
+          "average_evaluation_loss": 0.4588920056100982,
+          "average_mobility": 29.65,
+          "blunder_count": 13,
+          "blunder_rate": 0.018030513176144243,
+          "mistake_count": 95,
+          "mistake_rate": 0.1317614424410541,
+          "positions": 737,
+          "sample_size": 721
+        }
+      },
+      "higher_cpl_group": null,
+      "mean_count": 0.28855380397532554
+    },
+    "isolated_pawns": {
+      "groups": {
+        "absent": {
+          "average_centipawn_loss": 30.06,
+          "average_confidence": 0.8348758357211079,
+          "average_cpl_unrounded": 30.056277056277057,
+          "average_evaluation_loss": 0.3172637195121951,
+          "average_mobility": 31.14,
+          "blunder_count": 10,
+          "blunder_rate": 0.007215007215007215,
+          "mistake_count": 98,
+          "mistake_rate": 0.0707070707070707,
+          "positions": 1396,
+          "sample_size": 1386
+        },
+        "present": {
+          "average_centipawn_loss": 46.04,
+          "average_confidence": 0.9087406920718353,
+          "average_cpl_unrounded": 46.043184885290145,
+          "average_evaluation_loss": 0.47183393501805054,
+          "average_mobility": 26.91,
+          "blunder_count": 29,
+          "blunder_rate": 0.019568151147098516,
+          "mistake_count": 193,
+          "mistake_rate": 0.13022941970310392,
+          "positions": 1522,
+          "sample_size": 1482
+        }
+      },
+      "higher_cpl_group": "present",
+      "mean_count": 1.1072652501713502
+    },
+    "passed_pawns": {
+      "groups": {
+        "absent": {
+          "average_centipawn_loss": 36.61,
+          "average_confidence": 0.8497366666666667,
+          "average_cpl_unrounded": 36.60793172690763,
+          "average_evaluation_loss": 0.37352185089974294,
+          "average_mobility": 31.79,
+          "blunder_count": 24,
+          "blunder_rate": 0.012048192771084338,
+          "mistake_count": 195,
+          "mistake_rate": 0.09789156626506024,
+          "positions": 2000,
+          "sample_size": 1992
+        },
+        "present": {
+          "average_centipawn_loss": 42.2,
+          "average_confidence": 0.9249636891793754,
+          "average_cpl_unrounded": 42.204337899543376,
+          "average_evaluation_loss": 0.45643617021276595,
+          "average_mobility": 22.7,
+          "blunder_count": 15,
+          "blunder_rate": 0.017123287671232876,
+          "mistake_count": 96,
+          "mistake_rate": 0.1095890410958904,
+          "positions": 918,
+          "sample_size": 876
+        }
+      },
+      "higher_cpl_group": null,
+      "mean_count": 0.5921864290610007
+    },
+    "pawn_islands": {
+      "groups": {
+        "fragmented": {
+          "average_centipawn_loss": 48.43,
+          "average_confidence": 0.8918414918414919,
+          "average_cpl_unrounded": 48.43111638954869,
+          "average_evaluation_loss": 0.4900120192307692,
+          "average_mobility": 31.29,
+          "blunder_count": 16,
+          "blunder_rate": 0.019002375296912115,
+          "mistake_count": 120,
+          "mistake_rate": 0.14251781472684086,
+          "positions": 858,
+          "sample_size": 842
+        },
+        "lower_island_count": {
+          "average_centipawn_loss": 34.11,
+          "average_confidence": 0.8657233009708738,
+          "average_cpl_unrounded": 34.11401776900296,
+          "average_evaluation_loss": 0.35498659517426273,
+          "average_mobility": 27.95,
+          "blunder_count": 23,
+          "blunder_rate": 0.011352418558736426,
+          "mistake_count": 171,
+          "mistake_rate": 0.08440276406712735,
+          "positions": 2060,
+          "sample_size": 2026
+        }
+      },
+      "higher_cpl_group": "fragmented",
+      "mean_count": 3.696024674434544
+    }
+  },
+  "piece_activity_analysis": {
+    "bishops": {
+      "count_groups": {
+        "none": {
+          "average_centipawn_loss": 38.28,
+          "average_confidence": 0.8832659081331647,
+          "average_cpl_unrounded": 38.27640156453716,
+          "average_evaluation_loss": 0.43675762439807386,
+          "average_mobility": 21.35,
+          "blunder_count": 16,
+          "blunder_rate": 0.020860495436766623,
+          "mistake_count": 77,
+          "mistake_rate": 0.10039113428943937,
+          "positions": 791,
+          "sample_size": 767
+        },
+        "one": {
+          "average_centipawn_loss": 43.8,
+          "average_confidence": 0.9586740331491713,
+          "average_cpl_unrounded": 43.80113636363637,
+          "average_evaluation_loss": 0.4413134328358209,
+          "average_mobility": 28.35,
+          "blunder_count": 6,
+          "blunder_rate": 0.017045454545454544,
+          "mistake_count": 42,
+          "mistake_rate": 0.11931818181818182,
+          "positions": 362,
+          "sample_size": 352
+        },
+        "two_or_more": {
+          "average_centipawn_loss": 37.23,
+          "average_confidence": 0.8514938621340888,
+          "average_cpl_unrounded": 37.23156089193825,
+          "average_evaluation_loss": 0.3736630247268545,
+          "average_mobility": 32.45,
+          "blunder_count": 17,
+          "blunder_rate": 0.009719839908519153,
+          "mistake_count": 172,
+          "mistake_rate": 0.09834190966266437,
+          "positions": 1765,
+          "sample_size": 1749
+        }
+      },
+      "interpretation": "remaining piece count, not engine-derived piece mobility",
+      "underperforming_group": null
+    },
+    "knights": {
+      "count_groups": {
+        "none": {
+          "average_centipawn_loss": 40.7,
+          "average_confidence": 0.9001710654936461,
+          "average_cpl_unrounded": 40.69715142428785,
+          "average_evaluation_loss": 0.46155268022181145,
+          "average_mobility": 23.37,
+          "blunder_count": 13,
+          "blunder_rate": 0.019490254872563718,
+          "mistake_count": 78,
+          "mistake_rate": 0.11694152923538231,
+          "positions": 682,
+          "sample_size": 667
+        },
+        "one": {
+          "average_centipawn_loss": 43.23,
+          "average_confidence": 0.9271890145395799,
+          "average_cpl_unrounded": 43.23220338983051,
+          "average_evaluation_loss": 0.445117540687161,
+          "average_mobility": 25.87,
+          "blunder_count": 8,
+          "blunder_rate": 0.013559322033898305,
+          "mistake_count": 64,
+          "mistake_rate": 0.10847457627118644,
+          "positions": 619,
+          "sample_size": 590
+        },
+        "two_or_more": {
+          "average_centipawn_loss": 35.53,
+          "average_confidence": 0.841523397237683,
+          "average_cpl_unrounded": 35.531967721911855,
+          "average_evaluation_loss": 0.35800998128509043,
+          "average_mobility": 32.45,
+          "blunder_count": 18,
+          "blunder_rate": 0.0111731843575419,
+          "mistake_count": 149,
+          "mistake_rate": 0.09248913718187461,
+          "positions": 1617,
+          "sample_size": 1611
+        }
+      },
+      "interpretation": "remaining piece count, not engine-derived piece mobility",
+      "underperforming_group": null
+    },
+    "queens": {
+      "count_groups": {
+        "none": {
+          "average_centipawn_loss": 44.08,
+          "average_confidence": 0.9523713380839272,
+          "average_cpl_unrounded": 44.07617896009673,
+          "average_evaluation_loss": 0.42513240857503154,
+          "average_mobility": 19.22,
+          "blunder_count": 16,
+          "blunder_rate": 0.019347037484885126,
+          "mistake_count": 92,
+          "mistake_rate": 0.11124546553808948,
+          "positions": 842,
+          "sample_size": 827
+        },
+        "one": {
+          "average_centipawn_loss": 11.75,
+          "average_confidence": 0.7287499999999999,
+          "average_cpl_unrounded": 11.748538011695906,
+          "average_evaluation_loss": 0.28919354838709677,
+          "average_mobility": 23.57,
+          "blunder_count": 0,
+          "blunder_rate": 0.0,
+          "mistake_count": 6,
+          "mistake_rate": 0.03508771929824561,
+          "positions": 176,
+          "sample_size": 171
+        },
+        "two_or_more": {
+          "average_centipawn_loss": 38.2,
+          "average_confidence": 0.8518070175438597,
+          "average_cpl_unrounded": 38.2,
+          "average_evaluation_loss": 0.3879913137893594,
+          "average_mobility": 33.73,
+          "blunder_count": 23,
+          "blunder_rate": 0.01229946524064171,
+          "mistake_count": 193,
+          "mistake_rate": 0.10320855614973262,
+          "positions": 1900,
+          "sample_size": 1870
+        }
+      },
+      "interpretation": "remaining piece count, not engine-derived piece mobility",
+      "underperforming_group": null
+    },
+    "rooks": {
+      "count_groups": {
+        "none": {
+          "average_centipawn_loss": 37.82,
+          "average_confidence": 0.9035887096774193,
+          "average_cpl_unrounded": 37.82083333333333,
+          "average_evaluation_loss": 0.44340101522842634,
+          "average_mobility": 11.94,
+          "blunder_count": 2,
+          "blunder_rate": 0.008333333333333333,
+          "mistake_count": 23,
+          "mistake_rate": 0.09583333333333334,
+          "positions": 248,
+          "sample_size": 240
+        },
+        "one": {
+          "average_centipawn_loss": 29.1,
+          "average_confidence": 0.876875,
+          "average_cpl_unrounded": 29.096296296296295,
+          "average_evaluation_loss": 0.36793814432989697,
+          "average_mobility": 19.76,
+          "blunder_count": 0,
+          "blunder_rate": 0.0,
+          "mistake_count": 10,
+          "mistake_rate": 0.07407407407407407,
+          "positions": 144,
+          "sample_size": 135
+        },
+        "two_or_more": {
+          "average_centipawn_loss": 38.86,
+          "average_confidence": 0.8702414885193983,
+          "average_cpl_unrounded": 38.86442037705576,
+          "average_evaluation_loss": 0.3939658759883479,
+          "average_mobility": 31.12,
+          "blunder_count": 37,
+          "blunder_rate": 0.014841556357801846,
+          "mistake_count": 258,
+          "mistake_rate": 0.10348977135980746,
+          "positions": 2526,
+          "sample_size": 2493
+        }
+      },
+      "interpretation": "remaining piece count, not engine-derived piece mobility",
+      "underperforming_group": null
+    }
+  },
+  "thresholds": {
+    "blunder_cpl": 300.0,
+    "cpl_severity_scale": 300.0,
+    "minimum_cpl_delta": 10.0,
+    "minimum_sample_size": 20,
+    "mistake_cpl": 100.0,
+    "pawn_island_fragmentation": 5
+  }
+}
