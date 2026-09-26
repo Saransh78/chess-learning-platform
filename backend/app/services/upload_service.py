@@ -1,11 +1,17 @@
 import io
+from collections.abc import Callable
+from typing import Any
 
 import chess.pgn
 
 from app.services.analysis_service import analyze_position
 
 
-def extract_games(content: str):
+def extract_games(
+    content: str,
+    on_progress: Callable[[int], None] | None = None,
+) -> list[dict[str, Any]]:
+    """Extract per-game summaries and optionally report completed game analyses."""
     stream = io.StringIO(content)
     games = []
 
@@ -30,5 +36,7 @@ def extract_games(content: str):
         summary.update(analyze_position(board.fen()))
 
         games.append(summary)
+        if on_progress is not None:
+            on_progress(len(games))
 
     return games

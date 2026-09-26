@@ -22,18 +22,33 @@ notebook cell 40 builds them.
 """
 
 import io
+from collections.abc import Callable
+from contextlib import nullcontext
+from dataclasses import dataclass
 from statistics import mean, median
 from typing import Any
 
 import chess
+import chess.engine
 import chess.pgn
 
+from app.services.analysis_service import stockfish_session
 from app.services.features.extractor import extract_features
 from app.services.features.stockfish_features import analyze_move
 
 Row = dict[str, Any]
 
 _MATE_CPL_CUTOFF = 500
+
+
+@dataclass
+class PendingPosition:
+    """One pre-move feature row awaiting Stockfish analysis."""
+
+    game_id: int
+    fen: str
+    move_uci: str
+    row: Row
 
 
 def _mean(values: list) -> float:
@@ -87,13 +102,12 @@ def _valid_cpl(rows: list[Row]) -> list[Row]:
     ]
 
 
-def build_player_rows(pgn_text: str, depth: int = 12) -> list[Row]:
-    """Build per-move feature rows for every game in ``pgn_text``.
-
-    Mirrors notebook cell 40 ("Process All Games"): each row merges
-    ``extract_features`` output, ``analyze_move`` output, and game metadata.
-    """
-    rows: list[Row] = []
+def extract_player_features(
+    pgn_text: str,
+    on_progress: Callable[[int, int], None] | None = None,
+) -> list[PendingPosition]:
+    """Extract pre-move features and metadata without launching Stockfish."""
+    positions: list[PendingPosition] = []
     game_id = 1
     stream = io.StringIO(pgn_text)
 
@@ -104,17 +118,57 @@ def build_player_rows(pgn_text: str, depth: int = 12) -> list[Row]:
             break
 
         headers = game.headers
-        white_player = headers.get("White")
-        black_player = headers.get("Black")
-        white_elo = headers.get("WhiteElo")
-        black_elo = headers.get("BlackElo")
-        result = headers.get("Result")
-
+        metadata = {
+            "GameID": game_id,
+            "WhitePlayer": headers.get("White"),
+            "BlackPlayer": headers.get("Black"),
+            "WhiteElo": headers.get("WhiteElo"),
+            "BlackElo": headers.get("BlackElo"),
+            "Result": headers.get("Result"),
+        }
         board = game.board()
 
         for move in game.mainline_moves():
             row = extract_features(board)
-            analysis = analyze_move(board, move, depth)
+            row.update(metadata)
+            row["PlayedMove"] = board.san(move)
+            row["PlayedMoveUCI"] = move.uci()
+            positions.append(
+                PendingPosition(
+                    game_id=game_id,
+                    fen=board.fen(),
+                    move_uci=move.uci(),
+                    row=row,
+                )
+            )
+            if on_progress is not None:
+                on_progress(game_id, len(positions))
+            board.push(move)
+
+        game_id += 1
+
+    return positions
+
+
+def analyze_player_positions(
+    positions: list[PendingPosition],
+    depth: int = 12,
+    on_progress: Callable[[int, int], None] | None = None,
+    engine: chess.engine.SimpleEngine | None = None,
+) -> list[Row]:
+    """Enrich extracted rows with Stockfish analysis using one managed session."""
+    rows: list[Row] = []
+
+    if not positions:
+        return rows
+
+    engine_context = stockfish_session() if engine is None else nullcontext(engine)
+    with engine_context as active_engine:
+        for index, position in enumerate(positions, start=1):
+            board = chess.Board(position.fen)
+            move = chess.Move.from_uci(position.move_uci)
+            row = position.row
+            analysis = analyze_move(board, move, depth, engine=active_engine)
 
             if analysis is not None:
                 row["CurrentEvaluation"] = analysis["CurrentEvaluation"]
@@ -129,8 +183,6 @@ def build_player_rows(pgn_text: str, depth: int = 12) -> list[Row]:
                 row["Depth"] = analysis["Depth"]
             else:
                 row["CurrentEvaluation"] = None
-                row["PlayedMove"] = board.san(move)
-                row["PlayedMoveUCI"] = move.uci()
                 row["BestMove"] = None
                 row["BestMoveUCI"] = None
                 row["BestEvaluation"] = None
@@ -139,19 +191,32 @@ def build_player_rows(pgn_text: str, depth: int = 12) -> list[Row]:
                 row["PlayedBestMove"] = None
                 row["Depth"] = None
 
-            row["GameID"] = game_id
-            row["WhitePlayer"] = white_player
-            row["BlackPlayer"] = black_player
-            row["WhiteElo"] = white_elo
-            row["BlackElo"] = black_elo
-            row["Result"] = result
-
             rows.append(row)
-            board.push(move)
-
-        game_id += 1
+            if on_progress is not None:
+                on_progress(position.game_id, index)
 
     return rows
+
+
+def build_player_rows(
+    pgn_text: str,
+    depth: int = 12,
+    on_progress: Callable[[int, int], None] | None = None,
+    on_feature_progress: Callable[[int, int], None] | None = None,
+) -> list[Row]:
+    """Build per-move feature rows for every game in ``pgn_text``.
+
+    Mirrors notebook cell 40 ("Process All Games"): each row merges
+    ``extract_features`` output, ``analyze_move`` output, and game metadata.
+
+    ``on_progress`` is an optional orchestration hook called after each
+    Stockfish-analyzed row as ``on_progress(game_number, positions_completed)``.
+    ``on_feature_progress`` reports rows after feature extraction and before
+    any Stockfish work, allowing callers to publish distinct real stages.
+    ``None`` (the default) preserves the original behavior exactly.
+    """
+    positions = extract_player_features(pgn_text, on_progress=on_feature_progress)
+    return analyze_player_positions(positions, depth, on_progress=on_progress)
 
 
 def get_player_statistics(rows: list[Row]) -> dict[str, float]:

@@ -1,25 +1,20 @@
 from typing import Annotated
 
-from fastapi import APIRouter, File, HTTPException, Query, UploadFile
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    File,
+    HTTPException,
+    Query,
+    UploadFile,
+)
 
-from app.services.player_analysis import (
-    build_player_rows,
-    calculate_player_strength,
-    get_endgame_report,
-    get_middlegame_report,
-    get_opening_report,
-    get_player_statistics,
-    get_positional_statistics,
+from app.core.job_manager import (
+    STATUS_COMPLETED,
+    STATUS_FAILED,
+    job_manager,
 )
-from app.services.style_engine import detect_player_style
-from app.services.upload_service import extract_games
-from app.services.weakness_engine import (
-    detect_player_weaknesses,
-    detect_strengths,
-    detect_weaknesses,
-    generate_recommendations,
-    generate_training_plan,
-)
+from app.services.report_jobs import run_report_job
 
 router = APIRouter(prefix="/api", tags=["report"])
 
@@ -27,13 +22,14 @@ router = APIRouter(prefix="/api", tags=["report"])
 @router.post("/report")
 def generate_report(
     file: Annotated[UploadFile, File()],
+    background_tasks: BackgroundTasks,
     depth: Annotated[int, Query(ge=1, le=30)] = 12,
 ) -> dict:
-    """Orchestrate the full player-report pipeline for an uploaded PGN.
+    """Accept a PGN upload and queue background report analysis.
 
-    Delegates every computation to the existing services; this route only
-    wires upload summary -> per-move rows -> player/style/weakness
-    aggregates into a single JSON object.
+    Validates the upload synchronously, then returns immediately with the
+    job handle. All analysis runs in the background worker, which reuses
+    the existing services without duplicating their logic.
     """
     filename = file.filename or ""
 
@@ -47,50 +43,53 @@ def generate_report(
     except UnicodeDecodeError:
         raise HTTPException(status_code=400, detail="File is not valid UTF-8 text")
 
-    games = extract_games(content)
-
-    if not games:
-        raise HTTPException(status_code=400, detail="No games found in PGN")
-
-    rows = build_player_rows(content, depth=depth)
-
-    if not rows:
-        raise HTTPException(status_code=400, detail="No moves found in PGN")
-
-    player_statistics = get_player_statistics(rows)
-    opening_report = get_opening_report(rows)
-    middlegame_report = get_middlegame_report(rows)
-    endgame_report = get_endgame_report(rows)
-    style = detect_player_style(rows)
-    weaknesses = detect_weaknesses(rows)
-    strengths = detect_strengths(rows)
-    training_plan = generate_training_plan(
-        rows,
-        opening_report,
-        middlegame_report,
-        endgame_report,
-        strengths,
-        weaknesses,
-        style,
+    job = job_manager.create()
+    background_tasks.add_task(
+        run_report_job, job.job_id, content, filename, len(raw), depth
     )
 
-    return {
-        "upload_summary": {
-            "filename": filename,
-            "games_detected": len(games),
-            "file_size_bytes": len(raw),
-            "games": games,
-        },
-        "player_statistics": player_statistics,
-        "positional_statistics": get_positional_statistics(rows),
-        "strength_scores": calculate_player_strength(rows),
-        "opening_report": opening_report,
-        "middlegame_report": middlegame_report,
-        "endgame_report": endgame_report,
-        "style": style,
-        "weaknesses": weaknesses,
-        "player_weaknesses": detect_player_weaknesses(rows),
-        "strengths": strengths,
-        "recommendations": generate_recommendations(rows),
-        "training_plan": training_plan,
-    }
+    return {"job_id": job.job_id, "status": "queued"}
+
+
+@router.get("/report/status/{job_id}")
+def get_report_status(job_id: str) -> dict:
+    """Return live progress for a report job."""
+    job = job_manager.get(job_id)
+
+    if job is None:
+        raise HTTPException(status_code=404, detail="Unknown job_id")
+
+    return job_manager.to_status_dict(job)
+
+
+@router.delete("/report/{job_id}")
+def cancel_report(job_id: str) -> dict:
+    """Request cooperative cancellation without changing polling endpoints."""
+    accepted = job_manager.request_cancel(job_id)
+    if accepted is None:
+        raise HTTPException(status_code=404, detail="Unknown job_id")
+    if not accepted:
+        raise HTTPException(
+            status_code=409,
+            detail="The report job is already in a terminal state.",
+        )
+    return {"job_id": job_id, "status": "cancelling"}
+
+
+@router.get("/report/result/{job_id}")
+def get_report_result(job_id: str) -> dict:
+    """Return the final report once the job has completed."""
+    job = job_manager.get(job_id)
+
+    if job is None:
+        raise HTTPException(status_code=404, detail="Unknown job_id")
+
+    if job.status == STATUS_FAILED:
+        raise HTTPException(
+            status_code=500, detail=job.error or "Analysis failed."
+        )
+
+    if job.status != STATUS_COMPLETED or job.result is None:
+        return job_manager.to_status_dict(job)
+
+    return job.result

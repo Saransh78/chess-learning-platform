@@ -9,7 +9,7 @@ import argparse
 import json
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
 import numpy as np
 import pandas as pd
@@ -125,6 +125,7 @@ def _explain_prepared_frame(
     artifacts: LoadedArtifacts,
     top_n: int,
     models_dir: str,
+    predictions: Sequence[Mapping[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Explain a preprocessed batch using one cached explainer execution."""
     if prepared_features.empty:
@@ -141,16 +142,50 @@ def _explain_prepared_frame(
         class_count=class_count,
     )
 
-    probability_matrix = artifacts.model.predict_proba(prepared_features)
     model_class_ids = np.asarray(artifacts.model.classes_)
-    predicted_classes = model_class_ids[np.argmax(probability_matrix, axis=1)]
+    if predictions is not None:
+        if len(predictions) != len(prepared_features):
+            raise ValueError(
+                "Precomputed prediction count does not match explanation row count."
+            )
+        try:
+            predicted_classes = np.asarray(
+                [
+                    artifacts.label_encoder.transform(
+                        [str(prediction["predicted_result"])]
+                    )[0]
+                    for prediction in predictions
+                ]
+            )
+        except (KeyError, ValueError) as exc:
+            raise ValueError(
+                "Precomputed predictions contain a missing or unknown result label."
+            ) from exc
+        prediction_rows = [
+            {
+                "predicted_result": str(prediction["predicted_result"]),
+                "confidence": float(prediction["confidence"]),
+                "model_version": artifacts.public_metadata["model_version"],
+                "feature_schema_version": artifacts.public_metadata[
+                    "feature_schema_version"
+                ],
+            }
+            for prediction in predictions
+        ]
+    else:
+        probability_matrix = artifacts.model.predict_proba(prepared_features)
+        predicted_classes = model_class_ids[np.argmax(probability_matrix, axis=1)]
+        prediction_rows = [
+            _format_prediction(encoded_class, probabilities, artifacts)
+            for encoded_class, probabilities in zip(
+                predicted_classes, probability_matrix, strict=True
+            )
+        ]
     explanations = []
 
-    for row_index, (encoded_class, probabilities) in enumerate(
-        zip(predicted_classes, probability_matrix, strict=True)
-    ):
+    for row_index, encoded_class in enumerate(predicted_classes):
         class_index = int(np.flatnonzero(model_class_ids == encoded_class)[0])
-        prediction = _format_prediction(encoded_class, probabilities, artifacts)
+        prediction = prediction_rows[row_index]
         class_impacts = shap_tensor[row_index, :, class_index]
         explanations.append(
             {
@@ -174,6 +209,7 @@ def explain_dataframe(
     dataframe: pd.DataFrame,
     top_n: int = DEFAULT_TOP_N,
     models_dir: Path | str = DEFAULT_MODEL_DIR,
+    predictions: Sequence[Mapping[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """Explain a batch of positions with a single cached TreeExplainer call."""
     _validate_top_n(top_n)
@@ -185,6 +221,7 @@ def explain_dataframe(
         artifacts,
         top_n,
         normalized_models_dir,
+        predictions,
     )
 
 

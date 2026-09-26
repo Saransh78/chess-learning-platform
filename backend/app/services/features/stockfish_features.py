@@ -7,13 +7,12 @@ Migrated behavior-preserving from feature_extraction.ipynb:
 * cell 37 ``evaluate_best_move``
 * cell 38 ``analyze_move``
 
-Deliberate production divergence: the notebook held a single global
-``engine = popen_uci(STOCKFISH_PATH)`` (cell 32). This module instead
-acquires the engine per analysis via
-:func:`app.services.analysis_service.stockfish_session`, which uses the
-same ``settings.STOCKFISH_PATH`` launcher. Returned feature values keep
-notebook semantics (white-perspective pawn units, mate mapped to
-``+/-10000``).
+Deliberate production divergence: the notebook held a global engine.
+Standalone analysis acquires a managed session per request; batch callers may
+pass a caller-managed session to avoid launching a process per position.
+Both paths use :func:`app.services.analysis_service.stockfish_session` and
+``settings.STOCKFISH_PATH``. Returned feature values keep notebook semantics
+(white-perspective pawn units, mate mapped to ``+/-10000``).
 """
 
 import chess
@@ -23,7 +22,9 @@ from app.services.analysis_service import stockfish_session
 
 
 def stockfish_evaluation(
-    board: chess.Board, depth: int = 12
+    board: chess.Board,
+    depth: int = 12,
+    engine: chess.engine.SimpleEngine | None = None,
 ) -> dict[str, float | str | int | None]:
     if board.is_game_over():
         return {
@@ -33,7 +34,10 @@ def stockfish_evaluation(
             "Depth": depth,
         }
 
-    with stockfish_session() as engine:
+    if engine is None:
+        with stockfish_session() as session:
+            info = session.analyse(board, chess.engine.Limit(depth=depth))
+    else:
         info = engine.analyse(board, chess.engine.Limit(depth=depth))
 
     score = info["score"].white()
@@ -59,7 +63,10 @@ def stockfish_evaluation(
 
 
 def evaluate_after_move(
-    board: chess.Board, move: chess.Move, depth: int = 12
+    board: chess.Board,
+    move: chess.Move,
+    depth: int = 12,
+    engine: chess.engine.SimpleEngine | None = None,
 ) -> dict[str, float | str | int | None]:
     """
     Evaluates a position after a given move
@@ -69,18 +76,20 @@ def evaluate_after_move(
 
     temp_board.push(move)
 
-    result = stockfish_evaluation(temp_board, depth)
+    result = stockfish_evaluation(temp_board, depth, engine)
 
     return result
 
 
 def evaluate_best_move(
-    board: chess.Board, depth: int = 12
+    board: chess.Board,
+    depth: int = 12,
+    engine: chess.engine.SimpleEngine | None = None,
 ) -> dict[str, float | str | int | None] | None:
     """
     Evaluates the engine's best move.
     """
-    best = stockfish_evaluation(board, depth)
+    best = stockfish_evaluation(board, depth, engine)
 
     if best["BestMove"] is None:
         return None
@@ -99,11 +108,14 @@ def evaluate_best_move(
             "Depth": depth,
         }
 
-    return evaluate_after_move(board, move, depth)
+    return evaluate_after_move(board, move, depth, engine)
 
 
 def analyze_move(
-    board: chess.Board, move: chess.Move, depth: int = 12
+    board: chess.Board,
+    move: chess.Move,
+    depth: int = 12,
+    engine: chess.engine.SimpleEngine | None = None,
 ) -> dict[str, float | str | bool | int | None] | None:
     """
     Analyze a played move using Stockfish.
@@ -121,7 +133,7 @@ def analyze_move(
         - Depth
     """
     # Engine analysis of current position
-    current = stockfish_evaluation(board, depth)
+    current = stockfish_evaluation(board, depth, engine)
 
     if current["BestMoveUCI"] is None:
         return None
@@ -145,10 +157,10 @@ def analyze_move(
         }
 
     # Evaluate engine's best move
-    best = evaluate_best_move(board, depth)
+    best = evaluate_best_move(board, depth, engine)
 
     # Evaluate player's move
-    played = evaluate_after_move(board, move, depth)
+    played = evaluate_after_move(board, move, depth, engine)
 
     if best is None or played is None:
         return None

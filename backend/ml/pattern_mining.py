@@ -14,7 +14,7 @@ import math
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from statistics import fmean
-from typing import Any
+from typing import Any, Mapping, Sequence
 
 import pandas as pd
 
@@ -651,6 +651,8 @@ def _rank_patterns(patterns: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def generate_pattern_report(
     dataframe: pd.DataFrame,
     thresholds: PatternThresholds = PatternThresholds(),
+    *,
+    predictions: Sequence[Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Return recurring pattern metrics and severity-ranked findings.
 
@@ -680,11 +682,13 @@ def generate_pattern_report(
         }
         overall_average_cpl = None
     else:
-        predictions = predict_dataframe(dataframe)
-        if len(predictions) != len(dataframe):
+        position_predictions = (
+            list(predictions) if predictions is not None else predict_dataframe(dataframe)
+        )
+        if len(position_predictions) != len(dataframe):
             raise RuntimeError("Prediction count does not match the dataset row count.")
         analysis_frame["_prediction_confidence"] = [
-            prediction["confidence"] for prediction in predictions
+            prediction["confidence"] for prediction in position_predictions
         ]
         records = analysis_frame.to_dict(orient="records")
         overall_existing = get_player_statistics(records)
@@ -698,7 +702,7 @@ def generate_pattern_report(
             "average_cpl": overall_average_cpl,
             "average_mobility": _number(overall_existing.get("AverageMobility")),
             "average_confidence": _mean_or_none(
-                [prediction["confidence"] for prediction in predictions]
+                [prediction["confidence"] for prediction in position_predictions]
             ),
             "mistake_count": 0,
             "blunder_count": 0,
