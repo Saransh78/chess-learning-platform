@@ -1,5 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useGame } from "../context/GameContext";
+import useReport from "../hooks/useReport";
+import CoachSkeleton from "./coach/CoachSkeleton";
+import ReportModal from "./report/ReportModal";
+import {
+  clearSavedReportJobId,
+  getSavedReportJobId,
+  saveReportJobId,
+} from "../services/reportJobStorage";
 
 const ACCENTS = {
   clay: { dot: "bg-clay", label: "text-clay" },
@@ -34,9 +42,53 @@ const PREVIEW_INSIGHTS = [
 
 export default function CoachReport() {
   const { games } = useGame();
-  const [requested, setRequested] = useState(false);
+  const { status, report, error, filename, isUploading, submitReport, reset } =
+    useReport();
+  const inputRef = useRef(null);
+  const [activeJobId, setActiveJobId] = useState(getSavedReportJobId);
+  const [modalOpen, setModalOpen] = useState(() => Boolean(getSavedReportJobId()));
 
   const gameCount = games.length;
+  const jobId = report?.job_id || null;
+
+  function openPicker() {
+    inputRef.current?.click();
+  }
+
+  async function handleFileSelect(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (file) {
+      clearSavedReportJobId();
+      setActiveJobId(null);
+      setModalOpen(false);
+      const submitted = await submitReport(file);
+      if (submitted?.job_id) {
+        saveReportJobId(submitted.job_id);
+        setActiveJobId(submitted.job_id);
+        setModalOpen(true);
+      }
+    }
+  }
+
+  function handleReset() {
+    reset();
+    clearSavedReportJobId();
+    setActiveJobId(null);
+    setModalOpen(false);
+  }
+
+  function handleCloseModal(jobStatus) {
+    if (jobStatus === "cancelled" || jobStatus === "failed") {
+      clearSavedReportJobId();
+      setActiveJobId(null);
+    }
+    setModalOpen(false);
+  }
+
+  function handleReopen() {
+    if (activeJobId) setModalOpen(true);
+  }
 
   return (
     <div className="space-y-5 px-0.5 pb-2">
@@ -69,24 +121,81 @@ export default function CoachReport() {
         </p>
 
         <button
-          onClick={() => setRequested(true)}
-          className="relative mt-5 w-full rounded-xl bg-bronze px-4 py-2.5 text-sm font-semibold text-obsidian shadow-lg shadow-bronze/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:shadow-xl hover:shadow-bronze/25 active:translate-y-0"
+          onClick={openPicker}
+          disabled={isUploading}
+          className="relative mt-5 w-full rounded-xl bg-bronze px-4 py-2.5 text-sm font-semibold text-obsidian shadow-lg shadow-bronze/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-gold hover:shadow-xl hover:shadow-bronze/25 active:translate-y-0 disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0"
         >
-          Generate AI Report
+          {isUploading ? "Analyzing your games…" : "Generate AI Report"}
         </button>
 
-        {requested ? (
-          <p className="relative mt-3 animate-fade-in text-[11px] leading-relaxed text-sage">
-            The AI Coach is studying your patterns &mdash; full reports arrive
-            with the BoardSense engine release.
-          </p>
-        ) : (
-          gameCount > 0 && (
-            <p className="relative mt-3 text-[11px] text-faded">
-              Runs across all {gameCount} imported{" "}
-              {gameCount === 1 ? "game" : "games"}.
+        <input
+          ref={inputRef}
+          type="file"
+          accept=".pgn"
+          onChange={handleFileSelect}
+          className="hidden"
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+
+        {isUploading ? (
+          <div className="relative mt-4 text-left">
+            <CoachSkeleton filename={filename} />
+          </div>
+        ) : status === "success" && jobId ? (
+          <div className="relative mt-4">
+            <p className="text-[11px] leading-relaxed text-sage-light">
+              You can return to this analysis in this browser.
             </p>
-          )
+            <button
+              onClick={handleReopen}
+              className="relative mt-3 w-full rounded-xl border border-bronze/40 bg-bronze/10 px-4 py-2.5 text-sm font-semibold text-gold transition-all duration-200 hover:-translate-y-0.5 hover:bg-bronze/20"
+            >
+              Resume analysis
+            </button>
+            <button
+              onClick={handleReset}
+              className="relative mt-2 w-full rounded-xl border border-stone/60 bg-transparent px-4 py-2 text-xs font-semibold text-parchment transition-colors duration-200 hover:border-stone hover:text-ivory"
+            >
+              Analyze different games
+            </button>
+          </div>
+        ) : activeJobId ? (
+          <div className="relative mt-4">
+            <p className="text-[11px] leading-relaxed text-parchment">
+              A saved analysis job is available to resume.
+            </p>
+            <button
+              onClick={handleReopen}
+              className="mt-3 w-full rounded-xl border border-bronze/40 bg-bronze/10 px-4 py-2.5 text-sm font-semibold text-gold transition-colors duration-200 hover:bg-bronze/20"
+            >
+              Resume analysis
+            </button>
+            <button
+              onClick={handleReset}
+              className="mt-2 w-full rounded-xl border border-stone/60 bg-transparent px-4 py-2 text-xs font-semibold text-parchment transition-colors duration-200 hover:border-stone hover:text-ivory"
+            >
+              Forget saved job
+            </button>
+          </div>
+        ) : (
+          <>
+            {status === "error" ? (
+              <p
+                role="alert"
+                className="relative mt-3 animate-fade-in text-[11px] leading-relaxed text-clay"
+              >
+                {error}
+              </p>
+            ) : (
+              gameCount > 0 && (
+                <p className="relative mt-3 text-[11px] text-faded">
+                  Runs across all {gameCount} imported{" "}
+                  {gameCount === 1 ? "game" : "games"}.
+                </p>
+              )
+            )}
+          </>
         )}
       </section>
 
@@ -114,9 +223,13 @@ export default function CoachReport() {
                 </figcaption>
               </li>
             );
-          })}
-        </ul>
-      </div>
+            })}
+          </ul>
+        </div>
+
+      {modalOpen && activeJobId && (
+        <ReportModal key={activeJobId} jobId={activeJobId} onClose={handleCloseModal} />
+      )}
     </div>
   );
 }
