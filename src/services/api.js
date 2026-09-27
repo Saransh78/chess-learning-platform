@@ -1,4 +1,5 @@
 const FALLBACK_BASE_URL = "http://127.0.0.1:8000";
+export const DEFAULT_REPORT_DEPTH = 12;
 
 export const API_BASE_URL =
   (import.meta.env && import.meta.env.VITE_API_BASE_URL) || FALLBACK_BASE_URL;
@@ -20,7 +21,10 @@ function friendlyError(status, detail) {
   return detail || `Request failed with status ${status}.`;
 }
 
-export async function postReportPgn(file, { depth = 12, signal } = {}) {
+export async function postReportPgn(
+  file,
+  { depth = DEFAULT_REPORT_DEPTH, signal } = {}
+) {
   if (!isPgnFile(file)) {
     throw new Error("Please choose a file with a .pgn extension.");
   }
@@ -140,6 +144,33 @@ export async function cancelReportJob(jobId, { signal } = {}) {
     throw new Error(friendlyError(response.status, detail));
   }
 
+  return response.json();
+}
+
+export async function getAuthMe(accessToken, { signal } = {}) {
+  if (!accessToken) {
+    throw new Error("Missing access token. Please sign in again.");
+  }
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      signal,
+    });
+  } catch (error) {
+    if (error?.name === "AbortError" || signal?.aborted) throw error;
+    throw new Error(
+      "Cannot reach the analysis server. Make sure the backend is running.",
+      { cause: error }
+    );
+  }
+  if (!response.ok) {
+    const detail = await readErrorDetail(response);
+    if (response.status === 401) {
+      throw new Error(detail || "Session has expired. Please sign in again.");
+    }
+    throw new Error(friendlyError(response.status, detail));
+  }
   return response.json();
 }
 

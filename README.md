@@ -6,6 +6,37 @@ An AI-powered chess analysis and learning platform built to help players improve
 
 ---
 
+# Run Locally
+
+The frontend and API run as separate development servers. Start the API from
+`backend/` so its app imports, `.env`, and model artifact paths resolve against
+the backend directory.
+
+```bash
+cd backend
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+cp -n .env.example .env
+uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+Set `STOCKFISH_PATH` in `backend/.env` if the `stockfish` executable is not on
+`PATH`. `CORS_ORIGINS` must include the browser origin serving Vite.
+
+In a second terminal, from the repository root:
+
+```bash
+cp -n .env.example .env
+npm ci
+npm run dev -- --host 127.0.0.1 --strictPort
+```
+
+The frontend defaults to `http://127.0.0.1:8000`; override it with
+`VITE_API_BASE_URL` when the API is hosted elsewhere.
+
+---
+
 # 📸 Project Preview
 
 

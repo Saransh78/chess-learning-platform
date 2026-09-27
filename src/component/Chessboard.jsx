@@ -287,8 +287,8 @@ const fileLabels = isFlipped
 
   return (
     <div className="w-full min-w-0 animate-fade-in">
-      <div className="mx-auto flex w-full max-w-[clamp(420px,calc(100dvh_-_200px),780px)] flex-col">
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+      <div className="mx-auto flex w-full max-w-[clamp(420px,calc(100dvh_-_9rem),920px)] flex-col">
+        <div className="mb-2 ml-[44px] flex flex-wrap items-center justify-between gap-3">
         <div className="inline-flex items-center gap-2.5 rounded-full border border-stone/40 bg-charcoal/80 py-1.5 pl-3 pr-4 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5)]">
           <span
             className={`inline-block h-3 w-3 rounded-full ${

@@ -5,8 +5,9 @@ export default function Tabs({
   movesContent,
   engineContent,
   coachContent,
+  initialTab = "moves",
 }) {
-  const [activeTab, setActiveTab] = useState("moves");
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   const tabs = [
     { id: "games", label: "Games" },
@@ -54,7 +55,7 @@ export default function Tabs({
               role="tab"
               aria-selected={active}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative z-10 min-w-0 flex-1 rounded-lg px-2 pb-2 pt-[7px] text-xs font-medium transition-colors duration-200 ${
+              className={`relative z-10 min-w-0 flex-1 rounded-lg px-2 py-1.5 text-xs font-medium transition-colors duration-200 ${
                 active ? "text-ivory" : "text-faded hover:text-parchment"
               }`}
             >
@@ -70,7 +71,7 @@ export default function Tabs({
         })}
       </div>
 
-      <div className="scrollbar-thin mt-3 min-h-0 flex-1 overflow-y-auto pr-0.5 animate-fade-in" key={activeTab}>
+      <div className="scrollbar-thin mt-2.5 min-h-0 flex-1 overflow-y-auto pr-0.5 animate-fade-in">
         {renderContent()}
       </div>
     </div>

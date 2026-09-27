@@ -32,6 +32,9 @@
     --animate-fade-in: fade-in 0.5s ease-out both;
     --animate-eval: eval-fade 0.35s ease-out both;
     --animate-settle: settle 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    --animate-shimmer: shimmer 1.6s linear infinite;
+    --animate-float: float 7s ease-in-out infinite;
+    --animate-radar-reveal: radar-reveal 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
 
     @keyframes rise {
         from {
@@ -70,6 +73,36 @@
         }
         to {
             opacity: 1;
+        }
+    }
+
+    @keyframes shimmer {
+        from {
+            background-position: -200% 0;
+        }
+        to {
+            background-position: 200% 0;
+        }
+    }
+
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @keyframes radar-reveal {
+        from {
+            stroke-dashoffset: 700;
+            fill-opacity: 0;
+        }
+        to {
+            stroke-dashoffset: 0;
+            fill-opacity: 1;
         }
     }
 }
@@ -116,7 +149,6 @@ body {
     border-radius: 9999px;
 }
 
-::caret,
 input,
 textarea {
     caret-color: var(--color-ivory);
@@ -136,4 +168,3 @@ textarea {
         transition-duration: 0.01ms !important;
     }
 }
-

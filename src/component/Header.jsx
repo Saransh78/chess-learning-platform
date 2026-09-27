@@ -1,4 +1,5 @@
 import Logo from "./Logo";
+import AuthHeaderControl from "./auth/AuthHeaderControl";
 
 export default function Header({ engineEnabled, setEngineEnabled }) {
   return (
@@ -16,36 +17,39 @@ export default function Header({ engineEnabled, setEngineEnabled }) {
           </div>
         </div>
 
-        <button
-          type="button"
-          role="switch"
-          aria-checked={engineEnabled}
-          onClick={() => setEngineEnabled((on) => !on)}
-          className={`flex items-center gap-2.5 rounded-full border px-3 py-1.5 transition-colors duration-200 ${
-            engineEnabled
-              ? "border-bronze/40 bg-bronze/10 hover:border-bronze/60"
-              : "border-stone/50 bg-charcoal/70 hover:border-stone"
-          }`}
-        >
-          <span
-            className={`relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors duration-200 ${
-              engineEnabled ? "bg-bronze" : "bg-stone/70"
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={engineEnabled}
+            onClick={() => setEngineEnabled((on) => !on)}
+            className={`flex items-center gap-2.5 rounded-full border px-3 py-1.5 transition-colors duration-200 ${
+              engineEnabled
+                ? "border-bronze/40 bg-bronze/10 hover:border-bronze/60"
+                : "border-stone/50 bg-charcoal/70 hover:border-stone"
             }`}
           >
             <span
-              className={`absolute h-3 w-3 rounded-full bg-ivory shadow-sm transition-transform duration-200 ${
-                engineEnabled ? "translate-x-[14px]" : "translate-x-[2px]"
+              className={`relative inline-flex h-4 w-7 shrink-0 items-center rounded-full transition-colors duration-200 ${
+                engineEnabled ? "bg-bronze" : "bg-stone/70"
               }`}
-            />
-          </span>
-          <span
-            className={`text-xs font-medium tracking-wide ${
-              engineEnabled ? "text-gold" : "text-faded"
-            }`}
-          >
-            Stockfish {engineEnabled ? "On" : "Off"}
-          </span>
-        </button>
+            >
+              <span
+                className={`absolute h-3 w-3 rounded-full bg-ivory shadow-sm transition-transform duration-200 ${
+                  engineEnabled ? "translate-x-[14px]" : "translate-x-[2px]"
+                }`}
+              />
+            </span>
+            <span
+              className={`text-xs font-medium tracking-wide ${
+                engineEnabled ? "text-gold" : "text-faded"
+              }`}
+            >
+              Stockfish {engineEnabled ? "On" : "Off"}
+            </span>
+          </button>
+          <AuthHeaderControl />
+        </div>
       </nav>
     </header>
   );

@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "feature_names": [
+    "MoveNumber",
+    "PiecesOnBoard",
+    "Mobility",
+    "MaterialDifference",
+    "WhiteCastled",
+    "BlackCastled",
+    "GamePhase",
+    "WhitePawnCount",
+    "BlackPawnCount",
+    "WhiteKnightCount",
+    "BlackKnightCount",
+    "WhiteBishopCount",
+    "BlackBishopCount",
+    "WhiteRookCount",
+    "BlackRookCount",
+    "WhiteQueenCount",
+    "BlackQueenCount",
+    "WhiteBishopPair",
+    "BlackBishopPair",
+    "QueensPresent",
+    "WhiteDoubledPawns",
+    "BlackDoubledPawns",
+    "WhiteIsolatedPawns",
+    "BlackIsolatedPawns",
+    "WhitePassedPawns",
+    "BlackPassedPawns",
+    "WhitePawnIslands",
+    "BlackPawnIslands",
+    "CurrentEvaluation",
+    "BestEvaluation",
+    "PlayedEvaluation",
+    "CentipawnLoss",
+    "PlayedBestMove",
+    "Depth"
+  ],
+  "categorical_features": [
+    "GamePhase"
+  ],
+  "target_column": "Result",
+  "group_column": "GameID",
+  "excluded_metadata_columns": [
+    "FEN",
+    "GameID",
+    "WhitePlayer",
+    "BlackPlayer",
+    "WhiteElo",
+    "BlackElo"
+  ],
+  "excluded_move_columns": [
+    "PlayedMove",
+    "BestMove",
+    "BestMoveUCI",
+    "PlayedMoveUCI"
+  ],
+  "excluded_columns": [
+    "FEN",
+    "GameID",
+    "WhitePlayer",
+    "BlackPlayer",
+    "WhiteElo",
+    "BlackElo",
+    "Result",
+    "PlayedMove",
+    "BestMove",
+    "BestMoveUCI",
+    "PlayedMoveUCI"
+  ],
+  "label_classes": [
+    "0-1",
+    "1-0",
+    "1/2-1/2"
+  ],
+  "game_phase_classes": [
+    "Endgame",
+    "Middlegame",
+    "Opening"
+  ],
+  "split": {
+    "strategy": "GroupShuffleSplit",
+    "group_column": "GameID",
+    "test_size": 0.2,
+    "random_state": 42,
+    "candidate_splits": 100
+  },
+  "model": {
+    "type": "RandomForestClassifier",
+    "n_estimators": 300,
+    "random_state": 42,
+    "n_jobs": -1
+  }
+}

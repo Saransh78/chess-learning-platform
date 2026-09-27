@@ -1,0 +1,73 @@
+{
+  "accuracy": 0.5,
+  "precision": 0.4081519498803508,
+  "recall": 0.5,
+  "f1": 0.44916827675811516,
+  "metric_average": "weighted",
+  "class_labels": [
+    "0-1",
+    "1-0",
+    "1/2-1/2"
+  ],
+  "classification_report": {
+    "0-1": {
+      "precision": 0.14814814814814814,
+      "recall": 0.21333333333333335,
+      "f1-score": 0.17486338797814208,
+      "support": 150.0
+    },
+    "1-0": {
+      "precision": 0.6715481171548117,
+      "recall": 0.8106060606060606,
+      "f1-score": 0.7345537757437071,
+      "support": 396.0
+    },
+    "1/2-1/2": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 160.0
+    },
+    "accuracy": 0.5,
+    "macro avg": {
+      "precision": 0.27323208843431995,
+      "recall": 0.3413131313131313,
+      "f1-score": 0.3031390545739497,
+      "support": 706.0
+    },
+    "weighted avg": {
+      "precision": 0.4081519498803508,
+      "recall": 0.5,
+      "f1-score": 0.44916827675811516,
+      "support": 706.0
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "0-1",
+      "1-0",
+      "1/2-1/2"
+    ],
+    "matrix": [
+      [
+        32,
+        107,
+        11
+      ],
+      [
+        74,
+        321,
+        1
+      ],
+      [
+        110,
+        50,
+        0
+      ]
+    ]
+  },
+  "train_game_count": 30,
+  "test_game_count": 8,
+  "train_row_count": 2212,
+  "test_row_count": 706
+}

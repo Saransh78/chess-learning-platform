@@ -15,7 +15,7 @@ export default function EvaluationBar({ engineEnabled }) {
   ).toFixed(2)}`;
 
   return (
-    <section aria-label="Evaluation" className="rounded-xl bg-slate-ash/45 px-4 py-3.5">
+    <section aria-label="Evaluation" className="shrink-0 rounded-xl bg-slate-ash/45 px-4 py-2.5">
       <div className="flex items-center justify-between">
         <h2 className="text-xs font-medium uppercase tracking-[0.14em] text-faded">
           Evaluation
@@ -34,7 +34,7 @@ export default function EvaluationBar({ engineEnabled }) {
         </span>
       </div>
 
-      <div className="mt-2.5 flex items-end justify-between gap-3">
+      <div className="mt-2 flex items-end justify-between gap-3">
         <span
           key={displayEval}
           className="animate-eval text-[2rem] font-semibold leading-none tracking-tight text-bronze tabular-nums"
@@ -46,7 +46,7 @@ export default function EvaluationBar({ engineEnabled }) {
         </span>
       </div>
 
-      <dl className="mt-4 flex items-center gap-x-6 gap-y-1 text-xs">
+      <dl className="mt-3 flex items-center gap-x-6 gap-y-1 text-xs">
         <div className="flex items-center gap-1.5">
           <dt className="text-faded">Depth</dt>
           <dd className="font-medium text-ivory/90 tabular-nums">

@@ -17,6 +17,7 @@ function isExpiredJobError(error) {
 }
 
 export default function useReportJob(jobId) {
+  const [trackedJobId, setTrackedJobId] = useState(jobId);
   const [jobState, setJobState] = useState(null);
   const [lastActiveStage, setLastActiveStage] = useState(getSavedReportStage);
   const [report, setReport] = useState(null);
@@ -24,6 +25,17 @@ export default function useReportJob(jobId) {
   const [connectionState, setConnectionState] = useState("connecting");
   const [cancelling, setCancelling] = useState(false);
   const [cancelError, setCancelError] = useState("");
+
+  if (trackedJobId !== jobId) {
+    setTrackedJobId(jobId);
+    setJobState(null);
+    setLastActiveStage(getSavedReportStage());
+    setReport(null);
+    setError("");
+    setConnectionState("connecting");
+    setCancelling(false);
+    setCancelError("");
+  }
 
   useEffect(() => {
     if (!jobId) return undefined;

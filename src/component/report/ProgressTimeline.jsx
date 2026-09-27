@@ -37,7 +37,11 @@ function StageMark({ state }) {
   return <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-current" />;
 }
 
-export default function ProgressTimeline({ jobState, lastActiveStage }) {
+export default function ProgressTimeline({
+  jobState,
+  lastActiveStage,
+  showGameCounter = true,
+}) {
   const stageId = getProgressStageId(jobState, lastActiveStage);
   const currentIndex = Math.max(
     PROGRESS_STAGES.findIndex((stage) => stage.id === stageId),
@@ -55,7 +59,7 @@ export default function ProgressTimeline({ jobState, lastActiveStage }) {
         >
           Analysis stages
         </h3>
-        {jobState?.current_game > 0 && jobState?.total_games > 0 && (
+        {showGameCounter && jobState?.current_game > 0 && jobState?.total_games > 0 && (
           <p className="text-xs tabular-nums text-parchment">
             Game {jobState.current_game.toLocaleString()} of {jobState.total_games.toLocaleString()}
           </p>

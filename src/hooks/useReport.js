@@ -35,7 +35,9 @@ export default function useReport() {
     const controller = new AbortController();
     abortRef.current = controller;
 
+    let timedOut = false;
     const timeoutId = setTimeout(() => {
+      timedOut = true;
       controller.abort(
         new Error(
           "Upload timed out. The server is taking too long to respond."
@@ -55,10 +57,14 @@ export default function useReport() {
       setStatus("success");
       return data;
     } catch (err) {
-      if (err?.name === "AbortError") return;
+      if (err?.name === "AbortError" && !timedOut) return null;
 
       setReport(null);
-      setError(err?.message || "Something went wrong. Please try again.");
+      setError(
+        timedOut
+          ? controller.signal.reason?.message || "Upload timed out. Please try again."
+          : err?.message || "Something went wrong. Please try again."
+      );
       setStatus("error");
       return null;
     } finally {
