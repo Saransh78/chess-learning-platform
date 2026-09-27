@@ -26,3 +26,20 @@ dist-ssr
 .opencode/
 /feature_extraction.ipynb
 .ipynb_checkpoints/
+
+# Environment files
+.env
+backend/.env
+.env.local
+.env.*.local
+
+# Python virtual environment
+backend/.venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
