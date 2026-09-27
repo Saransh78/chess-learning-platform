@@ -1,0 +1,17 @@
+# Keep the image lean and secret-free. The Dockerfile copies only
+# requirements.txt, app/, ml/ and models/ explicitly; this file is
+# belt-and-braces for any future broader COPY.
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+.git/
+.ipynb_checkpoints/
+*.ipynb
+logs/
+*.log
+# Local env files are never baked in; Render injects env at runtime.
+.env
+.env.local
+.env.*.local
+# NOTE: backend/models/ must NOT be ignored — trained artifacts are required.

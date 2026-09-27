@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -7,8 +9,16 @@ from app.routes.auth import router as auth_router
 from app.routes.pgn import router as pgn_router
 from app.routes.report import router as report_router
 from app.routes.upload import router as upload_router
+from app.services.analysis_service import resolve_stockfish_path
 
-app = FastAPI(title="BoardSense API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Fail fast with a clear error when no Stockfish binary is available.
+    resolve_stockfish_path()
+    yield
+
+
+app = FastAPI(title="BoardSense API", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=list(settings.CORS_ORIGINS),

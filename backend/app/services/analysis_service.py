@@ -1,10 +1,48 @@
+import os
+import shutil
+
 import chess
 import chess.engine
 
 from collections.abc import Iterator
 from contextlib import contextmanager
+from functools import lru_cache
 
-from app.core.config import settings
+import app.core.config  # noqa: F401 — loads backend/.env so STOCKFISH_PATH resolves
+
+#: Debian/Ubuntu system path where `apt install stockfish` places the binary
+#: (also the production Dockerfile's install location).
+SYSTEM_STOCKFISH_PATH = "/usr/games/stockfish"
+
+
+@lru_cache(maxsize=1)
+def resolve_stockfish_path() -> str:
+    """Resolve the Stockfish binary without hardcoding platform paths.
+
+    Priority: explicit ``STOCKFISH_PATH`` env var, then the Debian system
+    path, then ``PATH`` lookup. Raises a clear ``RuntimeError`` when no
+    usable binary exists so startup fails fast instead of mid-analysis.
+    """
+    configured = (os.environ.get("STOCKFISH_PATH") or "").strip()
+    if configured:
+        if os.path.isfile(configured) and os.access(configured, os.X_OK):
+            return configured
+        raise RuntimeError(
+            f"Stockfish not found at STOCKFISH_PATH={configured!r}. "
+            "Install Stockfish or point STOCKFISH_PATH at the engine binary."
+        )
+    if os.path.isfile(SYSTEM_STOCKFISH_PATH) and os.access(
+        SYSTEM_STOCKFISH_PATH, os.X_OK
+    ):
+        return SYSTEM_STOCKFISH_PATH
+    on_path = shutil.which("stockfish")
+    if on_path:
+        return on_path
+    raise RuntimeError(
+        "Stockfish engine not found. Install Stockfish "
+        "(e.g. `apt install stockfish`) or set STOCKFISH_PATH "
+        "to the engine binary."
+    )
 
 
 @contextmanager
@@ -17,7 +55,7 @@ def stockfish_session() -> Iterator[chess.engine.SimpleEngine]:
     process (safe under the FastAPI threadpool) instead of reusing the
     notebook's global ``engine`` object.
     """
-    engine = chess.engine.SimpleEngine.popen_uci(settings.STOCKFISH_PATH)
+    engine = chess.engine.SimpleEngine.popen_uci(resolve_stockfish_path())
 
     try:
         yield engine
